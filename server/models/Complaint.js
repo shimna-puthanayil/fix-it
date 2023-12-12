@@ -6,6 +6,7 @@ const complaintSchema = new Schema({
     trim: true,
   },
   property: { type: Schema.Types.ObjectId, ref: "Property", required: true },
+  date: { type: Date, default: Date.now },
 });
 const Complaint = new model("Complaint", complaintSchema);
 module.exports = Complaint;
