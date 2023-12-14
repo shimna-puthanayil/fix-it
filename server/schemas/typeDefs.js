@@ -30,11 +30,11 @@ tenant:ID!
 }
 type Query{
 user:User
-property(agentId!):[Property]
-property(ownerId!):[Property]
-complaints(agentId!):[Complaint]
-complaints(ownerId!):[Complaint]
-complaints(tenantId!):[Complaint]
+propertiesByAgent(agentId!):[Property]
+propertiesByOwner(ownerId!):[Property]
+complaintsRaisedToAgent(agentId!):[Complaint]
+complaintsOfPropertyByOwner(ownerId!):[Complaint]
+complaintsRaisedByTenant(tenantId!):[Complaint]
 }
 type Mutation{
 addProperty(propertyDetails:propertyInput!):Property
