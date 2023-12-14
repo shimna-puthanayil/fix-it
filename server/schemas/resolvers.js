@@ -17,11 +17,28 @@ const resolvers = {
     },
     complaintsRaisedToAgent: async (parent, agentId) => {
       try {
-        const ids = [];
         return await Complaint.find({
           property: { $in: Property.find(agentId).select("_id") },
         });
       } catch (error) {
+        console.log("Could not find complaints");
+      }
+    },
+    complaintsOfPropertyByOwner: async (parent, ownerId) => {
+      try {
+        return await Complaint.find({
+          property: { $in: Property.find(ownerId) },
+        });
+      } catch (error) {
+        console.log("Could not find complaints");
+      }
+    },
+    complaintsRaisedByTenant: async (parent, tenantId) => {
+      try {
+        return await Complaint.find({
+          property: { $in: Property.find(tenantId) },
+        });
+      } catch {
         console.log("Could not find complaints");
       }
     },
