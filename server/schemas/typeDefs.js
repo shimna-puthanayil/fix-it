@@ -1,25 +1,25 @@
 const typeDefs = `
 type Property{
-_id:ID,
-address:String,
-owner:User,
-agent:User,
-tenant:User
+   _id:ID
+   address:String
+   owner:User
+   agent:User
+   tenant:User
 }
 type Complaint{
     _id:ID
-    complaint:string,
-    property:Property,
+    complaint:String
+    property:Property
     date:String
 }
 type User{
     _id:ID,
-    username:String,
-    email:String,
+    username:String
+    email:String
     role:String
 }
 type Auth{
-    token:ID,
+    token:ID
     user:User
 }
 input propertyInput{
@@ -30,16 +30,17 @@ tenant:ID!
 }
 type Query{
 user:User
-propertiesByAgent(agentId!):[Property]
-propertiesByOwner(ownerId!):[Property]
-complaintsRaisedToAgent(agentId!):[Complaint]
-complaintsOfPropertyByOwner(ownerId!):[Complaint]
-complaintsRaisedByTenant(tenantId!):[Complaint]
+properties:[Property]
+propertiesByAgent(agentId:ID!):[Property]
+propertiesByOwner(ownerId:ID!):[Property]
+complaintsRaisedToAgent(agentId:ID!):[Complaint]
+complaintsOfPropertyByOwner(ownerId:ID!):[Complaint]
+complaintsRaisedByTenant(tenantId:ID!):[Complaint]
 }
 type Mutation{
-addProperty(propertyDetails:propertyInput!):Property
+addProperty(propertyDetails:propertyInput):Property
 addComplaint(complaint:String!,property:ID!):Complaint
-addUser(username:String!,password:String!,email:String!,role:String):Auth
+addUser(username:String!,password:String!,email:String!,role:String!):Auth
 login(email: String!, password: String!): Auth
 }`;
 module.exports = typeDefs;

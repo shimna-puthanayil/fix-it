@@ -1,43 +1,65 @@
 const { User, Complaint, Property } = require("../models");
 const resolvers = {
   Query: {
-    propertiesByAgent: async (parent, agentId) => {
+    properties: async () => {
       try {
-        return await Property.find(agentId);
+        const props = Property.find()
+          .populate("agent")
+          .populate("owner")
+          .populate("tenant");
+
+        return props;
       } catch (error) {
         console.log("Could not find properties", error);
       }
     },
-    propertiesByOwner: async (parent, ownerId) => {
+    propertiesByAgent: async (parent, { agentId }) => {
       try {
-        return await Property.find(ownerId);
+        const props = await Property.find({ agent: agentId }).select("-__v");
+        return props;
       } catch (error) {
         console.log("Could not find properties", error);
       }
     },
-    complaintsRaisedToAgent: async (parent, agentId) => {
+    propertiesByOwner: async (parent, { ownerId }) => {
       try {
+        return await Property.find({ owner: ownerId });
+      } catch (error) {
+        console.log("Could not find properties", error);
+      }
+    },
+    complaintsRaisedToAgent: async (parent, { agentId }) => {
+      try {
+        const propertyIds = [];
+        const properties = await Property.find({ agent: agentId });
+        properties.map((x) => propertyIds.push(x._id));
         return await Complaint.find({
-          property: { $in: Property.find(agentId).select("_id") },
-        });
+          property: { $in: propertyIds },
+        }).populate("property");
       } catch (error) {
         console.log("Could not find complaints", error);
       }
     },
-    complaintsOfPropertyByOwner: async (parent, ownerId) => {
+    complaintsOfPropertyByOwner: async (parent, { ownerId }) => {
       try {
+        const propertyIds = [];
+        const properties = await Property.find({ owner: ownerId });
+        properties.map((x) => propertyIds.push(x._id));
         return await Complaint.find({
-          property: { $in: Property.find(ownerId) },
-        });
+          property: { $in: propertyIds },
+        }).populate("property");
       } catch (error) {
         console.log("Could not find complaints", error);
       }
     },
-    complaintsRaisedByTenant: async (parent, tenantId) => {
+    complaintsRaisedByTenant: async (parent, { tenantId }) => {
       try {
+        const propertyIds = [];
+        const properties = await Property.find({ tenant: tenantId });
+        properties.map((x) => propertyIds.push(x._id));
         return await Complaint.find({
-          property: { $in: Property.find(tenantId) },
-        });
+          property: { $in: propertyIds },
+        }).populate("property");
       } catch {
         console.log("Could not find complaints", error);
       }
@@ -84,3 +106,4 @@ const resolvers = {
     },
   },
 };
+module.exports = resolvers;
