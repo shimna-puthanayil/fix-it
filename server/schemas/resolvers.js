@@ -15,7 +15,9 @@ const resolvers = {
     },
     propertiesByAgent: async (parent, { agentId }) => {
       try {
-        const props = await Property.find({ agent: agentId }).select("-__v");
+        const props = await Property.find({ agent: agentId })
+          .populate("owner")
+          .populate("tenant");
         return props;
       } catch (error) {
         console.log("Could not find properties", error);
@@ -23,7 +25,9 @@ const resolvers = {
     },
     propertiesByOwner: async (parent, { ownerId }) => {
       try {
-        return await Property.find({ owner: ownerId });
+        return await Property.find({ owner: ownerId })
+          .populate("agent")
+          .populate("tenant");
       } catch (error) {
         console.log("Could not find properties", error);
       }
@@ -66,16 +70,16 @@ const resolvers = {
     },
   },
   Mutation: {
-    addProperty: async (parent, propertyDetails) => {
+    addProperty: async (parent, { propertyDetails }) => {
       try {
         return Property.create(propertyDetails);
       } catch (error) {
         console.log("Could not add property!", error);
       }
     },
-    addComplaint: async (parent, { complaint, propertyId }) => {
+    addComplaint: async (parent, { complaint, property }) => {
       try {
-        return Complaint.create({ complaint, propertyId });
+        return Complaint.create({ complaint, property });
       } catch (error) {
         console.log("Could not raise complaint", error);
       }

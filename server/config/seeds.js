@@ -9,25 +9,25 @@ db.once("open", async () => {
   //seed user
   const users = await User.insertMany([
     {
-      username: "pamela",
+      username: "Pamela",
       email: "pamela@testmail.com",
       password: "password12345",
       role: "agent",
     },
     {
-      username: "kim",
+      username: "Kim",
       email: "kim@testmail.com",
       password: "password12345",
       role: "agent",
     },
     {
-      username: "john",
+      username: "John",
       email: "john@testmail.com",
       password: "password12345",
       role: "tenant",
     },
     {
-      username: "maya",
+      username: "Maya",
       email: "maya@testmail.com",
       password: "password12345",
       role: "tenant",
@@ -39,19 +39,19 @@ db.once("open", async () => {
       role: "tenant",
     },
     {
-      username: "lena",
+      username: "Lena",
       email: "lena@testmail.com",
       password: "password12345",
       role: "owner",
     },
     {
-      username: "neda",
+      username: "Neda",
       email: "neda@testmail.com",
       password: "password12345",
       role: "owner",
     },
     {
-      username: "philip",
+      username: "Philip",
       email: "philip@testmail.com",
       password: "password12345",
       role: "owner",
