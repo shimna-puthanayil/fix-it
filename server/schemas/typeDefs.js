@@ -11,6 +11,7 @@ type Complaint{
     complaint:String
     property:Property
     date:String
+    status:String
 }
 type User{
     _id:ID,
