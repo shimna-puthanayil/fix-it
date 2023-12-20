@@ -1,6 +1,6 @@
-import gql from "@apollo/client";
+import { gql } from "@apollo/client";
 export const QUERY_USER = gql`
-  query UserS {
+  query Users {
     users {
       username
       email
@@ -73,14 +73,14 @@ export const QUERY_COMPLAINTS_OF_PROPERTY_BY_OWNER = gql`
   }
 `;
 export const QUERY_COMPLAINTS_RAISED_TO_AGENT = gql`
-  query ComplaintsRaisedToAgent($agentId: ID!) {
-    complaintsRaisedToAgent(agentId: $agentId) {
+  query ComplaintsRaisedToAgent {
+    complaintsRaisedToAgent {
+      date
       complaint
       property {
         address
       }
-      date
+      status
     }
   }
 `;
-export const QUERY_ = gql``;

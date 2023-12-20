@@ -1,15 +1,14 @@
 import { Outlet } from "react-router-dom";
+import "@fontsource/roboto/300.css";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
-  CreateHttpLink,
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { graphql } from "graphql";
 const httpLink = createHttpLink({ uri: "/graphql" });
-const authLink = setContext((_, { Headers }) => {
+const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
   return {
     headers: {

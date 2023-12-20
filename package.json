@@ -16,6 +16,7 @@
     "eslint-plugin-react": "^7.33.2"
   },
   "dependencies": {
+    "@mui/x-data-grid-pro": "^6.18.5",
     "dotenv": "^16.3.1"
   },
   "keywords": [],

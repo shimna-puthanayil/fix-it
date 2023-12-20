@@ -10,16 +10,26 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.15",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.15.1",
+    "@mui/material": "^5.15.1",
+    "@mui/x-data-grid": "^6.18.5",
     "@stripe/stripe-js": "^1.54.0",
     "@testing-library/react": "^14.0.0",
     "graphql": "^16.6.0",
     "happy-dom": "^9.20.3",
     "jwt-decode": "^3.1.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0",
+    "react-icons": "^4.11.0",
     "react-router-dom": "^6.11.2",
-    "vitest": "^0.32.0",
-    "react-icons": "^4.11.0"
+    "vitest": "^0.32.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",

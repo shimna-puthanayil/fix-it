@@ -1,4 +1,4 @@
-import gql from "@apollo/client";
+import { gql } from "@apollo/client";
 // Mutation to add a property
 export const ADD_PROPERTY = gql`
   mutation AddProperty($propertyDetails: propertyInput) {

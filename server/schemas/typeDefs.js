@@ -34,7 +34,7 @@ user:User
 properties:[Property]
 propertiesByAgent(agentId:ID!):[Property]
 propertiesByOwner(ownerId:ID!):[Property]
-complaintsRaisedToAgent(agentId:ID!):[Complaint]
+complaintsRaisedToAgent:[Complaint]
 complaintsOfPropertyByOwner(ownerId:ID!):[Complaint]
 complaintsRaisedByTenant(tenantId:ID!):[Complaint]
 }

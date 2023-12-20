@@ -18,6 +18,7 @@ const resolvers = {
         const props = await Property.find({ agent: agentId })
           .populate("owner")
           .populate("tenant");
+
         return props;
       } catch (error) {
         console.log("Could not find properties", error);
@@ -32,14 +33,17 @@ const resolvers = {
         console.log("Could not find properties", error);
       }
     },
-    complaintsRaisedToAgent: async (parent, { agentId }) => {
+    complaintsRaisedToAgent: async () => {
       try {
+        agentId = "657d4e2b62499caa2f977f7e";
         const propertyIds = [];
         const properties = await Property.find({ agent: agentId });
         properties.map((x) => propertyIds.push(x._id));
-        return await Complaint.find({
+        const comp = await Complaint.find({
           property: { $in: propertyIds },
         }).populate("property");
+        console.log(comp);
+        return comp;
       } catch (error) {
         console.log("Could not find complaints", error);
       }
