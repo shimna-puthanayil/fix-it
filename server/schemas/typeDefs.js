@@ -14,7 +14,7 @@ type Complaint{
     status:String
 }
 type User{
-    _id:ID,
+    _id:ID
     username:String
     email:String
     role:String
@@ -23,6 +23,7 @@ type Auth{
     token:ID
     user:User
 }
+
 input propertyInput{
 address:String!
 owner:ID!

@@ -1,4 +1,5 @@
 const { User, Complaint, Property } = require("../models");
+const { signToken, AuthenticationError } = require("../utils/auth");
 const resolvers = {
   Query: {
     properties: async () => {
@@ -91,23 +92,25 @@ const resolvers = {
     addUser: async (parent, args) => {
       try {
         const user = await User.create(args);
-        return { user };
+        const token = signToken(user);
+        return { token, user };
       } catch (error) {
         console.log("SignUp failed", error);
       }
     },
-    login: async ({ email, password }) => {
+    login: async (parent, { email, password }) => {
       try {
         const user = await User.findOne({ email });
         if (!user) {
-          //   throw AuthenticationError;
-          console.log("Authentication failed", error);
+          throw AuthenticationError;
         }
         const correctPassword = await user.isCorrectPassword(password);
         if (!correctPassword) {
-          console.log("Authentication failed", error);
+          throw AuthenticationError;
         }
-        return { user };
+        const token = signToken(user);
+        console.log(token);
+        return { token, user };
       } catch (error) {
         console.log("Login failed", error);
       }
