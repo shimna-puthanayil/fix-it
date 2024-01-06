@@ -32,6 +32,7 @@ export const ADD_USER = gql`
       token
       user {
         _id
+        role
       }
     }
   }
@@ -44,6 +45,7 @@ export const LOGIN = gql`
       token
       user {
         _id
+        role
       }
     }
   }

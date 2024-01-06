@@ -53,9 +53,9 @@ export default function SignIn() {
           password: data.get("password"),
         },
       });
-      console.log(response);
+
       const token = response.data.login.token;
-      console.log(token);
+      const role = response.data.login.user.role;
       Auth.login(token);
       data.set("email", "");
       data.set("password", "");

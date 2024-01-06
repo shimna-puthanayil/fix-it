@@ -7,7 +7,7 @@ db.once("open", async () => {
   await cleanDB("User", "users");
 
   //seed user
-  const users = await User.insertMany([
+  const users = await User.create([
     {
       username: "Pamela",
       email: "pamela@testmail.com",

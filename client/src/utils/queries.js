@@ -75,6 +75,7 @@ export const QUERY_COMPLAINTS_OF_PROPERTY_BY_OWNER = gql`
 export const QUERY_COMPLAINTS_RAISED_TO_AGENT = gql`
   query ComplaintsRaisedToAgent {
     complaintsRaisedToAgent {
+      _id
       date
       complaint
       property {

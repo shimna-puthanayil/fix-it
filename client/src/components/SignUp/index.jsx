@@ -18,6 +18,8 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import { styled } from "@mui/material/styles";
+import { cyan } from "@mui/material/colors";
 import { useMutation } from "@apollo/client";
 //import methods from files
 import Auth from "../../utils/auth";
@@ -85,7 +87,13 @@ export default function SignUp() {
       setErrorMessage("Please enter required fields");
     }
   };
-
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(cyan[50]),
+    backgroundColor: cyan[800],
+    "&:hover": {
+      backgroundColor: cyan[700],
+    },
+  }));
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
@@ -191,14 +199,14 @@ export default function SignUp() {
                 </FormControl>
               </Grid>
             </Grid>
-            <Button
+            <ColorButton
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign Up
-            </Button>
+            </ColorButton>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="/signin" variant="body2">

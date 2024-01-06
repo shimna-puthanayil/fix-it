@@ -7,6 +7,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
+import { ComplaintProvider } from "./utils/GlobalState";
 const httpLink = createHttpLink({ uri: "/graphql" });
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
@@ -24,7 +25,9 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <Outlet />
+      <ComplaintProvider>
+        <Outlet />
+      </ComplaintProvider>
     </ApolloProvider>
   );
 }
