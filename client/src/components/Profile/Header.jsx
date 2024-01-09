@@ -18,7 +18,8 @@ import { useComplaintContext } from "../../utils/GlobalState";
 import { UPDATE_ROLE } from "../../utils/actions";
 const ColorBar = styled(AppBar)(({ theme }) => ({
   color: "white",
-  background: "linear-gradient(to right ,#487B7B, #B2C9CB,#487B7B)",
+  background:
+    "linear-gradient(to right ,#457373,#7FA6A6, #B2C9CB,#7FA6A6,#487B7B)",
 }));
 function Header(props) {
   const { onDrawerToggle } = props;

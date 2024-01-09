@@ -8,13 +8,15 @@ import Link from "@mui/material/Link";
 import Navigator from "../components/Profile/Navigator";
 import Content from "../components/Profile/Content";
 import Header from "../components/Profile/Header";
-
+import ComplaintDetails from "../components/Complaint/ComplaintDetails";
+// import global state
+import { useComplaintContext } from "../utils/GlobalState";
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        FixIt.com
       </Link>{" "}
       {new Date().getFullYear()}.
     </Typography>
@@ -169,7 +171,9 @@ const drawerWidth = 256;
 export default function Profile() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
+  const [state, dispatch] = useComplaintContext();
 
+  console.log(state.selectedComplaint);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -202,7 +206,8 @@ export default function Profile() {
             component="main"
             sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1" }}
           >
-            <Content />
+            {/*Complaint details*/}
+            <ComplaintDetails />
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Copyright />

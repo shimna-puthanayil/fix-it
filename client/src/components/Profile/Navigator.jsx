@@ -100,7 +100,7 @@ export default function Navigator(props) {
               WebkitTextFillColor: "transparent",
             }}
           >
-            FIX - IT
+            FixIt
           </Typography>
         </ListItem>
 

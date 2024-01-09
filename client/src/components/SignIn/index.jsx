@@ -11,14 +11,13 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useMutation } from "@apollo/client";
 import Auth from "../../utils/auth";
 import { LOGIN } from "../../utils/mutations";
 import { validateEmail } from "../../utils/helpers";
 import { styled } from "@mui/material/styles";
-import { cyan } from "@mui/material/colors";
+
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",

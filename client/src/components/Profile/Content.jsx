@@ -2,15 +2,18 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Alert from "@mui/material/Alert";
 import { useQuery } from "@apollo/client";
-import { QUERY_COMPLAINTS_RAISED_TO_AGENT } from "../../utils/queries";
-import { UPDATE_COMPLAINTS } from "../../utils/actions";
+import { QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
+import { UPDATE_COMPLAINTS, SELECTED_COMPLAINT } from "../../utils/actions";
 import { idbPromise } from "../../utils/helpers";
 import Complaint from "../Complaint/AddComplaint";
 import { useEffect } from "react";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 import AddComplaint from "../Complaint/AddComplaint";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const columns = [
   {
     field: "address",
@@ -41,6 +44,7 @@ const columns = [
 ];
 
 export default function Content() {
+  const navigate = useNavigate();
   const [message, setMessage] = React.useState("");
   const [state, dispatch] = useComplaintContext();
   let status = "open";
@@ -52,7 +56,7 @@ export default function Content() {
   console.log(state.complaints);
   let complaints = [],
     comps = [];
-  const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED_TO_AGENT, {
+  const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED, {
     variables: status,
   });
 
@@ -61,10 +65,10 @@ export default function Content() {
       //dispatches the action UPDATE_COMPLAINTS to update the state with new complaints
       dispatch({
         type: UPDATE_COMPLAINTS,
-        complaints: data.complaintsRaisedToAgent,
+        complaints: data.complaintsRaised,
       });
       //update indexedDB with new complaints
-      data.complaintsRaisedToAgent.forEach((complaint) => {
+      data.complaintsRaised.forEach((complaint) => {
         idbPromise("complaints", "put", complaint);
       });
     } else if (!loading) {
@@ -100,10 +104,15 @@ export default function Content() {
       ((comp.status = complaints[i].status), comps.push(comp));
   }
   const rows = comps;
+  //click event of grid( when a particular complaint is clicked )
   const handleRowClick = (params) => {
-    window.location.assign("/complaint");
-    setMessage(`Movie "${params.row.address}" clicked`);
+    console.log(params.row);
+    dispatch({
+      type: SELECTED_COMPLAINT,
+      selectedComplaint: { ...params.row },
+    });
   };
+
   if (state.selectedItem === "Add Complaint") {
     console.log("add complaint");
     return <AddComplaint />;
@@ -111,23 +120,25 @@ export default function Content() {
     return (
       <Stack spacing={2} sx={{ height: "100%", width: "100%" }}>
         <Box sx={{ height: "100%", width: "100%" }}>
-          <DataGrid
-            onRowClick={handleRowClick}
-            rows={rows}
-            columns={columns}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 15,
+          <Link to={"/complaint"}>
+            <DataGrid
+              onRowClick={handleRowClick}
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 15,
+                  },
                 },
-              },
-            }}
-            pageSizeOptions={[5]}
-            checkboxSelection
-            disableRowSelectionOnClick
-          />
+              }}
+              pageSizeOptions={[5]}
+              checkboxSelection
+              disableRowSelectionOnClick
+            />
+          </Link>
         </Box>
-        {message && <Alert severity="info">{message}</Alert>}
+        {/*{message && <Alert severity="info">{message}</Alert>}*/}
       </Stack>
     );
 }

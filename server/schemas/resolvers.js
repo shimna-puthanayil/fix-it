@@ -34,13 +34,9 @@ const resolvers = {
         console.log("Could not find properties", error);
       }
     },
-    complaintsRaisedToAgent: async (parent, args, context) => {
+    complaintsRaised: async (parent, args, context) => {
       try {
         const params = {};
-
-        console.log(context.user.role);
-        console.log(" id" + context.user._id);
-        // if(context.user?.role)
         const propertyIds = [];
         let properties = [];
         switch (context.user.role) {
@@ -56,14 +52,12 @@ const resolvers = {
           default:
             break;
         }
-        // const properties = await Property.find({ agent: context.user._id });
         properties.map((x) => propertyIds.push(x._id));
 
         const comp = await Complaint.find({
           property: { $in: propertyIds },
         }).populate("property");
-        console.log("complaints");
-        console.log(comp);
+
         return comp;
       } catch (error) {
         console.log("Could not find complaints", error);

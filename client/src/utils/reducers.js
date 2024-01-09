@@ -3,6 +3,7 @@ import {
   CURRENT_SELECTED_ITEM,
   UPDATE_ROLE,
   UPDATE_PROPERTIES,
+  SELECTED_COMPLAINT,
 } from "./actions";
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
 export const reducer = (state, action) => {
@@ -12,6 +13,12 @@ export const reducer = (state, action) => {
       return {
         ...state,
         complaints: [...action.complaints],
+      };
+
+    case SELECTED_COMPLAINT:
+      return {
+        ...state,
+        selectedComplaint: action.selectedComplaint,
       };
     case UPDATE_PROPERTIES:
       return {

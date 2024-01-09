@@ -15,7 +15,7 @@ import { useMutation } from "@apollo/client";
 //import methods from files
 import Auth from "../../../utils/auth";
 import { ADD_COMPLAINT } from "../../../utils/mutations";
-import { QUERY_COMPLAINTS_RAISED_TO_AGENT } from "../../../utils/queries";
+import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -25,10 +25,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 export default function AddComplaint() {
   const [addComplaint] = useMutation(ADD_COMPLAINT, {
-    refetchQueries: [
-      QUERY_COMPLAINTS_RAISED_TO_AGENT,
-      "complaintsRaisedToAgent",
-    ],
+    refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
   const [complaint, setComplaint] = useState("");
   const [errorMessage, setErrorMessage] = useState("");

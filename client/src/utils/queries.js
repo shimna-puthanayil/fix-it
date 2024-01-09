@@ -72,9 +72,9 @@ export const QUERY_COMPLAINTS_OF_PROPERTY_BY_OWNER = gql`
     }
   }
 `;
-export const QUERY_COMPLAINTS_RAISED_TO_AGENT = gql`
-  query ComplaintsRaisedToAgent {
-    complaintsRaisedToAgent {
+export const QUERY_COMPLAINTS_RAISED = gql`
+  query ComplaintsRaised {
+    complaintsRaised {
       _id
       date
       complaint
