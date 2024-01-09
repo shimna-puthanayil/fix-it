@@ -25,7 +25,11 @@ import { useMutation } from "@apollo/client";
 import Auth from "../../utils/auth";
 import { ADD_USER } from "../../utils/mutations";
 import { validateEmail } from "../../utils/helpers";
-
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: "white",
+  fontWeight: "bold",
+  background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
+}));
 function Copyright(props) {
   return (
     <Typography
@@ -87,13 +91,7 @@ export default function SignUp() {
       setErrorMessage("Please enter required fields");
     }
   };
-  const ColorButton = styled(Button)(({ theme }) => ({
-    color: theme.palette.getContrastText(cyan[50]),
-    backgroundColor: cyan[800],
-    "&:hover": {
-      backgroundColor: cyan[700],
-    },
-  }));
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
@@ -146,6 +144,7 @@ export default function SignUp() {
                     label="name"
                     autoFocus
                     onBlur={handleInputOnFocusOut}
+                  
                   />
                 </FormControl>
               </Grid>

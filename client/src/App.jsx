@@ -8,6 +8,8 @@ import {
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { ComplaintProvider } from "./utils/GlobalState";
+import { ThemeProvider } from "@mui/material/styles";
+import { theme } from "./styles/theme";
 const httpLink = createHttpLink({ uri: "/graphql" });
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("id_token");
@@ -25,9 +27,11 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <ComplaintProvider>
-        <Outlet />
-      </ComplaintProvider>
+      <ThemeProvider theme={theme}>
+        <ComplaintProvider>
+          <Outlet />
+        </ComplaintProvider>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }

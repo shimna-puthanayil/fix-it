@@ -7,6 +7,7 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
+import Complaint from "./components/Complaint";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Home />,
+        element: <SignIn />,
       },
       {
         path: "/signup",
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "/complaint",
+        element: <Complaint />,
       },
     ],
   },

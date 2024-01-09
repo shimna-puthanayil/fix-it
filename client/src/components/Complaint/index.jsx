@@ -17,13 +17,6 @@ import { useMutation } from "@apollo/client";
 import Auth from "../../utils/auth";
 import { LOGIN } from "../../utils/mutations";
 import { validateEmail } from "../../utils/helpers";
-import { styled } from "@mui/material/styles";
-import { cyan } from "@mui/material/colors";
-const ColorButton = styled(Button)(({ theme }) => ({
-  color: "white",
-  fontWeight: "bold",
-  background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
-}));
 function Copyright(props) {
   return (
     <Typography
@@ -82,7 +75,6 @@ export default function SignIn() {
       setErrorMessage("");
     }
   };
-
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
@@ -150,14 +142,14 @@ export default function SignIn() {
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
             />
-            <ColorButton
+            <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
-            </ColorButton>
+            </Button>
             <Grid container>
               <Grid item xs>
                 <Link href="/signup" variant="body2">

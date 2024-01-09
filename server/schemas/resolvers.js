@@ -36,15 +36,34 @@ const resolvers = {
     },
     complaintsRaisedToAgent: async (parent, args, context) => {
       try {
+        const params = {};
+
         console.log(context.user.role);
-        console.log("agent id" + context.user._id);
+        console.log(" id" + context.user._id);
         // if(context.user?.role)
         const propertyIds = [];
-        const properties = await Property.find({ agent: context.user._id });
+        let properties = [];
+        switch (context.user.role) {
+          case "owner":
+            properties = await Property.find({ owner: context.user._id });
+            break;
+          case "agent":
+            properties = await Property.find({ agent: context.user._id });
+            break;
+          case "tenant":
+            properties = await Property.find({ tenant: context.user._id });
+            break;
+          default:
+            break;
+        }
+        // const properties = await Property.find({ agent: context.user._id });
         properties.map((x) => propertyIds.push(x._id));
+        params.propertyIds = propertyIds;
+
         const comp = await Complaint.find({
           property: { $in: propertyIds },
         }).populate("property");
+        console.log("complaints");
         console.log(comp);
         return comp;
       } catch (error) {
