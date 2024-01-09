@@ -41,7 +41,7 @@ complaintsRaisedByTenant(tenantId:ID!):[Complaint]
 }
 type Mutation{
 addProperty(propertyDetails:propertyInput):Property
-addComplaint(complaint:String!,property:ID!):Complaint
+addComplaint(complaint:String!):Complaint
 addUser(username:String!,password:String!,email:String!,role:String!):Auth
 login(email: String!, password: String!): Auth
 }`;

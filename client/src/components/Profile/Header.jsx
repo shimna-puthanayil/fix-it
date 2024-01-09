@@ -2,23 +2,20 @@ import * as React from "react";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import HelpIcon from "@mui/icons-material/Help";
 import IconButton from "@mui/material/IconButton";
-import Link from "@mui/material/Link";
 import MenuIcon from "@mui/icons-material/Menu";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import Tab from "@mui/material/Tab";
-import Tabs from "@mui/material/Tabs";
 import Toolbar from "@mui/material/Toolbar";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
-import { useComplaintContext } from "../utils/GlobalState";
+import { useEffect } from "react";
 // import theme from "../styles/theme";
-
-import { alpha, styled } from "@mui/material/styles";
-
+import Auth from "../../utils/auth";
+import { styled } from "@mui/material/styles";
+// import global state
+import { useComplaintContext } from "../../utils/GlobalState";
+import { UPDATE_ROLE } from "../../utils/actions";
 const ColorBar = styled(AppBar)(({ theme }) => ({
   color: "white",
   background: "linear-gradient(to right ,#487B7B, #B2C9CB,#487B7B)",
@@ -26,12 +23,26 @@ const ColorBar = styled(AppBar)(({ theme }) => ({
 function Header(props) {
   const { onDrawerToggle } = props;
   const [state, dispatch] = useComplaintContext();
-  let title = "Open";
-  if (state.selectedItem) title = state.selectedItem;
+  let title = "Open",
+    role = "";
 
+  if (Auth.loggedIn) {
+    role = Auth.getProfile().data.role;
+    useEffect(() => {
+      dispatch({
+        type: UPDATE_ROLE,
+        role: role,
+      });
+    }, [dispatch]);
+    if (state.selectedItem === "Add Complaint") title = "";
+    else if (role === "tenant" && state.selectedItem === "My Complaints") {
+      title = "My Complaints";
+    } else title = state.selectedItem;
+    console.log(title);
+  }
   return (
     <React.Fragment>
-      <ColorBar position="sticky" elevation={0}>
+      <ColorBar position="sticky" elevation={0} sx={{ height: 80 }}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
             <Grid item xs>
@@ -42,7 +53,7 @@ function Header(props) {
                 component="h1"
                 my={2.8}
               >
-                {state.selectedItem ? title : "All Complaints"}
+                {title}
               </Typography>
             </Grid>
             <Grid sx={{ display: { sm: "none", xs: "block" } }} item>

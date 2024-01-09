@@ -144,7 +144,6 @@ export default function SignUp() {
                     label="name"
                     autoFocus
                     onBlur={handleInputOnFocusOut}
-                  
                   />
                 </FormControl>
               </Grid>

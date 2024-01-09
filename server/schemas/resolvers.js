@@ -58,7 +58,6 @@ const resolvers = {
         }
         // const properties = await Property.find({ agent: context.user._id });
         properties.map((x) => propertyIds.push(x._id));
-        params.propertyIds = propertyIds;
 
         const comp = await Complaint.find({
           property: { $in: propertyIds },
@@ -103,9 +102,11 @@ const resolvers = {
         console.log("Could not add property!", error);
       }
     },
-    addComplaint: async (parent, { complaint, property }) => {
+    addComplaint: async (parent, { complaint }, context) => {
       try {
-        return Complaint.create({ complaint, property });
+        const properties = await Property.find({ tenant: context.user._id });
+        const propertyId = properties[0]._id;
+        return Complaint.create({ complaint, property: propertyId });
       } catch (error) {
         console.log("Could not raise complaint", error);
       }

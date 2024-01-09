@@ -9,8 +9,8 @@ export const ADD_PROPERTY = gql`
 `;
 // Mutation to add a new complaint
 export const ADD_COMPLAINT = gql`
-  mutation AddComplaint($complaint: String!, $property: ID!) {
-    addComplaint(complaint: $complaint, property: $property) {
+  mutation AddComplaint($complaint: String!) {
+    addComplaint(complaint: $complaint) {
       _id
     }
   }

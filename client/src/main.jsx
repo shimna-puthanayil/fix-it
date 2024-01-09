@@ -7,7 +7,7 @@ import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
-import Complaint from "./components/Complaint";
+import Complaint from "./components/Complaint/ComplaintDetails";
 const router = createBrowserRouter([
   {
     path: "/",
