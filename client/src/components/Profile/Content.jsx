@@ -41,6 +41,13 @@ const columns = [
     width: 110,
     editable: true,
   },
+  {
+    field: "property",
+    headerName: "Property",
+
+    width: 110,
+    editable: true,
+  },
 ];
 
 export default function Content() {
@@ -95,9 +102,11 @@ export default function Content() {
   }
   if (state.role === "tenant") complaints = filterComplaintsForTenants();
   else complaints = filterComplaints();
+  console.log(complaints);
   for (let i = 0; i < complaints.length; i++) {
     const comp = {};
     (comp.id = i + 1),
+      (comp.id = complaints[i]._id),
       (comp.complaint = complaints[i].complaint),
       (comp.address = complaints[i].property.address),
       (comp.date = new Date(parseInt(complaints[i].date)).toLocaleDateString()),
@@ -126,6 +135,12 @@ export default function Content() {
               rows={rows}
               columns={columns}
               initialState={{
+                columns: {
+                  columnVisibilityModel: {
+                    // Hide columns status and traderName, the other columns will remain visible
+                    property: false,
+                  },
+                },
                 pagination: {
                   paginationModel: {
                     pageSize: 15,

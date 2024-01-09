@@ -50,3 +50,19 @@ export const LOGIN = gql`
     }
   }
 `;
+// Mutation to add a new complaint
+export const UPDATE_COMPLAINT = gql`
+  mutation UpdateComplaint(
+    $quotes: String!
+    $status: String
+    $complaintI: complaintId
+  ) {
+    updateComplaint(
+      quotes: $quotes
+      status: $status
+      complaintId: $complaintId
+    ) {
+      _id
+    }
+  }
+`;

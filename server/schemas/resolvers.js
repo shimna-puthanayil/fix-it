@@ -105,6 +105,17 @@ const resolvers = {
         console.log("Could not raise complaint", error);
       }
     },
+    updateComplaint: async (parent, { quotes, status }, context) => {
+      try {
+        return await Complaint.findByIdAndUpdate(
+          _id,
+          { quotes, status },
+          { new: true }
+        );
+      } catch (error) {
+        console.log("Could not raise complaint", error);
+      }
+    },
     addUser: async (parent, args) => {
       try {
         const user = await User.create(args);
@@ -114,7 +125,7 @@ const resolvers = {
         console.log("SignUp failed", error);
       }
     },
-    login: async (parent, { email, password }) => {
+    login: async (parent, { email, password, complaintId }) => {
       try {
         const user = await User.findOne({ email });
         if (!user) {

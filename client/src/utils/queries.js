@@ -79,6 +79,7 @@ export const QUERY_COMPLAINTS_RAISED = gql`
       date
       complaint
       property {
+        _id
         address
       }
       status

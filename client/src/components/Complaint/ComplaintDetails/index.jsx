@@ -18,7 +18,7 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 //import methods from files
 import Auth from "../../../utils/auth";
-import { ADD_COMPLAINT } from "../../../utils/mutations";
+import { UPDATE_COMPLAINT } from "../../../utils/mutations";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
@@ -33,13 +33,14 @@ export default function ComplaintDetails() {
   const [state, dispatch] = useComplaintContext();
 
   console.log(state.selectedComplaint);
-  const [addComplaint] = useMutation(ADD_COMPLAINT, {
+  const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
   const [complaint, setComplaint] = useState("");
   const [status, setStatus] = useState(state.selectedComplaint.status);
+  const [quotes, setQuotes] = useState(state.selectedComplaint.quotes);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const complaintId = state.selectedComplaint.id;
   const handleInputOnFocusOut = (e) => {
     const type = e.target.name;
     const value = e.target.value;
@@ -55,6 +56,9 @@ export default function ComplaintDetails() {
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
+  const handleQuotesChange = (event) => {
+    setQuotes(event.target.value);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -62,9 +66,11 @@ export default function ComplaintDetails() {
       if (Auth.loggedIn()) {
         console.log("complaint");
         console.log(complaint);
-        const response = await addComplaint({
+        const response = await updateComplaint({
           variables: {
-            complaint: complaint,
+            quotes: quotes,
+            status: status,
+            complaintId: complaintId,
           },
         });
         setComplaint("");
@@ -188,6 +194,7 @@ export default function ComplaintDetails() {
                     name="quotes"
                     multiline
                     variant="standard"
+                    onChange={handleQuotesChange}
                   />
                 </FormControl>
               </Grid>

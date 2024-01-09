@@ -13,6 +13,10 @@ const complaintSchema = new Schema({
     trim: true,
     default: "open",
   },
+  quotes: {
+    type: String,
+    default: "",
+  },
 });
 const Complaint = new model("Complaint", complaintSchema);
 module.exports = Complaint;
