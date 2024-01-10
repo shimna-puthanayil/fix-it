@@ -31,7 +31,7 @@ const router = createBrowserRouter([
         element: <Profile />,
       },
       {
-        path: "/complaint",
+        path: "/complaint/:id",
         element: <Complaint />,
       },
     ],

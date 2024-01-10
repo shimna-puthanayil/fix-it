@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMediaQuery } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -8,24 +9,26 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
-import DnsRoundedIcon from "@mui/icons-material/DnsRounded";
+import FiberNewIcon from "@mui/icons-material/FiberNew";
 import PermMediaOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActual";
-import PublicIcon from "@mui/icons-material/Public";
+import FileOpenIcon from "@mui/icons-material/FileOpen";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import Typography from "@mui/material/Typography";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import Avatar from "@mui/material/Avatar";
+import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import { CURRENT_SELECTED_ITEM } from "../../utils/actions";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
-
+import { useNavigate } from "react-router-dom";
+import PropTypes from "prop-types";
 let categories = [
   {
     id: "Complaints",
     children: [
-      { id: "Open", icon: <DnsRoundedIcon /> },
+      { id: "Open", icon: <FiberNewIcon /> },
       { id: "In Progress", icon: <PermMediaOutlinedIcon /> },
-      { id: "Resolved", icon: <PublicIcon /> },
+      { id: "Resolved", icon: <AssignmentTurnedInIcon /> },
     ],
   },
   {
@@ -59,7 +62,11 @@ const itemCategory = {
 };
 
 export default function Navigator(props) {
-  const { ...other } = props;
+  // const { onDrawerToggle } = props;
+  // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
+
+  const navigate = useNavigate();
+  const { onClose, ...other } = props;
   const [state, dispatch] = useComplaintContext();
   // click event for items on navigation bar
   const handleClick = async (childId) => {
@@ -67,19 +74,21 @@ export default function Navigator(props) {
       type: CURRENT_SELECTED_ITEM,
       selectedItem: childId,
     });
+
+    if (state.selectedComplaint) navigate("/profile");
   };
   if (state.role === "tenant") categories = categoriesForTenants;
 
   return (
     <Drawer variant="permanent" {...other}>
-      <List disablePadding>
+      <List disablePadding onClick={onClose}>
         {/* Logo  */}
         <ListItem
-          sx={{ ...item, ...itemCategory, fontSize: 22, color: "#fff" }}
+          sx={{ ...item, ...itemCategory, fontSize: 12, color: "#fff" }}
         >
           <Avatar
             alt="logo"
-            src="./images/logo.png"
+            src="/images/logo.png"
             sx={{ width: 56, height: 56 }}
             ml={2}
           />
@@ -91,9 +100,7 @@ export default function Navigator(props) {
             fontFamily={"Alice"}
             ml={2}
             align="left"
-            color="grey.700"
             sx={{
-              backgroundcolor: "primary",
               backgroundImage: `linear-gradient(to bottom,#B2C9CB,#6E9B9B,#B2C9CB)`,
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
@@ -110,14 +117,18 @@ export default function Navigator(props) {
               <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>
             </ListItem>
             {children.map(({ id: childId, icon, active }) => (
-              <ListItem disablePadding key={childId}>
+              <ListItem
+                disablePadding
+                key={childId}
+                sx={{ fontSize: 14, fontWeight: 600 }}
+              >
                 <ListItemButton
                   selected={active}
                   sx={item}
                   onClick={() => handleClick(childId)}
                 >
                   <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText>{childId}</ListItemText>
+                  <ListItemText sx={{ fontSize: 18 }}>{childId}</ListItemText>
                 </ListItemButton>
               </ListItem>
             ))}
@@ -128,3 +139,48 @@ export default function Navigator(props) {
     </Drawer>
   );
 }
+
+//   if (lgUp) {
+//     return (
+//       <Drawer
+//         anchor="left"
+//         open
+//         PaperProps={{
+//           sx: {
+//             backgroundColor: "neutral.800",
+//             color: "common.white",
+//             // width: 280,
+//           },
+//         }}
+//         variant="permanent"
+//         {...other}
+//       >
+//         {content}
+//       </Drawer>
+//     );
+//   }
+
+//   return (
+//     <Drawer
+//       anchor="left"
+//       onClose={onClose}
+//       open={open}
+//       PaperProps={{
+//         sx: {
+//           backgroundColor: "neutral.800",
+//           color: "common.white",
+//           width: 280,
+//         },
+//       }}
+//       sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
+//       variant="temporary"
+//     >
+//       {content}
+//     </Drawer>
+//   );
+// }
+
+// Navigator.propTypes = {
+//   onClose: PropTypes.func,
+//   open: PropTypes.bool,
+// };

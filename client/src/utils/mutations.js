@@ -54,13 +54,13 @@ export const LOGIN = gql`
 export const UPDATE_COMPLAINT = gql`
   mutation UpdateComplaint(
     $quotes: String!
+    $complaintId: String!
     $status: String
-    $complaintI: complaintId
   ) {
     updateComplaint(
       quotes: $quotes
-      status: $status
       complaintId: $complaintId
+      status: $status
     ) {
       _id
     }

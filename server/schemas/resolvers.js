@@ -105,10 +105,10 @@ const resolvers = {
         console.log("Could not raise complaint", error);
       }
     },
-    updateComplaint: async (parent, { quotes, status }, context) => {
+    updateComplaint: async (parent, { quotes, status, complaintId }) => {
       try {
         return await Complaint.findByIdAndUpdate(
-          _id,
+          complaintId,
           { quotes, status },
           { new: true }
         );

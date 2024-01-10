@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -24,6 +25,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function AddComplaint() {
+  const navigate = useNavigate();
   const [addComplaint] = useMutation(ADD_COMPLAINT, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
@@ -38,7 +40,6 @@ export default function AddComplaint() {
       setErrorMessage("Please enter complaint ");
     } else {
       setErrorMessage("");
-
       setComplaint("");
     }
   };
@@ -55,6 +56,7 @@ export default function AddComplaint() {
           },
         });
         setComplaint("");
+        navigate("/profile");
       }
     } catch (error) {
       setErrorMessage("Please enter required fields");

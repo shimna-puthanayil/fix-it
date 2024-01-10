@@ -2,49 +2,62 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Paper from "@mui/material/Paper";
+import Toolbar from "@mui/material/Toolbar";
+import AppBar from "@mui/material/AppBar";
 import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
-import { UPDATE_COMPLAINTS, SELECTED_COMPLAINT } from "../../utils/actions";
+import {
+  UPDATE_COMPLAINTS,
+  SELECTED_COMPLAINT,
+  CLEAR_CURRENT_SELECTED_ITEM,
+} from "../../utils/actions";
 import { idbPromise } from "../../utils/helpers";
-import Complaint from "../Complaint/AddComplaint";
 import { useEffect } from "react";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 import AddComplaint from "../Complaint/AddComplaint";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const columns = [
   {
     field: "address",
     headerName: "Address",
     width: 450,
+    flex: 1,
     editable: true,
   },
   {
     field: "complaint",
     headerName: "Complaint",
     width: 550,
+    flex: 1,
     editable: true,
   },
   {
     field: "date",
     headerName: "Date",
-
     width: 110,
+    flex: .3,
     editable: true,
   },
   {
     field: "status",
     headerName: "Status",
-
     width: 110,
+    flex: 1,
     editable: true,
   },
   {
     field: "property",
     headerName: "Property",
-
+    width: 110,
+    editable: true,
+  },
+  {
+    field: "quotes",
+    headerName: "Quotes",
     width: 110,
     editable: true,
   },
@@ -52,7 +65,6 @@ const columns = [
 
 export default function Content() {
   const navigate = useNavigate();
-  const [message, setMessage] = React.useState("");
   const [state, dispatch] = useComplaintContext();
   let status = "open";
 
@@ -64,6 +76,7 @@ export default function Content() {
   let complaints = [],
     comps = [];
   const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED, {
+    fetchPolicy: "network-only",
     variables: status,
   });
 
@@ -110,9 +123,12 @@ export default function Content() {
       (comp.complaint = complaints[i].complaint),
       (comp.address = complaints[i].property.address),
       (comp.date = new Date(parseInt(complaints[i].date)).toLocaleDateString()),
-      ((comp.status = complaints[i].status), comps.push(comp));
+      ((comp.status = complaints[i].status),
+      (comp.quotes = complaints[i].quotes),
+      comps.push(comp));
   }
   const rows = comps;
+  let clickedId = "";
   //click event of grid( when a particular complaint is clicked )
   const handleRowClick = (params) => {
     console.log(params.row);
@@ -120,40 +136,122 @@ export default function Content() {
       type: SELECTED_COMPLAINT,
       selectedComplaint: { ...params.row },
     });
+    dispatch({
+      type: CLEAR_CURRENT_SELECTED_ITEM,
+      selectedItem: "",
+    });
+    clickedId = params.row.id;
+    console.log(clickedId);
+    navigate(`/complaint/${clickedId}`);
   };
 
-  if (state.selectedItem === "Add Complaint") {
-    console.log("add complaint");
-    return <AddComplaint />;
-  } else
+  if (state.selectedItem === "Add Complaint") return <AddComplaint />;
+  else if (state.role === "tenant")
+    // return (
+    //   <Paper sx={{ maxWidth: 936, margin: "auto", overflow: "hidden" }}>
+    //     <AppBar
+    //       position="static"
+    //       color="default"
+    //       elevation={0}
+    //       sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
+    //     >
+    //       <Toolbar>
+    //         <Stack spacing={2} sx={{ height: "100%", width: "100%" }}>
+    //           <Box sx={{ height: "100%", width: "100%" }}>
+    //             <DataGrid
+    //               onRowClick={handleRowClick}
+    //               rows={rows}
+    //               columns={columns}
+    //               columnVisibilityModel={{
+    //                 // Hide columns property and quotes, the other columns will remain visible
+    //                 quotes: false,
+    //                 property: false,
+    //               }}
+    //               initialState={{
+    //                 pagination: {
+    //                   paginationModel: {
+    //                     pageSize: 15,
+    //                   },
+    //                 },
+    //               }}
+    //               pageSizeOptions={[5]}
+    //               checkboxSelection
+    //               disableRowSelectionOnClick
+    //             />
+    //           </Box>
+    //           {/*{message && <Alert severity="info">{message}</Alert>}*/}
+    //         </Stack>
+    //       </Toolbar>
+    //     </AppBar>
+    //   </Paper>
+    // );
+    return (
+      <Paper sx={{ maxWidth: 936, margin: "auto", overflow: "hidden" }}>
+        <AppBar
+          position="static"
+          color="default"
+          elevation={0}
+          sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
+        >
+          <Toolbar>
+            <Grid container spacing={2} alignItems="center">
+              <Grid item xs>
+                {" "}
+                <DataGrid
+                  onRowClick={handleRowClick}
+                  rows={rows}
+                  columns={columns}
+                  columnVisibilityModel={{
+                    // Hide columns property and quotes, the other columns will remain visible
+                    quotes: false,
+                    property: false,
+                  }}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: 15,
+                      },
+                    },
+                  }}
+                  pageSizeOptions={[5]}
+                  checkboxSelection
+                  disableRowSelectionOnClick
+                />
+              </Grid>
+              <Grid item></Grid>
+            </Grid>
+          </Toolbar>
+        </AppBar>
+      </Paper>
+    );
+  else {
+    console.log("hi");
     return (
       <Stack spacing={2} sx={{ height: "100%", width: "100%" }}>
         <Box sx={{ height: "100%", width: "100%" }}>
-          <Link to={"/complaint"}>
-            <DataGrid
-              onRowClick={handleRowClick}
-              rows={rows}
-              columns={columns}
-              initialState={{
-                columns: {
-                  columnVisibilityModel: {
-                    // Hide columns status and traderName, the other columns will remain visible
-                    property: false,
-                  },
+          <DataGrid
+            onRowClick={handleRowClick}
+            rows={rows}
+            columns={columns}
+            columnVisibilityModel={{
+              // Hide columns property and quotes, the other columns will remain visible
+
+              property: false,
+            }}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: 15,
                 },
-                pagination: {
-                  paginationModel: {
-                    pageSize: 15,
-                  },
-                },
-              }}
-              pageSizeOptions={[5]}
-              checkboxSelection
-              disableRowSelectionOnClick
-            />
-          </Link>
+              },
+            }}
+            pageSizeOptions={[5]}
+            checkboxSelection
+            disableRowSelectionOnClick
+          />
         </Box>
         {/*{message && <Alert severity="info">{message}</Alert>}*/}
       </Stack>
     );
+  }
 }

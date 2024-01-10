@@ -12,6 +12,7 @@ type Complaint{
     property:Property
     date:String
     status:String
+    quotes:String
 }
 type User{
     _id:ID
@@ -43,7 +44,7 @@ type Mutation{
 addProperty(propertyDetails:propertyInput):Property
 addComplaint(complaint:String!):Complaint
 addUser(username:String!,password:String!,email:String!,role:String!):Auth
-updateComplaint(quotes:String!,status:String,complaintId:String):Complaint
+updateComplaint(quotes:String!,status:String,complaintId:String!):Complaint
 login(email: String!, password: String!): Auth
 }`;
 module.exports = typeDefs;

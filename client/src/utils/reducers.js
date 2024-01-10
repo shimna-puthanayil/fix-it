@@ -4,6 +4,7 @@ import {
   UPDATE_ROLE,
   UPDATE_PROPERTIES,
   SELECTED_COMPLAINT,
+  CLEAR_CURRENT_SELECTED_ITEM,
 } from "./actions";
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
 export const reducer = (state, action) => {
@@ -30,11 +31,18 @@ export const reducer = (state, action) => {
         ...state,
         selectedItem: action.selectedItem,
       };
+    //clears the current selected item
+    case CLEAR_CURRENT_SELECTED_ITEM:
+      return {
+        ...state,
+        selectedItem: "",
+      };
     case UPDATE_ROLE:
       return {
         ...state,
         role: action.role,
       };
+
     default:
       return state;
   }

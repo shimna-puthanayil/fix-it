@@ -83,6 +83,7 @@ export const QUERY_COMPLAINTS_RAISED = gql`
         address
       }
       status
+      quotes
     }
   }
 `;

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -10,7 +11,6 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
-import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useMutation } from "@apollo/client";
 import Select from "@mui/material/Select";
 import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
@@ -22,6 +22,7 @@ import { UPDATE_COMPLAINT } from "../../../utils/mutations";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
+import Quotes from "../../Quotes";
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -30,29 +31,31 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function ComplaintDetails() {
-  const [state, dispatch] = useComplaintContext();
+  // const complaintId = state.selectedComplaint.id;
 
-  console.log(state.selectedComplaint);
+  const [state, dispatch] = useComplaintContext();
+  const navigate = useNavigate();
   const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
-  const [complaint, setComplaint] = useState("");
+
   const [status, setStatus] = useState(state.selectedComplaint.status);
   const [quotes, setQuotes] = useState(state.selectedComplaint.quotes);
   const [errorMessage, setErrorMessage] = useState("");
   const complaintId = state.selectedComplaint.id;
-  const handleInputOnFocusOut = (e) => {
-    const type = e.target.name;
-    const value = e.target.value;
-    // check if any field left empty and email is invalid and set error message
-    if (!value) {
-      setErrorMessage("Please enter quotes ");
-    } else {
-      setErrorMessage("");
+  console.log(complaintId);
+  // const handleInputOnFocusOut = (e) => {
+  //   const type = e.target.name;
+  //   const value = e.target.value;
+  //   // check if any field left empty and email is invalid and set error message
+  //   if (!value) {
+  //     setErrorMessage("Please enter quotes ");
+  //   } else {
+  //     setErrorMessage("");
 
-      setStatus("");
-    }
-  };
+  //     setStatus("");
+  //   }
+  // };
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
@@ -64,8 +67,6 @@ export default function ComplaintDetails() {
     try {
       const data = new FormData(event.currentTarget);
       if (Auth.loggedIn()) {
-        console.log("complaint");
-        console.log(complaint);
         const response = await updateComplaint({
           variables: {
             quotes: quotes,
@@ -73,7 +74,7 @@ export default function ComplaintDetails() {
             complaintId: complaintId,
           },
         });
-        setComplaint("");
+        navigate("/profile");
       }
     } catch (error) {
       setErrorMessage("Please enter required fields");
@@ -189,6 +190,7 @@ export default function ComplaintDetails() {
               <Grid item xs={12}>
                 <FormControl sx={{ m: 1 }} fullWidth>
                   <TextField
+                    value={quotes}
                     id="standard-multiline-static"
                     label="Quotes"
                     name="quotes"
@@ -199,6 +201,7 @@ export default function ComplaintDetails() {
                 </FormControl>
               </Grid>
             </Grid>
+            <Quotes />
             <ColorButton
               type="submit"
               variant="contained"
