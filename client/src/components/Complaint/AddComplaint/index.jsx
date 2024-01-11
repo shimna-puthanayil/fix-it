@@ -80,10 +80,9 @@ export default function AddComplaint() {
       <Grid
         item
         xs={12}
-        sm={8}
-        md={10}
+        sm={12}
+        md={12}
         component={Paper}
-        elevation={6}
         square
         sx={{
           width: "100%",

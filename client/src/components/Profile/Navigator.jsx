@@ -22,6 +22,7 @@ import { CURRENT_SELECTED_ITEM } from "../../utils/actions";
 import { useComplaintContext } from "../../utils/GlobalState";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import auth from "../../utils/auth";
 let categories = [
   {
     id: "Complaints",
@@ -62,9 +63,6 @@ const itemCategory = {
 };
 
 export default function Navigator(props) {
-  // const { onDrawerToggle } = props;
-  // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
-
   const navigate = useNavigate();
   const { onClose, ...other } = props;
   const [state, dispatch] = useComplaintContext();
@@ -74,7 +72,9 @@ export default function Navigator(props) {
       type: CURRENT_SELECTED_ITEM,
       selectedItem: childId,
     });
-
+    if (!auth.loggedIn()) {
+      navigate("/signin");
+    }
     if (state.selectedComplaint) navigate("/profile");
   };
   if (state.role === "tenant") categories = categoriesForTenants;
@@ -128,7 +128,7 @@ export default function Navigator(props) {
                   onClick={() => handleClick(childId)}
                 >
                   <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText sx={{ fontSize: 18 }}>{childId}</ListItemText>
+                  <ListItemText sx={{ fontSize: 30 }}>{childId}</ListItemText>
                 </ListItemButton>
               </ListItem>
             ))}
@@ -139,48 +139,3 @@ export default function Navigator(props) {
     </Drawer>
   );
 }
-
-//   if (lgUp) {
-//     return (
-//       <Drawer
-//         anchor="left"
-//         open
-//         PaperProps={{
-//           sx: {
-//             backgroundColor: "neutral.800",
-//             color: "common.white",
-//             // width: 280,
-//           },
-//         }}
-//         variant="permanent"
-//         {...other}
-//       >
-//         {content}
-//       </Drawer>
-//     );
-//   }
-
-//   return (
-//     <Drawer
-//       anchor="left"
-//       onClose={onClose}
-//       open={open}
-//       PaperProps={{
-//         sx: {
-//           backgroundColor: "neutral.800",
-//           color: "common.white",
-//           width: 280,
-//         },
-//       }}
-//       sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}
-//       variant="temporary"
-//     >
-//       {content}
-//     </Drawer>
-//   );
-// }
-
-// Navigator.propTypes = {
-//   onClose: PropTypes.func,
-//   open: PropTypes.bool,
-// };

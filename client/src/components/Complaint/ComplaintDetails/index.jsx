@@ -44,18 +44,7 @@ export default function ComplaintDetails() {
   const [errorMessage, setErrorMessage] = useState("");
   const complaintId = state.selectedComplaint.id;
   console.log(complaintId);
-  // const handleInputOnFocusOut = (e) => {
-  //   const type = e.target.name;
-  //   const value = e.target.value;
-  //   // check if any field left empty and email is invalid and set error message
-  //   if (!value) {
-  //     setErrorMessage("Please enter quotes ");
-  //   } else {
-  //     setErrorMessage("");
 
-  //     setStatus("");
-  //   }
-  // };
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
@@ -201,6 +190,7 @@ export default function ComplaintDetails() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
+                {/*" Grid Of quotes "*/}
                 <Quotes />
               </Grid>
             </Grid>
