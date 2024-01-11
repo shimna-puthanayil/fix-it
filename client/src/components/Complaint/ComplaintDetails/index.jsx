@@ -200,8 +200,11 @@ export default function ComplaintDetails() {
                   />
                 </FormControl>
               </Grid>
+              <Grid item xs={12}>
+                <Quotes />
+              </Grid>
             </Grid>
-            <Quotes />
+
             <ColorButton
               type="submit"
               variant="contained"

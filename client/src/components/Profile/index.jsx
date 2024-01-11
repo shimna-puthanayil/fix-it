@@ -191,7 +191,6 @@ export default function ProfileComponent() {
             <Navigator
               PaperProps={{
                 style: { width: drawerWidth },
-                onclick: { handleDrawerToggle },
               }}
               variant="temporary"
               open={mobileOpen}
@@ -202,13 +201,19 @@ export default function ProfileComponent() {
           <Navigator
             PaperProps={{ style: { width: drawerWidth } }}
             sx={{ display: { sm: "block", xs: "none" } }}
+            onDrawerToggle={handleDrawerToggle}
           />
         </Box>
         <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
           <Header onDrawerToggle={handleDrawerToggle} />
           <Box
             component="main"
-            sx={{ flex: 1, py: 6, px: 4, bgcolor: "#eaeff1" }}
+            sx={{
+              flex: 1,
+              py: 6,
+              px: 4,
+              bgcolor: "#eaeff1",
+            }}
           >
             {id && !state.selectedItem ? <ComplaintDetails /> : <Content />}
           </Box>

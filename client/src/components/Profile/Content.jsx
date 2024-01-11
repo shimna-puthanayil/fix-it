@@ -6,8 +6,11 @@ import Paper from "@mui/material/Paper";
 import Toolbar from "@mui/material/Toolbar";
 import AppBar from "@mui/material/AppBar";
 import Alert from "@mui/material/Alert";
+import { Card } from "@mui/material";
+import { Scrollbar } from "../Scrollbar";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
+import { styled } from "@mui/material/styles";
 import { QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
 import {
   UPDATE_COMPLAINTS,
@@ -23,8 +26,10 @@ import { Link, useNavigate } from "react-router-dom";
 const columns = [
   {
     field: "address",
+    headerClassName: "super-app-theme--header",
     headerName: "Address",
     width: 450,
+    minWidth: 150,
     flex: 1,
     editable: true,
   },
@@ -39,7 +44,7 @@ const columns = [
     field: "date",
     headerName: "Date",
     width: 110,
-    flex: .3,
+    flex: 0.3,
     editable: true,
   },
   {
@@ -62,7 +67,22 @@ const columns = [
     editable: true,
   },
 ];
+const SIDE_NAV_WIDTH = 280;
+const LayoutRoot = styled("div")(({ theme }) => ({
+  display: "flex",
+  flex: "1 1 auto",
+  maxWidth: "100%",
+  [theme.breakpoints.up("lg")]: {
+    paddingLeft: SIDE_NAV_WIDTH,
+  },
+}));
 
+const LayoutContainer = styled("div")({
+  display: "flex",
+  flex: "1 1 auto",
+  flexDirection: "column",
+  width: "100%",
+});
 export default function Content() {
   const navigate = useNavigate();
   const [state, dispatch] = useComplaintContext();
@@ -186,46 +206,44 @@ export default function Content() {
     //   </Paper>
     // );
     return (
-      <Paper sx={{ maxWidth: 936, margin: "auto", overflow: "hidden" }}>
-        <AppBar
-          position="static"
-          color="default"
-          elevation={0}
-          sx={{ borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}
-        >
-          <Toolbar>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs>
-                {" "}
-                <DataGrid
-                  onRowClick={handleRowClick}
-                  rows={rows}
-                  columns={columns}
-                  columnVisibilityModel={{
-                    // Hide columns property and quotes, the other columns will remain visible
-                    quotes: false,
-                    property: false,
-                  }}
-                  initialState={{
-                    pagination: {
-                      paginationModel: {
-                        pageSize: 15,
-                      },
+      <Grid
+        container
+        component="main"
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <Grid item xs={12} md={8} lg={10}>
+          <Card>
+            <Scrollbar>
+              <DataGrid
+                onRowClick={handleRowClick}
+                rows={rows}
+                columns={columns}
+                columnVisibilityModel={{
+                  // Hide columns property and quotes, the other columns will remain visible
+                  quotes: false,
+                  property: false,
+                }}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 15,
                     },
-                  }}
-                  pageSizeOptions={[5]}
-                  checkboxSelection
-                  disableRowSelectionOnClick
-                />
-              </Grid>
-              <Grid item></Grid>
-            </Grid>
-          </Toolbar>
-        </AppBar>
-      </Paper>
+                  },
+                }}
+                pageSizeOptions={[5]}
+                disableRowSelectionOnClick
+              />
+            </Scrollbar>
+          </Card>
+        </Grid>
+      </Grid>
     );
-  else {
-    console.log("hi");
+  else
     return (
       <Stack spacing={2} sx={{ height: "100%", width: "100%" }}>
         <Box sx={{ height: "100%", width: "100%" }}>
@@ -253,5 +271,4 @@ export default function Content() {
         {/*{message && <Alert severity="info">{message}</Alert>}*/}
       </Stack>
     );
-  }
 }
