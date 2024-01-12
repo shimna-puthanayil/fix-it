@@ -9,7 +9,7 @@ import Link from "@mui/material/Link";
 import Navigator from "../../components/Profile/Navigator";
 import Content from "../../components/Profile/Content";
 import Header from "../../components/Profile/Header";
-import ComplaintDetails from "../Complaint/complaintDetails";
+import ComplaintDetails from "../../components/Complaint/ComplaintDetails";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 function Copyright() {
