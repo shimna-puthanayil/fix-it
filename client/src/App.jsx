@@ -1,4 +1,5 @@
 import { Outlet } from "react-router-dom";
+import ScrollToTop from "./components/Scroll/scrollToTop";
 import "@fontsource/roboto/300.css";
 import {
   ApolloClient,
@@ -30,6 +31,7 @@ function App() {
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <ComplaintProvider>
+          <ScrollToTop />
           <Outlet />
         </ComplaintProvider>
       </ThemeProvider>

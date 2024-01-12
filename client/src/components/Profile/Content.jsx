@@ -11,6 +11,7 @@ import {
   UPDATE_COMPLAINTS,
   SELECTED_COMPLAINT,
   CLEAR_CURRENT_SELECTED_ITEM,
+  UPDATE_COMPLAINT,
 } from "../../utils/actions";
 import { idbPromise } from "../../utils/helpers";
 import { useEffect } from "react";
@@ -18,6 +19,7 @@ import { useEffect } from "react";
 import { useComplaintContext } from "../../utils/GlobalState";
 import AddComplaint from "../Complaint/AddComplaint";
 import { useNavigate } from "react-router-dom";
+import ApproveComplaint from "../Complaint/ApproveComplaint";
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down("md")]: {
@@ -48,7 +50,6 @@ export default function Content() {
       headerName: "Address",
       width: 400,
       minWidth: 150,
-      editable: true,
     },
     {
       renderHeader: () => <strong>{"Complaint "}</strong>,
@@ -56,7 +57,6 @@ export default function Content() {
       headerName: "Complaint",
       width: 502,
       headerClassName: "super-app-theme--header",
-      editable: true,
     },
     {
       renderHeader: () => <strong>{"Date "}</strong>,
@@ -64,7 +64,6 @@ export default function Content() {
       headerName: "Date",
       width: dateColumnWidth,
       headerClassName: "super-app-theme--header",
-      editable: true,
     },
     {
       renderHeader: () => <strong>{"Status "}</strong>,
@@ -72,13 +71,11 @@ export default function Content() {
       headerName: "Status",
       width: statusColumnWidth,
       headerClassName: "super-app-theme--header",
-      editable: true,
     },
     {
       field: "property",
       headerName: "Property",
       width: 210,
-      editable: true,
       headerClassName: "super-app-theme--header",
     },
     {
@@ -102,7 +99,6 @@ export default function Content() {
     comps = [];
 
   const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED, {
-    fetchPolicy: "network-only",
     variables: status,
   });
 
@@ -114,21 +110,21 @@ export default function Content() {
         complaints: data.complaintsRaised,
       });
       //update indexedDB with new complaints
-      console.log(data);
-      data.complaintsRaised.forEach((complaint) => {
-        idbPromise("complaints", "put", complaint);
-      });
+
+      // data.complaintsRaised.forEach((complaint) => {
+      //   idbPromise("complaints", "put", complaint);
+      // });
     } else if (!loading) {
       //gets the complaints from indexedDB and updates the state complaints
-      idbPromise("complaints", "get").then((complaints) => {
-        dispatch({
-          type: UPDATE_COMPLAINTS,
-          complaints: complaints,
-        });
-      });
+      // idbPromise("complaints", "get").then((complaints) => {
+      //   dispatch({
+      //     type: UPDATE_COMPLAINTS,
+      //     complaints: complaints,
+      //   });
+      // });
     }
   }, [loading, data, dispatch]);
-
+  console.log(state.complaints);
   function filterComplaints() {
     //returns  complaints based on status for owner and agent login
     return state.complaints.filter((complaint) => complaint.status === status);
@@ -151,7 +147,7 @@ export default function Content() {
       (comp.address = complaints[i].property.address),
       (comp.date = new Date(parseInt(complaints[i].date)).toLocaleDateString()),
       ((comp.status = complaints[i].status),
-      (comp.quotes = complaints[i].quotes),
+      (comp.quotes = ""),
       comps.push(comp));
   }
   const rows = comps;
@@ -167,12 +163,30 @@ export default function Content() {
       type: CLEAR_CURRENT_SELECTED_ITEM,
       selectedItem: "",
     });
+
     clickedId = params.row.id;
-    console.log(clickedId);
-    navigate(`/complaint/${clickedId}`);
+    // if (state.role === "agent") navigate(`/complaint/${clickedId}`);
+    switch (state.role) {
+      case "agent":
+        navigate(`/complaint/${clickedId}`);
+        break;
+      case "tenant":
+        dispatch({
+          type: UPDATE_COMPLAINT,
+          updateComplaint: true,
+        });
+        navigate(`/updatecomplaint/${clickedId}`);
+        break;
+      case "owner":
+        navigate(`/complaint/approve/${clickedId}`);
+        break;
+      default:
+        break;
+    }
   };
 
   if (state.selectedItem === "Add Complaint") return <AddComplaint />;
+  else if (state.updateComplaint) return <AddComplaint />;
   else if (state.role === "tenant")
     return (
       <Root container>

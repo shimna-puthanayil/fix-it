@@ -38,7 +38,11 @@ function Header(props) {
     if (state.selectedItem === "Add Complaint") title = "";
     else if (role === "tenant" && state.selectedItem === "My Complaints") {
       title = "My Complaints";
-    } else title = state.selectedItem;
+    }
+    // } else if (role === "tenant" && state.selectedItem === "Add Complaint") {
+    //   title = "My Complaints";
+    // } 
+    else title = state.selectedItem;
     console.log(title);
   }
   return (

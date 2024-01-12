@@ -6,8 +6,9 @@ import App from "./App";
 import SignIn from "./components/SignIn";
 import SignUp from "./components/SignUp";
 import Profile from "./pages/Profile";
-import Home from "./pages/Home";
 import Complaint from "./pages/Complaint";
+import UpdateComplaint from "./pages/UpdateComplaint";
+import ApproveComplaint from "./components/Complaint/ApproveComplaint";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -33,6 +34,14 @@ const router = createBrowserRouter([
       {
         path: "/complaint/:id",
         element: <Complaint />,
+      },
+      {
+        path: "/updatecomplaint/:id",
+        element: <UpdateComplaint />,
+      },
+      {
+        path: "/complaint/approve/:id",
+        element: <ApproveComplaint />,
       },
     ],
   },

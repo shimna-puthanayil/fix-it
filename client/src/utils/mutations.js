@@ -51,18 +51,40 @@ export const LOGIN = gql`
   }
 `;
 // Mutation to add a new complaint
+// export const UPDATE_COMPLAINT = gql`
+//   mutation UpdateComplaint(
+//     $quotes: [quoteInput]!
+//     $complaintId: String!
+//     $status: String
+//   ) {
+//     updateComplaint(
+//       quotes: $quotes
+//       complaintId: $complaintId
+//       status: $status
+//     ) {
+//       _id
+//     }
+//   }
+// `;
 export const UPDATE_COMPLAINT = gql`
   mutation UpdateComplaint(
-    $quotes: String!
-    $complaintId: String!
+    $quotes: [quoteInput]
     $status: String
+    $complaintId: String!
+    $complaint: String!
   ) {
     updateComplaint(
       quotes: $quotes
-      complaintId: $complaintId
       status: $status
+      complaintId: $complaintId,
+      complaint: $complaint
     ) {
-      _id
+      complaint
+      quotes {
+        address
+        businessName
+        quote
+      }
     }
   }
 `;

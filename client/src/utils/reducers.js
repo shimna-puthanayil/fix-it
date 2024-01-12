@@ -6,6 +6,7 @@ import {
   SELECTED_COMPLAINT,
   CLEAR_CURRENT_SELECTED_ITEM,
   UPDATE_QUOTES,
+  UPDATE_COMPLAINT,CLEAR_UPDATE_COMPLAINT
 } from "./actions";
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
 export const reducer = (state, action) => {
@@ -47,6 +48,18 @@ export const reducer = (state, action) => {
       return {
         ...state,
         quotes: [...action.quotes],
+      };
+    //sets the state as true for update complaint
+    case UPDATE_COMPLAINT:
+      return {
+        ...state,
+        updateComplaint: true,
+      };
+    //clears the state
+    case CLEAR_UPDATE_COMPLAINT:
+      return {
+        ...state,
+        updateComplaint: false,
       };
     default:
       return state;

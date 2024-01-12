@@ -17,7 +17,10 @@ import Typography from "@mui/material/Typography";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
 import Avatar from "@mui/material/Avatar";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
-import { CURRENT_SELECTED_ITEM } from "../../utils/actions";
+import {
+  CURRENT_SELECTED_ITEM,
+  CLEAR_UPDATE_COMPLAINT,
+} from "../../utils/actions";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 import { useNavigate } from "react-router-dom";
@@ -75,6 +78,10 @@ export default function Navigator(props) {
     if (!auth.loggedIn()) {
       navigate("/signin");
     }
+    dispatch({
+      type: CLEAR_UPDATE_COMPLAINT,
+    });
+
     if (state.selectedComplaint) navigate("/profile");
   };
   if (state.role === "tenant") categories = categoriesForTenants;

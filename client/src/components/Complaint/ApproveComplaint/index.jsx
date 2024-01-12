@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -31,7 +31,9 @@ const ColorButton = styled(Button)(({ theme }) => ({
   background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
 }));
 
-export default function ComplaintDetails() {
+export default function ApproveComplaint() {
+  // const complaintId = state.selectedComplaint.id;
+
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
   const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
@@ -42,6 +44,8 @@ export default function ComplaintDetails() {
   const [quotes, setQuotes] = useState(state.selectedComplaint.quotes);
   const [errorMessage, setErrorMessage] = useState("");
   const complaintId = state.selectedComplaint.id;
+  console.log(complaintId);
+
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
@@ -55,6 +59,13 @@ export default function ComplaintDetails() {
       if (Auth.loggedIn()) {
         //To Do :get quotes from state and update complaint
         const quotes = state.quotes;
+        console.log(quotes);
+        const mapped = quotes.map((x) => {
+          {
+            x.address, x.name, x.quote;
+          }
+        });
+        console.log(mapped);
         const suggestedQuotes = [];
         for (let i = 0; i < quotes.length; i++) {
           const quote = {};
@@ -63,12 +74,13 @@ export default function ComplaintDetails() {
             (quote.quote = quotes[i].quote.toString()),
             suggestedQuotes.push(quote);
         }
+        console.log(suggestedQuotes);
+        console.log(status);
         const response = await updateComplaint({
           variables: {
             quotes: suggestedQuotes,
             status: status,
             complaintId: complaintId,
-            complaint: "",
           },
         });
         navigate("/profile");
@@ -189,18 +201,13 @@ export default function ComplaintDetails() {
                   <TextField
                     value={quotes}
                     id="standard-multiline-static"
-                    label="Approved Quote"
+                    label="Quotes"
                     name="quotes"
                     multiline
                     variant="standard"
                     onChange={handleQuotesChange}
-                    aria-readonly
                   />
                 </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                {/*" Grid Of quotes "*/}
-                <Quotes />
               </Grid>
             </Grid>
 

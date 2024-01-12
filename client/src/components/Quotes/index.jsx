@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
+import { styled } from "@mui/material/styles";
 import {
   GridRowModes,
   DataGrid,
@@ -18,11 +19,42 @@ import { UPDATE_QUOTES } from "../../utils/actions";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 const roles = ["Market", "Finance", "Development"];
-const quotes = [];
+let quotes = [];
 const randomRole = () => {
   return randomArrayItem(roles);
 };
-
+const initialRows = [
+  {
+    id: randomId(),
+    name: "hello",
+    address: "25",
+    quote: 1,
+  },
+  {
+    id: randomId(),
+    name: "hello",
+    address: "25",
+    quote: 1,
+  },
+  {
+    id: randomId(),
+    name: "hello",
+    address: "25",
+    quote: 1,
+  },
+  {
+    id: randomId(),
+    name: "hello",
+    address: "25",
+    quote: 1,
+  },
+  {
+    id: randomId(),
+    name: "hello",
+    address: "25",
+    quote: 1,
+  },
+];
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
@@ -40,17 +72,39 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
+      <ColorButton startIcon={<AddIcon />} onClick={handleClick}>
+        Add quote
+      </ColorButton>
     </GridToolbarContainer>
   );
 }
-
+const ColorButton = styled(Button)(({ theme }) => ({
+  color: "#457373",
+  fontWeight: "bold",
+  // width: "80%",
+  // background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
+}));
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState([]);
-  const [rowModesModel, setRowModesModel] = React.useState({});
   const [state, dispatch] = useComplaintContext();
+  const quotesOfComplaint = state.complaints.find(
+    (x) => x._id === state.selectedComplaint.id
+  ).quotes;
+  console.log(quotesOfComplaint);
+  const suggestedQuotes = [];
+  for (let i = 0; i < quotesOfComplaint.length; i++) {
+    const quote = {};
+    (quote.id = randomId()),
+      (quote.name = quotesOfComplaint[i].businessName),
+      (quote.address = quotesOfComplaint[i].address),
+      (quote.quote = quotesOfComplaint[i].quote),
+      suggestedQuotes.push(quote);
+  }
+  console.log(suggestedQuotes);
+  quotes = suggestedQuotes;
+  console.log(quotes);
+  const [rows, setRows] = React.useState(suggestedQuotes);
+  const [rowModesModel, setRowModesModel] = React.useState({});
+
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -90,23 +144,14 @@ export default function FullFeaturedCrudGrid() {
       (quote.name = updatedRow.name),
       (quote.address = updatedRow.address),
       (quote.quote = updatedRow.quote);
-    // if (quotes.forEach((quote) => quote.id === updatedRow.id))
-    const itemInQuotes = quotes.find((quote) => quote.id === updatedRow.id);
-    // const itemInQuotes = (quote) => quote.id === updatedRow.id;
-
-    // console.log(quotes.findIndex(itemInQuotes));
     const isLargeNumber = (quote) => quote.id === updatedRow.id;
     const index = quotes.findIndex(isLargeNumber);
     if (index >= 0) {
       quotes.splice(index, 1);
     }
-    console.log(index);
-    console.log(itemInQuotes);
-    console.log(quotes);
-    if (itemInQuotes) {
-    }
     quotes.push(quote);
-    // adding new/updated to state quotes
+    console.log(quotes);
+    // adding new/updated  quote details to state quotes
     dispatch({
       type: UPDATE_QUOTES,
       quotes: quotes,
@@ -123,7 +168,9 @@ export default function FullFeaturedCrudGrid() {
     {
       field: "name",
       headerName: "Business Name",
-      width: 220,
+      renderHeader: () => <strong>{"Business Name "}</strong>,
+      headerClassName: "super-app-theme--header",
+      width: 300,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -131,15 +178,19 @@ export default function FullFeaturedCrudGrid() {
     {
       field: "address",
       headerName: "Address",
-      width: 220,
+      renderHeader: () => <strong>{" Address "}</strong>,
+      headerClassName: "super-app-theme--header",
+      width: 310,
       editable: true,
       valueOptions: ["Market", "Finance", "Development"],
     },
     {
       field: "quote",
       headerName: "Quote",
+      renderHeader: () => <strong>{"Quote "}</strong>,
+      headerClassName: "super-app-theme--header",
       type: "number",
-      width: 220,
+      width: 200,
       align: "left",
       headerAlign: "left",
       editable: true,
@@ -148,8 +199,10 @@ export default function FullFeaturedCrudGrid() {
     {
       field: "actions",
       type: "actions",
+      renderHeader: () => <strong>{"actions "}</strong>,
+      headerClassName: "super-app-theme--header",
       headerName: "Actions",
-      width: 100,
+      width: 250,
       cellClassName: "actions",
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -203,6 +256,10 @@ export default function FullFeaturedCrudGrid() {
         },
         "& .textPrimary": {
           color: "text.primary",
+        },
+        "& .super-app-theme--header": {
+          backgroundColor: "#101F33",
+          color: "white",
         },
       }}
     >

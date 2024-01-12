@@ -15,8 +15,14 @@ import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutli
 import { useMutation } from "@apollo/client";
 //import methods from files
 import Auth from "../../../utils/auth";
-import { ADD_COMPLAINT } from "../../../utils/mutations";
+import {
+  CLEAR_UPDATE_COMPLAINT,
+  CLEAR_CURRENT_SELECTED_ITEM,
+} from "../../../utils/actions";
+import { ADD_COMPLAINT, UPDATE_COMPLAINT } from "../../../utils/mutations";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
+// import global state
+import { useComplaintContext } from "../../../utils/GlobalState";
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -25,11 +31,18 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function AddComplaint() {
+  const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
   const [addComplaint] = useMutation(ADD_COMPLAINT, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
-  const [complaint, setComplaint] = useState("");
+  const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
+    refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
+  });
+  let [complaint, setComplaint] = useState("");
+  if (state.updateComplaint) {
+    [complaint, setComplaint] = useState(state.selectedComplaint.complaint);
+  }
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleInputOnFocusOut = (e) => {
@@ -48,13 +61,28 @@ export default function AddComplaint() {
     try {
       const data = new FormData(event.currentTarget);
       if (Auth.loggedIn()) {
-        console.log("complaint");
-        console.log(complaint);
-        const response = await addComplaint({
-          variables: {
-            complaint: complaint,
-          },
-        });
+        if (state.updateComplaint) {
+          const response = await updateComplaint({
+            variables: {
+              complaint: complaint,
+              quotes: [],
+              status: "",
+              complaintId: state.selectedComplaint.id,
+            },
+          });
+          dispatch({
+            type: CLEAR_UPDATE_COMPLAINT,
+          });
+        } else {
+          const response = await addComplaint({
+            variables: {
+              complaint: complaint,
+            },
+          });
+          dispatch({
+            type: CLEAR_CURRENT_SELECTED_ITEM,
+          });
+        }
         setComplaint("");
         navigate("/profile");
       }
@@ -99,9 +127,17 @@ export default function AddComplaint() {
           <Avatar sx={{ m: 1, bgcolor: "#457373" }}>
             <DriveFileRenameOutlineIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Raise A Complaint
-          </Typography>
+
+          {state.updateComplaint ? (
+            <Typography component="h1" variant="h5">
+              Update Complaint{" "}
+            </Typography>
+          ) : (
+            <Typography component="h1" variant="h5">
+              Raise A Complaint{" "}
+            </Typography>
+          )}
+
           <Box
             width={"80%"}
             component="form"

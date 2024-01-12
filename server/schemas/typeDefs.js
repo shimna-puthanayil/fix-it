@@ -6,13 +6,19 @@ type Property{
    agent:User
    tenant:User
 }
+type Quote{
+    businessName:String!
+    address:String!
+    quote:String!
+    }
+
 type Complaint{
     _id:ID
     complaint:String
     property:Property
     date:String
     status:String
-    quotes:String
+    quotes:[Quote]
 }
 type User{
     _id:ID
@@ -31,6 +37,12 @@ owner:ID!
 agent:ID!
 tenant:ID!
 }
+input quoteInput{
+    businessName:String!
+    address:String!
+    quote:String!
+    }
+
 type Query{
 user:User
 properties:[Property]
@@ -44,7 +56,7 @@ type Mutation{
 addProperty(propertyDetails:propertyInput):Property
 addComplaint(complaint:String!):Complaint
 addUser(username:String!,password:String!,email:String!,role:String!):Auth
-updateComplaint(quotes:String!,status:String,complaintId:String!):Complaint
+updateComplaint(quotes:[quoteInput],status:String,complaintId:String!,complaint:String):Complaint
 login(email: String!, password: String!): Auth
 }`;
 module.exports = typeDefs;

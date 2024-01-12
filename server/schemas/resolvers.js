@@ -41,7 +41,9 @@ const resolvers = {
         let properties = [];
         switch (context.user.role) {
           case "owner":
-            properties = await Property.find({ owner: context.user._id });
+            properties = await Property.find({
+              owner: context.user._id,
+            });
             break;
           case "agent":
             properties = await Property.find({ agent: context.user._id });
@@ -57,7 +59,6 @@ const resolvers = {
         const comp = await Complaint.find({
           property: { $in: propertyIds },
         }).populate("property");
-
         return comp;
       } catch (error) {
         console.log("Could not find complaints", error);
@@ -105,13 +106,24 @@ const resolvers = {
         console.log("Could not raise complaint", error);
       }
     },
-    updateComplaint: async (parent, { quotes, status, complaintId }) => {
+    updateComplaint: async (
+      parent,
+      { complaint, quotes, status, complaintId }
+    ) => {
       try {
-        return await Complaint.findByIdAndUpdate(
-          complaintId,
-          { quotes, status },
-          { new: true }
-        );
+        console.log(quotes);
+        if (complaint)
+          return await Complaint.findByIdAndUpdate(
+            complaintId,
+            { complaint },
+            { new: true }
+          );
+        else
+          return await Complaint.findByIdAndUpdate(
+            complaintId,
+            { $set: { quotes: quotes, status: status } },
+            { new: true }
+          );
       } catch (error) {
         console.log("Could not raise complaint", error);
       }
