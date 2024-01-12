@@ -6,7 +6,9 @@ import {
   SELECTED_COMPLAINT,
   CLEAR_CURRENT_SELECTED_ITEM,
   UPDATE_QUOTES,
-  UPDATE_COMPLAINT,CLEAR_UPDATE_COMPLAINT
+  UPDATE_COMPLAINT,
+  CLEAR_UPDATE_COMPLAINT,
+  CLEAR_QUOTES,
 } from "./actions";
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
 export const reducer = (state, action) => {
@@ -33,12 +35,7 @@ export const reducer = (state, action) => {
         ...state,
         selectedItem: action.selectedItem,
       };
-    //clears the current selected item
-    case CLEAR_CURRENT_SELECTED_ITEM:
-      return {
-        ...state,
-        selectedItem: "",
-      };
+
     case UPDATE_ROLE:
       return {
         ...state,
@@ -60,6 +57,17 @@ export const reducer = (state, action) => {
       return {
         ...state,
         updateComplaint: false,
+      };
+    //clears the current selected item
+    case CLEAR_CURRENT_SELECTED_ITEM:
+      return {
+        ...state,
+        selectedItem: "",
+      };
+    case CLEAR_QUOTES:
+      return {
+        ...state,
+        quotes: [],
       };
     default:
       return state;

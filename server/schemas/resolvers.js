@@ -148,7 +148,6 @@ const resolvers = {
           throw AuthenticationError;
         }
         const token = signToken(user);
-        console.log(token);
         return { token, user };
       } catch (error) {
         console.log("Login failed", error);

@@ -23,7 +23,7 @@ import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
 import Quotes from "../../Quotes";
-
+import { UPDATE_QUOTES, CLEAR_QUOTES } from "../../../utils/actions";
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -71,6 +71,11 @@ export default function ComplaintDetails() {
             complaint: "",
           },
         });
+        dispatch({
+          type: CLEAR_QUOTES,
+          quotes: [],
+        });
+
         navigate("/profile");
       }
     } catch (error) {

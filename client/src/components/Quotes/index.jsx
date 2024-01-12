@@ -86,6 +86,12 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 export default function FullFeaturedCrudGrid() {
   const [state, dispatch] = useComplaintContext();
+
+  // dispatch({
+  //   type: CLEAR_QUOTES,
+  //   quotes: [],
+  // });
+
   const quotesOfComplaint = state.complaints.find(
     (x) => x._id === state.selectedComplaint.id
   ).quotes;
@@ -113,6 +119,7 @@ export default function FullFeaturedCrudGrid() {
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+    console.log();
   };
 
   const handleSaveClick = (id) => () => {
@@ -139,6 +146,7 @@ export default function FullFeaturedCrudGrid() {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     console.log(updatedRow);
+    console.log(rows);
     const quote = {};
     (quote.id = updatedRow.id),
       (quote.name = updatedRow.name),

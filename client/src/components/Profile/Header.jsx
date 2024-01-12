@@ -16,12 +16,15 @@ import { styled } from "@mui/material/styles";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 import { UPDATE_ROLE } from "../../utils/actions";
+import AccountPopover from "../Profile/AccountPopOver";
+import { usePopover } from "../Profile/UsePopOver";
 const ColorBar = styled(AppBar)(({ theme }) => ({
   color: "white",
   background:
     "linear-gradient(to right ,#457373,#7FA6A6, #B2C9CB,#7FA6A6,#487B7B)",
 }));
 function Header(props) {
+  const accountPopover = usePopover();
   const { onDrawerToggle } = props;
   const [state, dispatch] = useComplaintContext();
   let title = "Open",
@@ -41,10 +44,13 @@ function Header(props) {
     }
     // } else if (role === "tenant" && state.selectedItem === "Add Complaint") {
     //   title = "My Complaints";
-    // } 
+    // }
     else title = state.selectedItem;
     console.log(title);
   }
+  const ColorAvatar = styled(Avatar)(({ theme }) => ({
+    background: "linear-gradient(to right ,#457373, #B2C9CB,#457373)",
+  }));
   return (
     <React.Fragment>
       <ColorBar position="sticky" elevation={0} sx={{ height: 80 }}>
@@ -73,8 +79,22 @@ function Header(props) {
             </Grid>
             <Grid item>
               <IconButton color="inherit" sx={{ p: 0.5 }}>
-                <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
+                <Avatar
+                  onClick={accountPopover.handleOpen}
+                  ref={accountPopover.anchorRef}
+                  sx={{
+                    bgcolor: "#7FA6A6",
+                    cursor: "pointer",
+                    height: 40,
+                    width: 40,
+                  }}
+                />
               </IconButton>
+              <AccountPopover
+                anchorEl={accountPopover.anchorRef.current}
+                open={accountPopover.open}
+                onClose={accountPopover.handleClose}
+              />
             </Grid>
           </Grid>
         </Toolbar>
