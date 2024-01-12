@@ -13,10 +13,32 @@ const complaintSchema = new Schema({
     trim: true,
     default: "open",
   },
-  quotes: {
-    type: String,
-    default: "",
-  },
+  // quotes: {
+  //   type: String,
+  //   default: "",
+  // },
+  quotes: [
+    {
+      businessName: {
+        type: String,
+        required: true,
+        trim: true,
+        default: "",
+      },
+
+      address: {
+        type: String,
+        trim: true,
+        default: "",
+      },
+      //   get current date
+      quote: {
+        type: String,
+        required: true,
+        default: "",
+      },
+    },
+  ],
 });
 const Complaint = new model("Complaint", complaintSchema);
 module.exports = Complaint;

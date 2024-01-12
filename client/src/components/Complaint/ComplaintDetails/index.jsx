@@ -23,6 +23,7 @@ import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
 import Quotes from "../../Quotes";
+
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -54,8 +55,11 @@ export default function ComplaintDetails() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const data = new FormData(event.currentTarget);
+      // const data = new FormData(event.currentTarget);
       if (Auth.loggedIn()) {
+        //To Do :get quotes from state and update complaint
+        const quotes = state.quotes;
+        console.log(quotes);
         const response = await updateComplaint({
           variables: {
             quotes: quotes,

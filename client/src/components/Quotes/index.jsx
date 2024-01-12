@@ -14,8 +14,11 @@ import {
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
 import { randomId, randomArrayItem } from "@mui/x-data-grid-generator";
-
+import { UPDATE_QUOTES } from "../../utils/actions";
+// import global state
+import { useComplaintContext } from "../../utils/GlobalState";
 const roles = ["Market", "Finance", "Development"];
+const quotes = [];
 const randomRole = () => {
   return randomArrayItem(roles);
 };
@@ -25,7 +28,10 @@ function EditToolbar(props) {
 
   const handleClick = () => {
     const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: "", age: "", isNew: true }]);
+    setRows((oldRows) => [
+      ...oldRows,
+      { id, name: "", address: "", isNew: true },
+    ]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
@@ -44,7 +50,7 @@ function EditToolbar(props) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
-
+  const [state, dispatch] = useComplaintContext();
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -78,6 +84,34 @@ export default function FullFeaturedCrudGrid() {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    console.log(updatedRow);
+    const quote = {};
+    (quote.id = updatedRow.id),
+      (quote.name = updatedRow.name),
+      (quote.address = updatedRow.address),
+      (quote.quote = updatedRow.quote);
+    // if (quotes.forEach((quote) => quote.id === updatedRow.id))
+    const itemInQuotes = quotes.find((quote) => quote.id === updatedRow.id);
+    // const itemInQuotes = (quote) => quote.id === updatedRow.id;
+
+    // console.log(quotes.findIndex(itemInQuotes));
+    const isLargeNumber = (quote) => quote.id === updatedRow.id;
+    const index = quotes.findIndex(isLargeNumber);
+    if (index >= 0) {
+      quotes.splice(index, 1);
+    }
+    console.log(index);
+    console.log(itemInQuotes);
+    console.log(quotes);
+    if (itemInQuotes) {
+    }
+    quotes.push(quote);
+    // adding new/updated to state quotes
+    dispatch({
+      type: UPDATE_QUOTES,
+      quotes: quotes,
+    });
+
     return updatedRow;
   };
 
@@ -89,7 +123,6 @@ export default function FullFeaturedCrudGrid() {
     {
       field: "name",
       headerName: "Business Name",
-
       width: 220,
       align: "left",
       headerAlign: "left",
