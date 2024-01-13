@@ -2,25 +2,32 @@ const { User, Complaint, Property } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 const resolvers = {
   Query: {
+    users: async () => {
+      try {
+        return User.find();
+      } catch (error) {
+        console.log("Could not find properties", error);
+      }
+    },
     properties: async () => {
       try {
-        const props = Property.find()
+        const properties = Property.find()
           .populate("agent")
           .populate("owner")
           .populate("tenant");
 
-        return props;
+        return properties;
       } catch (error) {
         console.log("Could not find properties", error);
       }
     },
     propertiesByAgent: async (parent, { agentId }) => {
       try {
-        const props = await Property.find({ agent: agentId })
+        const properties = await Property.find({ agent: agentId })
           .populate("owner")
           .populate("tenant");
 
-        return props;
+        return properties;
       } catch (error) {
         console.log("Could not find properties", error);
       }
@@ -56,10 +63,10 @@ const resolvers = {
         }
         properties.map((x) => propertyIds.push(x._id));
 
-        const comp = await Complaint.find({
+        const complaints = await Complaint.find({
           property: { $in: propertyIds },
         }).populate("property");
-        return comp;
+        return complaints;
       } catch (error) {
         console.log("Could not find complaints", error);
       }
@@ -92,7 +99,7 @@ const resolvers = {
   Mutation: {
     addProperty: async (parent, { propertyDetails }) => {
       try {
-        return Property.create(propertyDetails);
+        return Property.create({ propertyDetails });
       } catch (error) {
         console.log("Could not add property!", error);
       }

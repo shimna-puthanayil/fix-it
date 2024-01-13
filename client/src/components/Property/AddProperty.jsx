@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -11,9 +11,9 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
-import { useMutation } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import Select from "@mui/material/Select";
-import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
+
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 //import methods from files
@@ -23,6 +23,9 @@ import { QUERY_PROPERTY } from "../../utils/queries";
 import { useComplaintContext } from "../../utils/GlobalState";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import { ADD_PROPERTY } from "../../utils/mutations";
+import { QUERY_USERS, QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
+import { UPDATE_USERS } from "../../utils/actions";
+
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -31,21 +34,46 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function AddProperty() {
-  // const complaintId = state.selectedComplaint.id;
-  const agents = [],
-    owners = [],
+  let owners,
+    agents,
     tenants = [];
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
-  //mutation to add/update approved quote for complaint
-  const [addApprovedQuote] = useMutation(ADD_PROPERTY, {
+
+  const { loading, data } = useQuery(QUERY_USERS);
+  const [addProperty] = useMutation(ADD_PROPERTY, {
     refetchQueries: [QUERY_PROPERTY, "properties"],
   });
+  console.log(data);
+  useEffect(() => {
+    console.log(data);
+    if (data) {
+      //dispatches the action UPDATE_USERS to update the state with users
+      dispatch({
+        type: UPDATE_USERS,
+        users: data.users,
+      });
+    }
+  }, [loading, data, dispatch]);
+  console.log(state.users);
+  function filterUsers(role) {
+    //returns users based on role
+    return state.users.filter((user) => user.role === role);
+  }
+  tenants = filterUsers("tenant");
+  owners = filterUsers("owner");
+  agents = filterUsers("agent");
+
+  console.log(tenants);
+
   const [owner, setOwner] = useState("");
   const [agent, setAgent] = useState("");
   const [tenant, setTenant] = useState("");
+  const [address, setAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
+  // const handleAddressChange = (event) => {
+  //   setAddress(event.target.value);
+  // };
   const handleOwnerChange = (event) => {
     setOwner(event.target.value);
   };
@@ -58,16 +86,23 @@ export default function AddProperty() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(quotes);
+      console.log(owner);
+      console.log(agent);
+      console.log(tenant);
+      console.log(address);
       if (Auth.loggedIn()) {
         //get selected quote and update approvedQuote in collection complaint
-        const response = await addApprovedQuote({
+        const response = await addProperty({
           variables: {
-            approvedQuote: quotes,
-            complaintId: complaintId,
+            propertyInput: {
+              address: address,
+              owner: owner,
+              agent: agent,
+              title: title,
+            },
           },
         });
-        navigate("/profile");
+        navigate("/properties");
       }
     } catch (error) {
       setErrorMessage("Something went wrong!");
@@ -134,7 +169,7 @@ export default function AddProperty() {
                 <FormControl sx={{ m: 1 }} fullWidth>
                   <TextField
                     value={state.selectedComplaint.address}
-                    onChange={(e) => setComplaint(e.target.value)}
+                    onChange={(e) => setAddress(e.target.value)}
                     id="standard-multiline-static"
                     label="Address"
                     name="address"
@@ -157,12 +192,10 @@ export default function AddProperty() {
                     name="owner"
                     onChange={handleOwnerChange}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
-                    {agents.map((quote) => (
-                      <MenuItem key="" value=""></MenuItem>
+                    {owners.map((owner) => (
+                      <MenuItem key={owner._id} value={owner._id}>
+                        {owner.username}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -179,12 +212,10 @@ export default function AddProperty() {
                     name="agent"
                     onChange={handleAgentChange}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
-                    {owners.map((quote) => (
-                      <MenuItem key="" value=""></MenuItem>
+                    {agents.map((agent) => (
+                      <MenuItem key={agent._id} value={agent._id}>
+                        {agent.username}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
@@ -201,12 +232,10 @@ export default function AddProperty() {
                     name="tenant"
                     onChange={handleTenantChange}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
-                    {tenants.map((quote) => (
-                      <MenuItem key="" value=""></MenuItem>
+                    {tenants.map((tenant) => (
+                      <MenuItem key={tenant._id} value={tenant._id}>
+                        {tenant.username}
+                      </MenuItem>
                     ))}
                   </Select>
                 </FormControl>

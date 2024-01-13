@@ -89,18 +89,14 @@ export default function Content() {
   ];
 
   const navigate = useNavigate();
-
   let status = "open";
-
   if (state.selectedItem) {
     status = state.selectedItem.toLowerCase();
   }
   let complaints = [],
     comps = [];
 
-  const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED, {
-    variables: status,
-  });
+  const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED);
 
   useEffect(() => {
     if (data) {
