@@ -15,7 +15,9 @@ import FileOpenIcon from "@mui/icons-material/FileOpen";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import Typography from "@mui/material/Typography";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import AddHomeIcon from "@mui/icons-material/AddHome";
 import Avatar from "@mui/material/Avatar";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import {
   CURRENT_SELECTED_ITEM,
@@ -50,6 +52,15 @@ const categoriesForTenants = [
     ],
   },
 ];
+const categoriesForAdmin = [
+  {
+    id: "Complaints",
+    children: [
+      { id: "Add Property", icon: <AddHomeWorkIcon /> },
+      { id: "Properties", icon: <HomeIcon /> },
+    ],
+  },
+];
 const item = {
   py: "2px",
   px: 3,
@@ -81,10 +92,14 @@ export default function Navigator(props) {
     dispatch({
       type: CLEAR_UPDATE_COMPLAINT,
     });
+    if (childId === "Properties" || childId === "Houses")
+      navigate("/properties");
 
     if (state.selectedComplaint) navigate("/profile");
   };
+
   if (state.role === "tenant") categories = categoriesForTenants;
+  if (state.role === "admin") categories = categoriesForAdmin;
 
   return (
     <Drawer variant="permanent" {...other}>
@@ -139,7 +154,7 @@ export default function Navigator(props) {
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText sx={{ fontSize: 30 }}>
                     {" "}
-                    <strong>  {childId}</strong>
+                    <strong> {childId}</strong>
                   </ListItemText>
                 </ListItemButton>
               </ListItem>

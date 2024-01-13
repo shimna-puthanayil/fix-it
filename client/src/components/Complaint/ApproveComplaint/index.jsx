@@ -21,7 +21,6 @@ import Auth from "../../../utils/auth";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
-import Quotes from "../../Quotes";
 import { Divider } from "@mui/material";
 import { ADD_APPROVED_QUOTE } from "../../../utils/mutations";
 const ColorButton = styled(Button)(({ theme }) => ({
@@ -36,12 +35,11 @@ export default function ApproveComplaint() {
 
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
+  //mutation to add/update approved quote for complaint
   const [addApprovedQuote] = useMutation(ADD_APPROVED_QUOTE, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
-  const [quotes, setQuotes] = useState(
-    state.selectedComplaint.addApprovedQuote
-  );
+  const [quotes, setQuotes] = useState(state.selectedComplaint.approvedQuote);
   const [errorMessage, setErrorMessage] = useState("");
 
   const complaintId = state.selectedComplaint.id;
@@ -57,8 +55,7 @@ export default function ApproveComplaint() {
     try {
       console.log(quotes);
       if (Auth.loggedIn()) {
-        //get selected quote and update complaint
-        console.log(quotes);
+        //get selected quote and update approvedQuote in collection complaint
         const response = await addApprovedQuote({
           variables: {
             approvedQuote: quotes,

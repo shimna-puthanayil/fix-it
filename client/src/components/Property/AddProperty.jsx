@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -17,69 +17,60 @@ import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 //import methods from files
-import Auth from "../../../utils/auth";
-import { UPDATE_COMPLAINT } from "../../../utils/mutations";
-import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
+import Auth from "../../utils/auth";
+import { QUERY_PROPERTY } from "../../utils/queries";
 // import global state
-import { useComplaintContext } from "../../../utils/GlobalState";
-import Quotes from "../../Quotes";
-import { UPDATE_QUOTES, CLEAR_QUOTES } from "../../../utils/actions";
-const ColorButton = styled(Button)(({}) => ({
+import { useComplaintContext } from "../../utils/GlobalState";
+import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
+import { ADD_PROPERTY } from "../../utils/mutations";
+const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
   width: "80%",
   background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
 }));
 
-export default function ComplaintDetails() {
+export default function AddProperty() {
+  // const complaintId = state.selectedComplaint.id;
+  const agents = [],
+    owners = [],
+    tenants = [];
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
-  const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
-    refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
+  //mutation to add/update approved quote for complaint
+  const [addApprovedQuote] = useMutation(ADD_PROPERTY, {
+    refetchQueries: [QUERY_PROPERTY, "properties"],
   });
-
-  const [status, setStatus] = useState(state.selectedComplaint.status);
-  const [quotes, setQuotes] = useState(state.selectedComplaint.quotes);
+  const [owner, setOwner] = useState("");
+  const [agent, setAgent] = useState("");
+  const [tenant, setTenant] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const complaintId = state.selectedComplaint.id;
-  const handleChange = (event) => {
-    setStatus(event.target.value);
+
+  const handleOwnerChange = (event) => {
+    setOwner(event.target.value);
   };
-  const handleQuotesChange = (event) => {
-    setQuotes(event.target.value);
+  const handleAgentChange = (event) => {
+    setAgent(event.target.value);
+  };
+  const handleTenantChange = (event) => {
+    setTenant(event.target.value);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // const data = new FormData(event.currentTarget);
+      console.log(quotes);
       if (Auth.loggedIn()) {
-        //get quotes from state and update complaint
-        const quotes = state.quotes;
-        const suggestedQuotes = [];
-        for (let i = 0; i < quotes.length; i++) {
-          const quote = {};
-          (quote.businessName = quotes[i].name),
-            (quote.address = quotes[i].address),
-            (quote.quote = quotes[i].quote.toString()),
-            suggestedQuotes.push(quote);
-        }
-        const response = await updateComplaint({
+        //get selected quote and update approvedQuote in collection complaint
+        const response = await addApprovedQuote({
           variables: {
-            quotes: suggestedQuotes,
-            status: status,
+            approvedQuote: quotes,
             complaintId: complaintId,
-            complaint: "",
           },
         });
-        dispatch({
-          type: CLEAR_QUOTES,
-          quotes: [],
-        });
-
         navigate("/profile");
       }
     } catch (error) {
-      setErrorMessage("Please enter required fields");
+      setErrorMessage("Something went wrong!");
     }
   };
 
@@ -123,15 +114,14 @@ export default function ComplaintDetails() {
               width: 56,
               height: 56,
               m: 1,
-              bgcolor: "#457373",
             }}
           >
-            <SpeakerNotesIcon />
+            <AddHomeWorkIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Complaint
+            Enter Property Details
           </Typography>
-          <Typography component="h5">{state.selectedComplaint.date}</Typography>
+
           <Box
             width={"80%"}
             component="form"
@@ -154,57 +144,72 @@ export default function ComplaintDetails() {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <TextField
-                    value={state.selectedComplaint.complaint}
-                    onChange={(e) => setComplaint(e.target.value)}
-                    id="standard-multiline-static"
-                    label="Complaint"
-                    name="complaint"
-                    multiline
-                    variant="standard"
-                  />
-                </FormControl>
-              </Grid>
+
               <Grid item xs={12}>
                 <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
-                  <InputLabel id="label-role">Status</InputLabel>
+                  <InputLabel id="label-role">Owner</InputLabel>
                   <Select
                     required
-                    labelId="label-status"
-                    id="status"
-                    value={status}
-                    label="Status"
-                    name="status"
-                    onChange={handleChange}
+                    labelId="label-owner"
+                    id="owner"
+                    value={owner}
+                    label="Owner"
+                    name="owner"
+                    onChange={handleOwnerChange}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={"open"}>Open</MenuItem>
-                    <MenuItem value={"in progress"}>In Progress</MenuItem>
-                    <MenuItem value={"resolved"}>Resolved</MenuItem>
+
+                    {agents.map((quote) => (
+                      <MenuItem key="" value=""></MenuItem>
+                    ))}
                   </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <TextField
-                    value={quotes}
-                    id="standard-multiline-static"
-                    label="Approved Quote"
-                    name="quotes"
-                    multiline
-                    variant="standard"
-                    onChange={handleQuotesChange}
-                    aria-readonly
-                  />
+                <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
+                  <InputLabel id="label-role">Agent</InputLabel>
+                  <Select
+                    required
+                    labelId="label-agent"
+                    id="agent"
+                    value={agent}
+                    label="Agent"
+                    name="agent"
+                    onChange={handleAgentChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+
+                    {owners.map((quote) => (
+                      <MenuItem key="" value=""></MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                {/*" Grid Of quotes "*/}
-                <Quotes />
+                <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
+                  <InputLabel id="label-role">Tenant</InputLabel>
+                  <Select
+                    required
+                    labelId="label-tenant"
+                    id="tenant"
+                    value={tenant}
+                    label="Tenant"
+                    name="tenant"
+                    onChange={handleTenantChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+
+                    {tenants.map((quote) => (
+                      <MenuItem key="" value=""></MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
               </Grid>
             </Grid>
 
@@ -213,7 +218,7 @@ export default function ComplaintDetails() {
               variant="contained"
               sx={{
                 mt: 3,
-                mb: 4,
+                mb: 2,
                 mx: "auto",
                 display: "flex",
                 flexDirection: "column",

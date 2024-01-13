@@ -13,13 +13,13 @@ import {
   CLEAR_CURRENT_SELECTED_ITEM,
   UPDATE_COMPLAINT,
 } from "../../utils/actions";
-import { idbPromise } from "../../utils/helpers";
 import { useEffect } from "react";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 import AddComplaint from "../Complaint/AddComplaint";
 import { useNavigate } from "react-router-dom";
-import ApproveComplaint from "../Complaint/ApproveComplaint";
+import AddProperty from "../Property/AddProperty";
+import Properties from "../../pages/Properties";
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down("md")]: {
@@ -113,7 +113,7 @@ export default function Content() {
   }, [loading, data, dispatch]);
   console.log(state.complaints);
   function filterComplaints() {
-    //returns  complaints based on status for owner and agent login
+    //returns complaints based on status( for owner and agent login)
     return state.complaints.filter((complaint) => complaint.status === status);
   }
   function filterComplaintsForTenants() {
@@ -175,8 +175,10 @@ export default function Content() {
         break;
     }
   };
-
+  console.log(state.selectedItem);
   if (state.selectedItem === "Add Complaint") return <AddComplaint />;
+  else if (state.selectedItem === "Add Property") return <AddProperty />;
+  else if (state.selectedItem === "Properties") return <Properties />;
   else if (state.updateComplaint) return <AddComplaint />;
   else if (state.role === "tenant")
     return (

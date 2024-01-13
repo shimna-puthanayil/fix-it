@@ -10,6 +10,7 @@ import Complaint from "./pages/Complaint";
 import UpdateComplaint from "./pages/UpdateComplaint";
 import ApproveComplaint from "./pages/ApproveComplaint";
 import ErrorPage from "./pages/404";
+import Properties from "./pages/Properties";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: "/approve/complaint/:id",
         element: <ApproveComplaint />,
+      },
+      {
+        path: "/properties",
+        element: <Properties />,
       },
     ],
   },
