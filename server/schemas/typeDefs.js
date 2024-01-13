@@ -19,6 +19,7 @@ type Complaint{
     date:String
     status:String
     quotes:[Quote]
+    approvedQuote:String
 }
 type User{
     _id:ID
@@ -57,6 +58,7 @@ addProperty(propertyDetails:propertyInput):Property
 addComplaint(complaint:String!):Complaint
 addUser(username:String!,password:String!,email:String!,role:String!):Auth
 updateComplaint(quotes:[quoteInput],status:String,complaintId:String!,complaint:String):Complaint
+addApprovedQuote(approvedQuote:String!,complaintId:String!):Complaint
 login(email: String!, password: String!): Auth
 }`;
 module.exports = typeDefs;

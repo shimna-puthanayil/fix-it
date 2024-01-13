@@ -18,6 +18,7 @@ const complaintSchema = new Schema({
   },
 
   quotes: [quoteSchema],
+  approvedQuote: { type: String, default: "" },
 });
 const Complaint = new model("Complaint", complaintSchema);
 module.exports = Complaint;

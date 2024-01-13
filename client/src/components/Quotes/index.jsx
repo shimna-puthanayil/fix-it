@@ -7,7 +7,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
-import Fab from '@mui/material/Fab';
+import Fab from "@mui/material/Fab";
 import {
   GridRowModes,
   DataGrid,
@@ -74,8 +74,17 @@ function EditToolbar(props) {
   return (
     <GridToolbarContainer>
       <ColorButton
+        sx={{ ":hover": { background: "white" } }}
         startIcon={
-          <Fab color="primary" aria-label="add">
+          <Fab
+            size="small"
+            sx={{
+              color: "white",
+              backgroundImage: `linear-gradient(to bottom,#86AEAF,#457373,#86AEAF)`,
+              ":hover": { background: "#7FA6A6" },
+            }}
+            aria-label="add"
+          >
             <AddIcon />
           </Fab>
         }
@@ -86,7 +95,7 @@ function EditToolbar(props) {
     </GridToolbarContainer>
   );
 }
-const ColorButton = styled(Button)(({ theme }) => ({
+const ColorButton = styled(Button)(({}) => ({
   color: "#457373",
   fontWeight: "bold",
 }));

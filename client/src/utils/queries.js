@@ -88,6 +88,7 @@ export const QUERY_COMPLAINTS_RAISED = gql`
         businessName
         quote
       }
+      approvedQuote
     }
   }
 `;

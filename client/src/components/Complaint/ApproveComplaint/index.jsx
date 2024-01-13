@@ -18,12 +18,12 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 //import methods from files
 import Auth from "../../../utils/auth";
-import { UPDATE_COMPLAINT } from "../../../utils/mutations";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
 import Quotes from "../../Quotes";
-
+import { Divider } from "@mui/material";
+import { ADD_APPROVED_QUOTE } from "../../../utils/mutations";
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -36,59 +36,42 @@ export default function ApproveComplaint() {
 
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
-  const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
+  const [addApprovedQuote] = useMutation(ADD_APPROVED_QUOTE, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
-
-  const [status, setStatus] = useState(state.selectedComplaint.status);
-  const [quotes, setQuotes] = useState(state.selectedComplaint.quotes);
+  const [quotes, setQuotes] = useState(
+    state.selectedComplaint.addApprovedQuote
+  );
   const [errorMessage, setErrorMessage] = useState("");
 
   const complaintId = state.selectedComplaint.id;
-  console.log(complaintId);
   const quotesOfComplaint = state.complaints.find(
     (x) => x._id === state.selectedComplaint.id
   ).quotes;
 
-  const handleChange = (event) => {
-    setStatus(event.target.value);
-  };
   const handleQuotesChange = (event) => {
     setQuotes(event.target.value);
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      // const data = new FormData(event.currentTarget);
+      console.log(quotes);
       if (Auth.loggedIn()) {
-        //get quotes from state and update complaint
-        const quotes = state.quotes;
+        //get selected quote and update complaint
         console.log(quotes);
-
-        const suggestedQuotes = [];
-        for (let i = 0; i < quotes.length; i++) {
-          const quote = {};
-          (quote.businessName = quotes[i].name),
-            (quote.address = quotes[i].address),
-            (quote.quote = quotes[i].quote.toString()),
-            suggestedQuotes.push(quote);
-        }
-        console.log(suggestedQuotes);
-        console.log(status);
-        const response = await updateComplaint({
+        const response = await addApprovedQuote({
           variables: {
-            quotes: suggestedQuotes,
-            status: status,
+            approvedQuote: quotes,
             complaintId: complaintId,
           },
         });
         navigate("/profile");
       }
     } catch (error) {
-      setErrorMessage("Please enter required fields");
+      setErrorMessage("Something went wrong!");
     }
   };
-  console.log(quotesOfComplaint);
+
   return (
     <Grid
       container
@@ -175,7 +158,7 @@ export default function ApproveComplaint() {
               <Grid item xs={12}>
                 <FormControl sx={{ m: 1 }} fullWidth>
                   <TextField
-                    value={status}
+                    value={state.selectedComplaint.status}
                     id="standard-multiline-static"
                     label="Status"
                     name="status"
@@ -190,10 +173,10 @@ export default function ApproveComplaint() {
                   <Select
                     required
                     labelId="label-status"
-                    id="status"
+                    id="quotes"
                     value={quotes}
                     label="Quotes"
-                    name="status"
+                    name="quotes"
                     onChange={handleQuotesChange}
                   >
                     <MenuItem value="">
@@ -202,6 +185,7 @@ export default function ApproveComplaint() {
 
                     {quotesOfComplaint.map((quote) => (
                       <MenuItem
+                        key={quote.businessName}
                         value={
                           quote.businessName +
                           " " +
@@ -210,12 +194,27 @@ export default function ApproveComplaint() {
                           quote.quote
                         }
                       >
-                        <strong>Business Name </strong>
-                        {quote.businessName +
-                          " " +
-                          quote.address +
-                          " " +
-                          quote.quote}
+                        <Box
+                          sx={{
+                            width: "100%",
+                            p: 2,
+                            bgcolor: "#eaeff1",
+                          }}
+                        >
+                          <Typography mr={1}>
+                            <strong>Business Name : </strong>
+                            {quote.businessName}
+                          </Typography>
+
+                          <Typography mr={1}>
+                            <strong> Address : </strong> {quote.address}
+                          </Typography>
+
+                          <Typography mr={1}>
+                            <strong>Quote : </strong> {quote.quote}
+                          </Typography>
+                        </Box>
+                        <Divider />
                       </MenuItem>
                     ))}
                   </Select>
@@ -235,7 +234,7 @@ export default function ApproveComplaint() {
                 alignItems: "center",
               }}
             >
-              Submit
+              Approve
             </ColorButton>
           </Box>
         </Box>

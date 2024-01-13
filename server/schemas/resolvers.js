@@ -125,7 +125,19 @@ const resolvers = {
             { new: true }
           );
       } catch (error) {
-        console.log("Could not raise complaint", error);
+        console.log("Could not update complaint", error);
+      }
+    },
+    addApprovedQuote: async (parent, { approvedQuote, complaintId }) => {
+      try {
+        console.log(approvedQuote);
+        return await Complaint.findByIdAndUpdate(
+          complaintId,
+          { approvedQuote },
+          { new: true }
+        );
+      } catch (error) {
+        console.log("Could not update approved quote", error);
       }
     },
     addUser: async (parent, args) => {

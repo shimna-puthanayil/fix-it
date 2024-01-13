@@ -79,9 +79,9 @@ export default function Content() {
       headerClassName: "super-app-theme--header",
     },
     {
-      renderHeader: () => <strong>{"Quotes "}</strong>,
-      field: "quotes",
-      headerName: "Quotes",
+      renderHeader: () => <strong>{"Quote "}</strong>,
+      field: "approvedQuote",
+      headerName: "Quote",
       headerClassName: "super-app-theme--header",
       width: 390,
       editable: true,
@@ -109,19 +109,6 @@ export default function Content() {
         type: UPDATE_COMPLAINTS,
         complaints: data.complaintsRaised,
       });
-      //update indexedDB with new complaints
-
-      // data.complaintsRaised.forEach((complaint) => {
-      //   idbPromise("complaints", "put", complaint);
-      // });
-    } else if (!loading) {
-      //gets the complaints from indexedDB and updates the state complaints
-      // idbPromise("complaints", "get").then((complaints) => {
-      //   dispatch({
-      //     type: UPDATE_COMPLAINTS,
-      //     complaints: complaints,
-      //   });
-      // });
     }
   }, [loading, data, dispatch]);
   console.log(state.complaints);
@@ -147,10 +134,11 @@ export default function Content() {
       (comp.address = complaints[i].property.address),
       (comp.date = new Date(parseInt(complaints[i].date)).toLocaleDateString()),
       ((comp.status = complaints[i].status),
-      (comp.quotes = ""),
+      (comp.approvedQuote = complaints[i].approvedQuote),
       comps.push(comp));
   }
   const rows = comps;
+  console.log(comps);
   let clickedId = "";
   //click event of grid( when a particular complaint is clicked )
   const handleRowClick = (params) => {

@@ -24,7 +24,7 @@ import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 import { useComplaintContext } from "../../../utils/GlobalState";
 import Quotes from "../../Quotes";
 import { UPDATE_QUOTES, CLEAR_QUOTES } from "../../../utils/actions";
-const ColorButton = styled(Button)(({ theme }) => ({
+const ColorButton = styled(Button)(({}) => ({
   color: "white",
   fontWeight: "bold",
   width: "80%",
@@ -120,7 +120,6 @@ export default function ComplaintDetails() {
           <Avatar
             sx={{
               backgroundImage: `linear-gradient(to bottom,#86AEAF,#457373,#86AEAF)`,
-
               width: 56,
               height: 56,
               m: 1,
@@ -169,7 +168,7 @@ export default function ComplaintDetails() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl  variant="standard"  sx={{ m: 1 }} fullWidth>
+                <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
                   <InputLabel id="label-role">Status</InputLabel>
                   <Select
                     required
