@@ -121,7 +121,9 @@ export default function Navigator(props) {
         {categories.map(({ id, children }) => (
           <Box key={id} sx={{ bgcolor: "#101F33" }}>
             <ListItem sx={{ py: 2, px: 3 }}>
-              <ListItemText sx={{ color: "#fff" }}>{id}</ListItemText>
+              <ListItemText sx={{ color: "#fff" }}>
+                <strong>{id}</strong>
+              </ListItemText>
             </ListItem>
             {children.map(({ id: childId, icon, active }) => (
               <ListItem
@@ -135,7 +137,10 @@ export default function Navigator(props) {
                   onClick={() => handleClick(childId)}
                 >
                   <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText sx={{ fontSize: 30 }}>{childId}</ListItemText>
+                  <ListItemText sx={{ fontSize: 30 }}>
+                    {" "}
+                    <strong>  {childId}</strong>
+                  </ListItemText>
                 </ListItemButton>
               </ListItem>
             ))}
