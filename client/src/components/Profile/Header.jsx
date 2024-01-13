@@ -78,9 +78,12 @@ function Header(props) {
               </Tooltip>
             </Grid>
             <Grid item>
-              <IconButton color="inherit" sx={{ p: 0.5 }}>
+              <IconButton
+                color="inherit"
+                sx={{ p: 0.5 }}
+                onClick={accountPopover.handleOpen}
+              >
                 <Avatar
-                  onClick={accountPopover.handleOpen}
                   ref={accountPopover.anchorRef}
                   sx={{
                     bgcolor: "#7FA6A6",

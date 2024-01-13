@@ -8,12 +8,13 @@ import SignUp from "./components/SignUp";
 import Profile from "./pages/Profile";
 import Complaint from "./pages/Complaint";
 import UpdateComplaint from "./pages/UpdateComplaint";
-import ApproveComplaint from "./components/Complaint/ApproveComplaint";
+import ApproveComplaint from "./pages/ApproveComplaint";
+import ErrorPage from "./pages/404";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    // errorElement: <ErrorPage />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
@@ -36,11 +37,11 @@ const router = createBrowserRouter([
         element: <Complaint />,
       },
       {
-        path: "/updatecomplaint/:id",
+        path: "/update/complaint/:id",
         element: <UpdateComplaint />,
       },
       {
-        path: "/complaint/approve/:id",
+        path: "/approve/complaint/:id",
         element: <ApproveComplaint />,
       },
     ],

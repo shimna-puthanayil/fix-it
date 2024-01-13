@@ -43,8 +43,12 @@ export default function ApproveComplaint() {
   const [status, setStatus] = useState(state.selectedComplaint.status);
   const [quotes, setQuotes] = useState(state.selectedComplaint.quotes);
   const [errorMessage, setErrorMessage] = useState("");
+
   const complaintId = state.selectedComplaint.id;
   console.log(complaintId);
+  const quotesOfComplaint = state.complaints.find(
+    (x) => x._id === state.selectedComplaint.id
+  ).quotes;
 
   const handleChange = (event) => {
     setStatus(event.target.value);
@@ -57,15 +61,10 @@ export default function ApproveComplaint() {
     try {
       // const data = new FormData(event.currentTarget);
       if (Auth.loggedIn()) {
-        //To Do :get quotes from state and update complaint
+        //get quotes from state and update complaint
         const quotes = state.quotes;
         console.log(quotes);
-        const mapped = quotes.map((x) => {
-          {
-            x.address, x.name, x.quote;
-          }
-        });
-        console.log(mapped);
+
         const suggestedQuotes = [];
         for (let i = 0; i < quotes.length; i++) {
           const quote = {};
@@ -89,7 +88,7 @@ export default function ApproveComplaint() {
       setErrorMessage("Please enter required fields");
     }
   };
-
+  console.log(quotesOfComplaint);
   return (
     <Grid
       container
@@ -127,11 +126,9 @@ export default function ApproveComplaint() {
           <Avatar
             sx={{
               backgroundImage: `linear-gradient(to bottom,#86AEAF,#457373,#86AEAF)`,
-
               width: 56,
               height: 56,
               m: 1,
-              bgcolor: "#457373",
             }}
           >
             <SpeakerNotesIcon />
@@ -177,36 +174,51 @@ export default function ApproveComplaint() {
               </Grid>
               <Grid item xs={12}>
                 <FormControl sx={{ m: 1 }} fullWidth>
-                  <InputLabel id="label-role">Status</InputLabel>
+                  <TextField
+                    value={status}
+                    id="standard-multiline-static"
+                    label="Status"
+                    name="status"
+                    multiline
+                    variant="standard"
+                  />
+                </FormControl>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
+                  <InputLabel id="label-role">Quotes</InputLabel>
                   <Select
                     required
                     labelId="label-status"
                     id="status"
-                    value={status}
-                    label="Status"
+                    value={quotes}
+                    label="Quotes"
                     name="status"
-                    onChange={handleChange}
+                    onChange={handleQuotesChange}
                   >
                     <MenuItem value="">
                       <em>None</em>
                     </MenuItem>
-                    <MenuItem value={"open"}>Open</MenuItem>
-                    <MenuItem value={"in progress"}>In Progress</MenuItem>
-                    <MenuItem value={"resolved"}>Resolved</MenuItem>
+
+                    {quotesOfComplaint.map((quote) => (
+                      <MenuItem
+                        value={
+                          quote.businessName +
+                          " " +
+                          quote.address +
+                          " " +
+                          quote.quote
+                        }
+                      >
+                        <strong>Business Name </strong>
+                        {quote.businessName +
+                          " " +
+                          quote.address +
+                          " " +
+                          quote.quote}
+                      </MenuItem>
+                    ))}
                   </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <TextField
-                    value={quotes}
-                    id="standard-multiline-static"
-                    label="Quotes"
-                    name="quotes"
-                    multiline
-                    variant="standard"
-                    onChange={handleQuotesChange}
-                  />
                 </FormControl>
               </Grid>
             </Grid>

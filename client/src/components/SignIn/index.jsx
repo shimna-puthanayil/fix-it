@@ -111,7 +111,13 @@ export default function SignIn() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "#457373" }}>
+          <Avatar
+            sx={{
+              m: 1,
+              backgroundImage: `linear-gradient(to right,#457373,#6E9B9B,#457373)`,
+              bgcolor: "#457373",
+            }}
+          >
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">

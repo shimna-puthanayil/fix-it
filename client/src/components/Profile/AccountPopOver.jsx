@@ -18,7 +18,6 @@ export default function AccountPopover(props) {
     Auth.logout();
     navigate("/signin");
   }, [onClose, Auth]);
-  console.log(Auth.getProfile());
   return (
     <Popover
       anchorEl={anchorEl}

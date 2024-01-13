@@ -163,7 +163,10 @@ export default function Content() {
       type: CLEAR_CURRENT_SELECTED_ITEM,
       selectedItem: "",
     });
-
+    dispatch({
+      type: UPDATE_COMPLAINT,
+      updateComplaint: true,
+    });
     clickedId = params.row.id;
     // if (state.role === "agent") navigate(`/complaint/${clickedId}`);
     switch (state.role) {
@@ -171,14 +174,14 @@ export default function Content() {
         navigate(`/complaint/${clickedId}`);
         break;
       case "tenant":
-        dispatch({
-          type: UPDATE_COMPLAINT,
-          updateComplaint: true,
-        });
-        navigate(`/updatecomplaint/${clickedId}`);
+        // dispatch({
+        //   type: UPDATE_COMPLAINT,
+        //   updateComplaint: true,
+        // });
+        navigate(`/update/complaint/${clickedId}`);
         break;
       case "owner":
-        navigate(`/complaint/approve/${clickedId}`);
+        navigate(`/approve/complaint/${clickedId}`);
         break;
       default:
         break;

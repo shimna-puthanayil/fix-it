@@ -53,7 +53,7 @@ export default function ComplaintDetails() {
     try {
       // const data = new FormData(event.currentTarget);
       if (Auth.loggedIn()) {
-        //To Do :get quotes from state and update complaint
+        //get quotes from state and update complaint
         const quotes = state.quotes;
         const suggestedQuotes = [];
         for (let i = 0; i < quotes.length; i++) {
@@ -169,7 +169,7 @@ export default function ComplaintDetails() {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
+                <FormControl  variant="standard"  sx={{ m: 1 }} fullWidth>
                   <InputLabel id="label-role">Status</InputLabel>
                   <Select
                     required

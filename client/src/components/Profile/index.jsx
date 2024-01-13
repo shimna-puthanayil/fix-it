@@ -7,11 +7,11 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Navigator from "../../components/Profile/Navigator";
-import Content from "../../components/Profile/Content";
 import Header from "../../components/Profile/Header";
-import ComplaintDetails from "../Complaint/ComplaintDetails";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
+
+import ContentArea from "./ContentArea";
 function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" align="center">
@@ -169,7 +169,7 @@ theme = {
 
 const drawerWidth = 256;
 export default function ProfileComponent() {
-  //get product id from route
+  //get complaint id from route
   const { id } = useParams();
   const [state, dispatch] = useComplaintContext();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -221,7 +221,8 @@ export default function ProfileComponent() {
               bgcolor: "#eaeff1",
             }}
           >
-            {id && !state.selectedItem ? <ComplaintDetails /> : <Content />}
+            {/*id && !state.selectedItem ? <ComplaintDetails /> : <Content />*/}
+            <ContentArea />
           </Box>
           <Box component="footer" sx={{ p: 2, bgcolor: "#eaeff1" }}>
             <Copyright />

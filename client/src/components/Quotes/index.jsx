@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import { styled } from "@mui/material/styles";
+import Fab from '@mui/material/Fab';
 import {
   GridRowModes,
   DataGrid,
@@ -72,7 +73,14 @@ function EditToolbar(props) {
 
   return (
     <GridToolbarContainer>
-      <ColorButton startIcon={<AddIcon />} onClick={handleClick}>
+      <ColorButton
+        startIcon={
+          <Fab color="primary" aria-label="add">
+            <AddIcon />
+          </Fab>
+        }
+        onClick={handleClick}
+      >
         Add quote
       </ColorButton>
     </GridToolbarContainer>
@@ -81,8 +89,6 @@ function EditToolbar(props) {
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "#457373",
   fontWeight: "bold",
-  // width: "80%",
-  // background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
 }));
 export default function FullFeaturedCrudGrid() {
   const [state, dispatch] = useComplaintContext();
