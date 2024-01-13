@@ -11,8 +11,6 @@ const quoteSchema = new Schema({
   quote: {
     type: String,
   },
-  //set approved as true for an approved quote
-  approved: { type: Boolean, default: false },
 });
 
 module.exports = quoteSchema;

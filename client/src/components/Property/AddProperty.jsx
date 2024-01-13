@@ -23,7 +23,7 @@ import { QUERY_PROPERTY } from "../../utils/queries";
 import { useComplaintContext } from "../../utils/GlobalState";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import { ADD_PROPERTY } from "../../utils/mutations";
-import { QUERY_USERS, QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
+import { QUERY_USERS } from "../../utils/queries";
 import { UPDATE_USERS } from "../../utils/actions";
 
 const ColorButton = styled(Button)(({ theme }) => ({
@@ -71,9 +71,7 @@ export default function AddProperty() {
   const [tenant, setTenant] = useState("");
   const [address, setAddress] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  // const handleAddressChange = (event) => {
-  //   setAddress(event.target.value);
-  // };
+
   const handleOwnerChange = (event) => {
     setOwner(event.target.value);
   };
@@ -86,20 +84,17 @@ export default function AddProperty() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(owner);
-      console.log(agent);
-      console.log(tenant);
-      console.log(address);
+      const property = {};
+      (property.address = address),
+        (property.owner = owner),
+        (property.agent = agent),
+        (property.tenant = tenant);
+
       if (Auth.loggedIn()) {
-        //get selected quote and update approvedQuote in collection complaint
+        //add property details
         const response = await addProperty({
           variables: {
-            propertyInput: {
-              address: address,
-              owner: owner,
-              agent: agent,
-              title: title,
-            },
+            propertyDetails: property,
           },
         });
         navigate("/properties");

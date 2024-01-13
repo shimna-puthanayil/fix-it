@@ -72,12 +72,12 @@ export default function Content() {
       width: statusColumnWidth,
       headerClassName: "super-app-theme--header",
     },
-    {
-      field: "property",
-      headerName: "Property",
-      width: 210,
-      headerClassName: "super-app-theme--header",
-    },
+    // {
+    //   field: "property",
+    //   headerName: "Property",
+    //   width: 210,
+    //   headerClassName: "super-app-theme--header",
+    // },
     {
       renderHeader: () => <strong>{"Quote "}</strong>,
       field: "approvedQuote",

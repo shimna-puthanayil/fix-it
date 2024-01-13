@@ -11,7 +11,7 @@ const ComplaintProvider = ({ value = [], ...props }) => {
     selectedItem: "",
     complaints: [],
     role: "",
-    properties: "",
+    properties: [],
     selectedComplaint: "",
     quotes: [],
     updateComplaint: false,

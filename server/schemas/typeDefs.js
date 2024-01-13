@@ -47,7 +47,7 @@ input quoteInput{
 type Query{
 users:[User]
 properties:[Property]
-propertiesByAgent(agentId:ID!):[Property]
+propertiesByUser(role:String!):[Property]
 propertiesByOwner(ownerId:ID!):[Property]
 complaintsRaised:[Complaint]
 complaintsOfPropertyByOwner(ownerId:ID!):[Complaint]

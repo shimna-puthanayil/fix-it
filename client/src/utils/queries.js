@@ -25,54 +25,61 @@ export const QUERY_PROPERTY = gql`
     }
   }
 `;
-export const QUERY_PROPERTIES_BY_AGENT = gql`
-  query PropertiesByAgent($agentId: ID!) {
-    propertiesByAgent(agentId: $agentId) {
+export const QUERY_PROPERTIES_BY_USER = gql`
+  query PropertiesByUser($role: String!) {
+    propertiesByUser(role: $role) {
+      _id
       address
       owner {
+        _id
         username
       }
-      tenant {
-        username
-      }
-    }
-  }
-`;
-export const QUERY_PROPERTIES_BY_OWNER = gql`
-  query PropertiesByOwner($ownerId: ID!) {
-    propertiesByOwner(ownerId: $ownerId) {
-      address
       agent {
+        _id
         username
       }
       tenant {
+        _id
         username
       }
     }
   }
 `;
-export const QUERY_COMPLAINTS_BY_TENANT = gql`
-  query ComplaintsRaisedByTenant($tenantId: ID!) {
-    complaintsRaisedByTenant(tenantId: $tenantId) {
-      complaint
-      property {
-        address
-      }
-      date
-    }
-  }
-`;
-export const QUERY_COMPLAINTS_OF_PROPERTY_BY_OWNER = gql`
-  query ComplaintsOfPropertyByOwner($ownerId: ID!) {
-    complaintsOfPropertyByOwner(ownerId: $ownerId) {
-      complaint
-      property {
-        address
-      }
-      date
-    }
-  }
-`;
+// export const QUERY_PROPERTIES_BY_OWNER = gql`
+//   query PropertiesByOwner($ownerId: ID!) {
+//     propertiesByOwner(ownerId: $ownerId) {
+//       address
+//       agent {
+//         username
+//       }
+//       tenant {
+//         username
+//       }
+//     }
+//   }
+// `;
+// export const QUERY_COMPLAINTS_BY_TENANT = gql`
+//   query ComplaintsRaisedByTenant($tenantId: ID!) {
+//     complaintsRaisedByTenant(tenantId: $tenantId) {
+//       complaint
+//       property {
+//         address
+//       }
+//       date
+//     }
+//   }
+// `;
+// export const QUERY_COMPLAINTS_OF_PROPERTY_BY_OWNER = gql`
+//   query ComplaintsOfPropertyByOwner($ownerId: ID!) {
+//     complaintsOfPropertyByOwner(ownerId: $ownerId) {
+//       complaint
+//       property {
+//         address
+//       }
+//       date
+//     }
+//   }
+// `;
 export const QUERY_COMPLAINTS_RAISED = gql`
   query ComplaintsRaised {
     complaintsRaised {

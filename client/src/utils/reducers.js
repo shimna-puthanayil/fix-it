@@ -52,6 +52,7 @@ export const reducer = (state, action) => {
         ...state,
         users: [...action.users],
       };
+
     //sets the state as true for update complaint
     case UPDATE_COMPLAINT:
       return {

@@ -16,12 +16,12 @@ export default function ContentArea() {
     return <ComplaintDetails />;
   else if (state.updateComplaint && state.role === "owner")
     return <ApproveComplaint />;
-  else if (state.role === "admin" && state.selectedItem != "Properties")
-    return <AddProperty />;
   else if (
     state.selectedItem === "Properties" ||
     state.selectedItem === "Houses"
   )
     return <Properties />;
+  else if (state.role === "admin")
+    return <AddProperty />;
   else return <Content />;
 }

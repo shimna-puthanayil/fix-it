@@ -11,11 +11,9 @@ import ListItemText from "@mui/material/ListItemText";
 import HomeIcon from "@mui/icons-material/Home";
 import FiberNewIcon from "@mui/icons-material/FiberNew";
 import PermMediaOutlinedIcon from "@mui/icons-material/PhotoSizeSelectActual";
-import FileOpenIcon from "@mui/icons-material/FileOpen";
 import QuestionAnswerIcon from "@mui/icons-material/QuestionAnswer";
 import Typography from "@mui/material/Typography";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
-import AddHomeIcon from "@mui/icons-material/AddHome";
 import Avatar from "@mui/material/Avatar";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
@@ -26,7 +24,6 @@ import {
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
 import auth from "../../utils/auth";
 let categories = [
   {

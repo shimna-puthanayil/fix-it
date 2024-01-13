@@ -41,11 +41,7 @@ function Header(props) {
     if (state.selectedItem === "Add Complaint") title = "";
     else if (role === "tenant" && state.selectedItem === "My Complaints") {
       title = "My Complaints";
-    }
-    // } else if (role === "tenant" && state.selectedItem === "Add Complaint") {
-    //   title = "My Complaints";
-    // }
-    else title = state.selectedItem;
+    } else title = state.selectedItem;
     console.log(title);
   }
   const ColorAvatar = styled(Avatar)(({ theme }) => ({
@@ -112,8 +108,8 @@ function Header(props) {
         <Toolbar>
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
-              <Typography color="inherit" variant="h5" component="h1" mb={3}>
-                {title}
+              <Typography color="white" variant="h5" component="h1" mb={3}>
+                <strong>{title}</strong>
               </Typography>
             </Grid>
           </Grid>

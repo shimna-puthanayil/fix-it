@@ -4,9 +4,14 @@ export const ADD_PROPERTY = gql`
   mutation AddProperty($propertyDetails: propertyInput) {
     addProperty(propertyDetails: $propertyDetails) {
       _id
+      address
+      agent {
+        username
+      }
     }
   }
 `;
+
 // Mutation to add a new complaint
 export const ADD_COMPLAINT = gql`
   mutation AddComplaint($complaint: String!) {

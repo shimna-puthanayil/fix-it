@@ -21,13 +21,23 @@ const resolvers = {
         console.log("Could not find properties", error);
       }
     },
-    propertiesByAgent: async (parent, { agentId }) => {
+    propertiesByUser: async (parent, { role }, context) => {
       try {
-        const properties = await Property.find({ agent: agentId })
-          .populate("owner")
-          .populate("tenant");
-
-        return properties;
+        if (role === "agent")
+          return await Property.find({ agent: context.user._id })
+            .populate("owner")
+            .populate("agent")
+            .populate("tenant");
+        else if (role === "owner")
+          return await Property.find({ owner: context.user._id })
+            .populate("owner")
+            .populate("agent")
+            .populate("tenant");
+        else
+          return await Property.find()
+            .populate("owner")
+            .populate("agent")
+            .populate("tenant");
       } catch (error) {
         console.log("Could not find properties", error);
       }
@@ -99,7 +109,7 @@ const resolvers = {
   Mutation: {
     addProperty: async (parent, { propertyDetails }) => {
       try {
-        return Property.create({ propertyDetails });
+        return Property.create(propertyDetails);
       } catch (error) {
         console.log("Could not add property!", error);
       }
