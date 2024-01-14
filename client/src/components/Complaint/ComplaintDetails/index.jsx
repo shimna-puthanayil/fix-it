@@ -23,7 +23,7 @@ import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
 import Quotes from "../../Quotes";
-import { UPDATE_QUOTES, CLEAR_QUOTES } from "../../../utils/actions";
+import { CLEAR_QUOTES, CLEAR_UPDATE_COMPLAINT } from "../../../utils/actions";
 const ColorButton = styled(Button)(({}) => ({
   color: "white",
   fontWeight: "bold",
@@ -77,7 +77,9 @@ export default function ComplaintDetails() {
           type: CLEAR_QUOTES,
           quotes: [],
         });
-
+        dispatch({
+          type: CLEAR_UPDATE_COMPLAINT,
+        });
         navigate("/profile");
       }
     } catch (error) {
@@ -193,13 +195,12 @@ export default function ComplaintDetails() {
               <Grid item xs={12}>
                 <FormControl sx={{ m: 1 }} fullWidth>
                   <TextField
-                    value={quotes}
+                    value={state.selectedComplaint.approvedQuote}
                     id="standard-multiline-static"
                     label="Approved Quote"
                     name="quotes"
                     multiline
                     variant="standard"
-                    onChange={handleQuotesChange}
                     aria-readonly
                   />
                 </FormControl>

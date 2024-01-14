@@ -6,7 +6,7 @@ const resolvers = {
       try {
         return User.find();
       } catch (error) {
-        console.log("Could not find properties", error);
+        console.log("Could not find users", error);
       }
     },
     // properties: async () => {
@@ -120,7 +120,7 @@ const resolvers = {
           new: true,
         });
       } catch (error) {
-        console.log("Could not update complaint", error);
+        console.log("Could not update property", error);
       }
     },
     addComplaint: async (parent, { complaint }, context) => {
@@ -137,7 +137,6 @@ const resolvers = {
       { complaint, quotes, status, complaintId }
     ) => {
       try {
-        console.log(quotes);
         if (complaint)
           return await Complaint.findByIdAndUpdate(
             complaintId,

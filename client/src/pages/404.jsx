@@ -48,8 +48,8 @@ const Page = () => {
               }}
             >
               <img
-                alt="Under development"
-                src="/images/error-404.png"
+                alt="not found"
+                src="/images/no-data.png"
                 style={{
                   display: "inline-block",
                   maxWidth: "100%",

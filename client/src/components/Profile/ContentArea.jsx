@@ -12,7 +12,11 @@ export default function ContentArea() {
   const [state, dispatch] = useComplaintContext();
   console.log(state.role);
   console.log(state.updateComplaint);
-  if (state.updateComplaint && state.role === "tenant") return <AddComplaint />;
+  if (
+    (state.updateComplaint && state.role === "tenant") ||
+    state.selectedItem === "Add Complaint"
+  )
+    return <AddComplaint />;
   else if (state.updateComplaint && state.role === "agent")
     return <ComplaintDetails />;
   else if (state.updateComplaint && state.role === "owner")

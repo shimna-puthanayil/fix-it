@@ -23,6 +23,7 @@ import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 import { useComplaintContext } from "../../../utils/GlobalState";
 import { Divider } from "@mui/material";
 import { ADD_APPROVED_QUOTE } from "../../../utils/mutations";
+import { CLEAR_UPDATE_COMPLAINT } from "../../../utils/actions";
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
@@ -61,6 +62,9 @@ export default function ApproveComplaint() {
             approvedQuote: quotes,
             complaintId: complaintId,
           },
+        });
+        dispatch({
+          type: CLEAR_UPDATE_COMPLAINT,
         });
         navigate("/profile");
       }
@@ -183,13 +187,7 @@ export default function ApproveComplaint() {
                     {quotesOfComplaint.map((quote) => (
                       <MenuItem
                         key={quote.businessName}
-                        value={
-                          quote.businessName +
-                          " " +
-                          quote.address +
-                          " " +
-                          quote.quote
-                        }
+                        value={`Business Name : ${quote.businessName}  |  Address : ${quote.address}  |   Quote : ${quote.quote}`}
                       >
                         <Box
                           sx={{

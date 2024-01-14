@@ -37,7 +37,7 @@ export default function AccountPopover(props) {
       >
         <Typography variant="overline">Account</Typography>
         <Typography color="text.secondary" variant="body2">
-          {Auth.getProfile().data.username}
+          {Auth.getProfile().data.username.toUpperCase()}
         </Typography>
       </Box>
       <Divider />

@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { styled } from "@mui/material/styles";
 import { QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
-
+import { Container, SvgIcon, Link } from "@mui/material";
 import {
   UPDATE_COMPLAINTS,
   SELECTED_COMPLAINT,
@@ -20,6 +20,7 @@ import AddComplaint from "../Complaint/AddComplaint";
 import { useNavigate } from "react-router-dom";
 import AddProperty from "../Property/AddProperty";
 import Properties from "../../pages/Properties";
+import { Typography } from "@mui/material";
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down("md")]: {
@@ -36,10 +37,12 @@ const Root = styled(Grid)(({ theme }) => ({
 export default function Content() {
   const [state, dispatch] = useComplaintContext();
   let dateColumnWidth = 150,
-    statusColumnWidth = 150;
+    statusColumnWidth = 150,
+    addressColumnWidth = 300;
   if (state.role === "tenant") {
     dateColumnWidth = 350;
     statusColumnWidth = 330;
+    addressColumnWidth = 400;
   }
 
   const columns = [
@@ -48,7 +51,7 @@ export default function Content() {
       field: "address",
       headerClassName: "super-app-theme--header",
       headerName: "Address",
-      width: 400,
+      width: addressColumnWidth,
       minWidth: 150,
     },
     {
@@ -79,11 +82,11 @@ export default function Content() {
     //   headerClassName: "super-app-theme--header",
     // },
     {
-      renderHeader: () => <strong>{"Quote "}</strong>,
+      renderHeader: () => <strong>{"Approved Quote "}</strong>,
       field: "approvedQuote",
       headerName: "Quote",
       headerClassName: "super-app-theme--header",
-      width: 390,
+      width: 465,
       editable: true,
     },
   ];
@@ -136,7 +139,50 @@ export default function Content() {
       comps.push(comp));
   }
   const rows = comps;
-  console.log(comps);
+  if (rows.length === 0) {
+    return (
+      <>
+        <Box
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            flexGrow: 1,
+          }}
+        >
+          <Container>
+            <Box
+              sx={{
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Box
+                sx={{
+                  mt: 20,
+                  mb: 3,
+                  textAlign: "center",
+                }}
+              >
+                <img
+                  alt="no data"
+                  src="/images/no-data.png"
+                  style={{
+                    display: "inline-block",
+                    maxWidth: "50%",
+                    width: 300,
+                  }}
+                />
+              </Box>
+              <Typography align="center" sx={{ mb: 3 }} variant="h6">
+                There are no complaints
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      </>
+    );
+  }
   let clickedId = "";
   //click event of grid( when a particular complaint is clicked )
   const handleRowClick = (params) => {
@@ -159,10 +205,6 @@ export default function Content() {
         navigate(`/complaint/${clickedId}`);
         break;
       case "tenant":
-        // dispatch({
-        //   type: UPDATE_COMPLAINT,
-        //   updateComplaint: true,
-        // });
         navigate(`/update/complaint/${clickedId}`);
         break;
       case "owner":
@@ -172,7 +214,7 @@ export default function Content() {
         break;
     }
   };
-  console.log(state.selectedItem);
+
   if (state.selectedItem === "Add Complaint") return <AddComplaint />;
   else if (state.selectedItem === "Add Property") return <AddProperty />;
   else if (state.selectedItem === "Properties") return <Properties />;
@@ -202,7 +244,7 @@ export default function Content() {
               columns={columns}
               columnVisibilityModel={{
                 // Hide columns property and quotes, the other columns will remain visible
-                quotes: false,
+                approvedQuote: false,
                 property: false,
               }}
               initialState={{
@@ -235,6 +277,7 @@ export default function Content() {
             }}
           >
             <DataGrid
+              sx={{ backgroundColor: "#eaeff1" }}
               disableColumnMenu
               getRowClassName={(params) =>
                 `super-app-theme--${params.row.status}`
