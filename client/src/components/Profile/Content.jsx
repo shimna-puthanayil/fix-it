@@ -96,7 +96,9 @@ export default function Content() {
   let complaints = [],
     comps = [];
 
-  const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED);
+  const { loading, data } = useQuery(QUERY_COMPLAINTS_RAISED, {
+    fetchPolicy: "network-only",
+  });
 
   useEffect(() => {
     if (data) {

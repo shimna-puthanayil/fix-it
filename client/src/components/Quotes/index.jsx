@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
@@ -15,47 +16,11 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from "@mui/x-data-grid";
-import { randomId, randomArrayItem } from "@mui/x-data-grid-generator";
+import { randomId } from "@mui/x-data-grid-generator";
 import { UPDATE_QUOTES } from "../../utils/actions";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
-const roles = ["Market", "Finance", "Development"];
-let quotes = [];
-const randomRole = () => {
-  return randomArrayItem(roles);
-};
-const initialRows = [
-  {
-    id: randomId(),
-    name: "hello",
-    address: "25",
-    quote: 1,
-  },
-  {
-    id: randomId(),
-    name: "hello",
-    address: "25",
-    quote: 1,
-  },
-  {
-    id: randomId(),
-    name: "hello",
-    address: "25",
-    quote: 1,
-  },
-  {
-    id: randomId(),
-    name: "hello",
-    address: "25",
-    quote: 1,
-  },
-  {
-    id: randomId(),
-    name: "hello",
-    address: "25",
-    quote: 1,
-  },
-];
+
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
 
@@ -99,18 +64,12 @@ const ColorButton = styled(Button)(({}) => ({
   color: "#457373",
   fontWeight: "bold",
 }));
-export default function FullFeaturedCrudGrid() {
+export default function Quotes() {
   const [state, dispatch] = useComplaintContext();
-
-  // dispatch({
-  //   type: CLEAR_QUOTES,
-  //   quotes: [],
-  // });
 
   const quotesOfComplaint = state.complaints.find(
     (x) => x._id === state.selectedComplaint.id
   ).quotes;
-  console.log(quotesOfComplaint);
   const suggestedQuotes = [];
   for (let i = 0; i < quotesOfComplaint.length; i++) {
     const quote = {};
@@ -120,11 +79,15 @@ export default function FullFeaturedCrudGrid() {
       (quote.quote = quotesOfComplaint[i].quote),
       suggestedQuotes.push(quote);
   }
-  console.log(suggestedQuotes);
-  quotes = suggestedQuotes;
-  console.log(quotes);
-  const [rows, setRows] = React.useState(suggestedQuotes);
-  const [rowModesModel, setRowModesModel] = React.useState({});
+  const [quotes, setQuotes] = useState(suggestedQuotes);
+  useEffect(() => {
+    dispatch({
+      type: UPDATE_QUOTES,
+      quotes: quotes,
+    });
+  }, [quotes]);
+  const [rows, setRows] = useState(suggestedQuotes);
+  const [rowModesModel, setRowModesModel] = useState({});
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -134,15 +97,21 @@ export default function FullFeaturedCrudGrid() {
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-    console.log();
   };
 
   const handleSaveClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
-
+  // when a quote is deleted from grid
   const handleDeleteClick = (id) => () => {
+    let currentQuotes = state.quotes;
     setRows(rows.filter((row) => row.id !== id));
+    const isAlreadyExisting = (quote) => quote.id === id;
+    const index = currentQuotes.findIndex(isAlreadyExisting);
+    console.log(index);
+    if (index >= 0) {
+      currentQuotes.splice(index, 1);
+    }
   };
 
   const handleCancelClick = (id) => () => {
@@ -160,26 +129,18 @@ export default function FullFeaturedCrudGrid() {
   const processRowUpdate = (newRow) => {
     const updatedRow = { ...newRow, isNew: false };
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    console.log(updatedRow);
-    console.log(rows);
+    let currentQuotes = state.quotes;
     const quote = {};
     (quote.id = updatedRow.id),
       (quote.name = updatedRow.name),
       (quote.address = updatedRow.address),
       (quote.quote = updatedRow.quote);
-    const isLargeNumber = (quote) => quote.id === updatedRow.id;
-    const index = quotes.findIndex(isLargeNumber);
+    const isAlreadyExisting = (quote) => quote.id === updatedRow.id;
+    const index = currentQuotes.findIndex(isAlreadyExisting);
     if (index >= 0) {
-      quotes.splice(index, 1);
+      currentQuotes.splice(index, 1);
     }
-    quotes.push(quote);
-    console.log(quotes);
-    // adding new/updated  quote details to state quotes
-    dispatch({
-      type: UPDATE_QUOTES,
-      quotes: quotes,
-    });
-
+    currentQuotes.push(quote);
     return updatedRow;
   };
 
