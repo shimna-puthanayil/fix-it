@@ -58,6 +58,7 @@ addProperty(propertyDetails:propertyInput):Property
 addComplaint(complaint:String!):Complaint
 addUser(username:String!,password:String!,email:String!,role:String!):Auth
 updateComplaint(quotes:[quoteInput],status:String,complaintId:String!,complaint:String):Complaint
+updateProperty(propertyDetails:propertyInput,propertyId:ID!):Property
 addApprovedQuote(approvedQuote:String!,complaintId:String!):Complaint
 login(email: String!, password: String!): Auth
 }`;

@@ -11,7 +11,15 @@ export const ADD_PROPERTY = gql`
     }
   }
 `;
-
+// Mutation to update a property
+export const UPDATE_PROPERTY = gql`
+  mutation UpdateProperty($propertyId: ID!, $propertyDetails: propertyInput) {
+    updateProperty(propertyId: $propertyId, propertyDetails: $propertyDetails) {
+      _id
+      address
+    }
+  }
+`;
 // Mutation to add a new complaint
 export const ADD_COMPLAINT = gql`
   mutation AddComplaint($complaint: String!) {

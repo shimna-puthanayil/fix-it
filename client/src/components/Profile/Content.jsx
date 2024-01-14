@@ -138,7 +138,6 @@ export default function Content() {
   let clickedId = "";
   //click event of grid( when a particular complaint is clicked )
   const handleRowClick = (params) => {
-    console.log(params.row);
     dispatch({
       type: SELECTED_COMPLAINT,
       selectedComplaint: { ...params.row },

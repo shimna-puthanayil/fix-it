@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -11,20 +11,24 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, NetworkStatus } from "@apollo/client";
 import Select from "@mui/material/Select";
 
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 //import methods from files
 import Auth from "../../utils/auth";
-import { QUERY_PROPERTY } from "../../utils/queries";
+import { QUERY_PROPERTIES_BY_USER } from "../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
-import { ADD_PROPERTY } from "../../utils/mutations";
+import { ADD_PROPERTY, UPDATE_PROPERTY } from "../../utils/mutations";
 import { QUERY_USERS } from "../../utils/queries";
-import { UPDATE_USERS } from "../../utils/actions";
+import {
+  UPDATE_USERS,
+  CLEAR_UPDATE_PROPERTY,
+  CLEAR_CURRENT_SELECTED_ITEM,
+} from "../../utils/actions";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
@@ -37,16 +41,21 @@ export default function AddProperty() {
   let owners,
     agents,
     tenants = [];
+  let propertyId;
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
 
   const { loading, data } = useQuery(QUERY_USERS);
   const [addProperty] = useMutation(ADD_PROPERTY, {
-    refetchQueries: [QUERY_PROPERTY, "properties"],
+    refetchQueries: [QUERY_PROPERTIES_BY_USER, "propertiesByUser"],
+    fetchPolicy: "network-only",
   });
-  console.log(data);
+
+  const [updateProperty] = useMutation(UPDATE_PROPERTY, {
+    refetchQueries: [QUERY_PROPERTIES_BY_USER, "propertiesByUser"],
+  });
+
   useEffect(() => {
-    console.log(data);
     if (data) {
       //dispatches the action UPDATE_USERS to update the state with users
       dispatch({
@@ -55,7 +64,7 @@ export default function AddProperty() {
       });
     }
   }, [loading, data, dispatch]);
-  console.log(state.users);
+
   function filterUsers(role) {
     //returns users based on role
     return state.users.filter((user) => user.role === role);
@@ -64,14 +73,27 @@ export default function AddProperty() {
   owners = filterUsers("owner");
   agents = filterUsers("agent");
 
-  console.log(tenants);
+  let [owner, setOwner] = useState("");
+  let [agent, setAgent] = useState("");
+  let [tenant, setTenant] = useState("");
+  let [address, setAddress] = useState("");
+  let [errorMessage, setErrorMessage] = useState("");
 
-  const [owner, setOwner] = useState("");
-  const [agent, setAgent] = useState("");
-  const [tenant, setTenant] = useState("");
-  const [address, setAddress] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  if (state.updateProperty) {
+    const { id } = useParams();
+    const selectedProperty = state.properties.find(
+      (property) => property._id === id
+    );
 
+    [owner, setOwner] = useState(selectedProperty.owner._id);
+    [agent, setAgent] = useState(selectedProperty.agent._id);
+    [tenant, setTenant] = useState(selectedProperty.tenant._id);
+    [address, setAddress] = useState(selectedProperty.address);
+    propertyId = selectedProperty._id;
+  }
+  const handleAddressChange = (event) => {
+    setAddress(event.target.value);
+  };
   const handleOwnerChange = (event) => {
     setOwner(event.target.value);
   };
@@ -91,12 +113,29 @@ export default function AddProperty() {
         (property.tenant = tenant);
 
       if (Auth.loggedIn()) {
-        //add property details
-        const response = await addProperty({
-          variables: {
-            propertyDetails: property,
-          },
-        });
+        //update property details
+        if (state.updateProperty) {
+          const response = await updateProperty({
+            variables: {
+              propertyDetails: property,
+              propertyId: propertyId,
+            },
+          });
+          dispatch({
+            type: CLEAR_UPDATE_PROPERTY,
+          });
+        } else {
+          //add property details
+          const response = await addProperty({
+            variables: {
+              propertyDetails: property,
+            },
+          });
+          console.log(response);
+          dispatch({
+            type: CLEAR_CURRENT_SELECTED_ITEM,
+          });
+        }
         navigate("/properties");
       }
     } catch (error) {
@@ -148,10 +187,16 @@ export default function AddProperty() {
           >
             <AddHomeWorkIcon />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Enter Property Details
-          </Typography>
 
+          {state.updateProperty ? (
+            <Typography component="h1" variant="h5">
+              Update Property Details
+            </Typography>
+          ) : (
+            <Typography component="h1" variant="h5">
+              Enter Property Details
+            </Typography>
+          )}
           <Box
             width={"80%"}
             component="form"
@@ -163,8 +208,8 @@ export default function AddProperty() {
               <Grid item xs={12}>
                 <FormControl sx={{ m: 1 }} fullWidth>
                   <TextField
-                    value={state.selectedComplaint.address}
-                    onChange={(e) => setAddress(e.target.value)}
+                    value={address}
+                    onChange={handleAddressChange}
                     id="standard-multiline-static"
                     label="Address"
                     name="address"

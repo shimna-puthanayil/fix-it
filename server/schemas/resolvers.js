@@ -114,6 +114,15 @@ const resolvers = {
         console.log("Could not add property!", error);
       }
     },
+    updateProperty: async (parent, { propertyDetails, propertyId }) => {
+      try {
+        return await Property.findByIdAndUpdate(propertyId, propertyDetails, {
+          new: true,
+        });
+      } catch (error) {
+        console.log("Could not update complaint", error);
+      }
+    },
     addComplaint: async (parent, { complaint }, context) => {
       try {
         const properties = await Property.find({ tenant: context.user._id });

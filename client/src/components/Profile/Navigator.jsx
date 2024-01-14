@@ -20,6 +20,7 @@ import AssignmentTurnedInIcon from "@mui/icons-material/AssignmentTurnedIn";
 import {
   CURRENT_SELECTED_ITEM,
   CLEAR_UPDATE_COMPLAINT,
+  CLEAR_UPDATE_PROPERTY,
 } from "../../utils/actions";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
@@ -89,10 +90,14 @@ export default function Navigator(props) {
     dispatch({
       type: CLEAR_UPDATE_COMPLAINT,
     });
+    dispatch({
+      type: CLEAR_UPDATE_PROPERTY,
+    });
     if (childId === "Properties" || childId === "Houses")
       navigate("/properties");
 
-    if (state.selectedComplaint) navigate("/profile");
+    if (state.selectedComplaint || childId === "Add Property")
+      navigate("/profile");
   };
 
   if (state.role === "tenant") categories = categoriesForTenants;
@@ -150,7 +155,6 @@ export default function Navigator(props) {
                 >
                   <ListItemIcon>{icon}</ListItemIcon>
                   <ListItemText sx={{ fontSize: 30 }}>
-                    {" "}
                     <strong> {childId}</strong>
                   </ListItemText>
                 </ListItemButton>

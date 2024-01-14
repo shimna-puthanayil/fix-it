@@ -16,6 +16,7 @@ const ComplaintProvider = ({ value = [], ...props }) => {
     quotes: [],
     updateComplaint: false,
     users: [],
+    updateProperty: false,
   });
   // The value prop expects an initial state object and it has given the global state object and the dispatch function from `useReducer` hook
   return <Provider value={[state, dispatch]} {...props} />;

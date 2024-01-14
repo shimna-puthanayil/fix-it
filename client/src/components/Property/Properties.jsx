@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { styled } from "@mui/material/styles";
 import { QUERY_PROPERTIES_BY_USER } from "../../utils/queries";
-import { UPDATE_PROPERTIES } from "../../utils/actions";
+import { UPDATE_PROPERTIES, UPDATE_PROPERTY } from "../../utils/actions";
 import { useEffect } from "react";
 // import global state
 import { useComplaintContext } from "../../utils/GlobalState";
@@ -67,7 +67,10 @@ export default function Properties() {
 
   const { loading, data } = useQuery(QUERY_PROPERTIES_BY_USER, {
     variables: { role: state.role },
+    fetchPolicy: "network-only",
   });
+  console.log(state.role);
+  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -78,7 +81,7 @@ export default function Properties() {
       });
     }
   }, [loading, data, dispatch]);
-
+  console.log(state.properties);
   const propertyByUser = state.properties.map((property) => ({
     id: property._id,
     address: property.address,
@@ -86,13 +89,19 @@ export default function Properties() {
     agent: property.agent.username,
     tenant: property.tenant.username,
   }));
-
+  console.log(propertyByUser);
   const rows = propertyByUser;
+
   let clickedId = "";
   //click event of grid( when a  property is clicked )
   const handleRowClick = (params) => {
     console.log(params.row);
     clickedId = params.row.id;
+    dispatch({
+      type: UPDATE_PROPERTY,
+      updateProperty: true,
+    });
+    if (state.role === "admin") navigate(`/update/property/${clickedId}`);
   };
   return (
     <Root container>

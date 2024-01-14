@@ -11,6 +11,7 @@ import UpdateComplaint from "./pages/UpdateComplaint";
 import ApproveComplaint from "./pages/ApproveComplaint";
 import ErrorPage from "./pages/404";
 import Properties from "./pages/Properties";
+import UpdateProperty from "./pages/UpdateProperty";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -48,6 +49,10 @@ const router = createBrowserRouter([
       {
         path: "/properties",
         element: <Properties />,
+      },
+      {
+        path: "/update/property/:id",
+        element: <UpdateProperty />,
       },
     ],
   },

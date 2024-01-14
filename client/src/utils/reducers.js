@@ -10,6 +10,8 @@ import {
   CLEAR_UPDATE_COMPLAINT,
   CLEAR_QUOTES,
   UPDATE_USERS,
+  UPDATE_PROPERTY,
+  CLEAR_UPDATE_PROPERTY,
 } from "./actions";
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
 export const reducer = (state, action) => {
@@ -59,6 +61,12 @@ export const reducer = (state, action) => {
         ...state,
         updateComplaint: true,
       };
+    //sets the state as true for update property
+    case UPDATE_PROPERTY:
+      return {
+        ...state,
+        updateProperty: true,
+      };
     //clears the state
     case CLEAR_UPDATE_COMPLAINT:
       return {
@@ -71,6 +79,13 @@ export const reducer = (state, action) => {
         ...state,
         selectedItem: "",
       };
+    //clears the update property state and set it as false
+    case CLEAR_UPDATE_PROPERTY:
+      return {
+        ...state,
+        updateProperty: false,
+      };
+
     case CLEAR_QUOTES:
       return {
         ...state,
