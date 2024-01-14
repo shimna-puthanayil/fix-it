@@ -66,13 +66,6 @@ function Header(props) {
 
             <Grid item xs />
 
-            <Grid item mt={2}>
-              <Tooltip title="Alerts • No alerts">
-                <IconButton color="inherit">
-                  <NotificationsIcon />
-                </IconButton>
-              </Tooltip>
-            </Grid>
             <Grid item mr={3} mt={2}>
               <IconButton
                 color="inherit"

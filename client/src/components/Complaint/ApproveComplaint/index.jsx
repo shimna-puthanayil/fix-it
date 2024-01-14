@@ -32,8 +32,6 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function ApproveComplaint() {
-  // const complaintId = state.selectedComplaint.id;
-
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
   //mutation to add/update approved quote for complaint
@@ -54,7 +52,6 @@ export default function ApproveComplaint() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      console.log(quotes);
       if (Auth.loggedIn()) {
         //get selected quote and update approvedQuote in collection complaint
         const response = await addApprovedQuote({
@@ -187,7 +184,7 @@ export default function ApproveComplaint() {
                     {quotesOfComplaint.map((quote) => (
                       <MenuItem
                         key={quote.businessName}
-                        value={`Business Name : ${quote.businessName}  |  Address : ${quote.address}  |   Quote : ${quote.quote}`}
+                        value={`Business Name : ${quote.businessName}  |  Address : ${quote.address}  |   Quote : $${quote.quote}`}
                       >
                         <Box
                           sx={{
@@ -206,7 +203,7 @@ export default function ApproveComplaint() {
                           </Typography>
 
                           <Typography mr={1}>
-                            <strong>Quote : </strong> {quote.quote}
+                            <strong>Quote : $</strong> {quote.quote}
                           </Typography>
                         </Box>
                         <Divider />

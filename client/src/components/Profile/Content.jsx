@@ -75,12 +75,7 @@ export default function Content() {
       width: statusColumnWidth,
       headerClassName: "super-app-theme--header",
     },
-    // {
-    //   field: "property",
-    //   headerName: "Property",
-    //   width: 210,
-    //   headerClassName: "super-app-theme--header",
-    // },
+
     {
       renderHeader: () => <strong>{"Approved Quote "}</strong>,
       field: "approvedQuote",
@@ -182,126 +177,127 @@ export default function Content() {
         </Box>
       </>
     );
+  } else {
+    let clickedId = "";
+    //click event of grid( when a particular complaint is clicked )
+    const handleRowClick = (params) => {
+      dispatch({
+        type: SELECTED_COMPLAINT,
+        selectedComplaint: { ...params.row },
+      });
+      dispatch({
+        type: CLEAR_CURRENT_SELECTED_ITEM,
+        selectedItem: "",
+      });
+      dispatch({
+        type: UPDATE_COMPLAINT,
+        updateComplaint: true,
+      });
+      clickedId = params.row.id;
+      // if (state.role === "agent") navigate(`/complaint/${clickedId}`);
+      switch (state.role) {
+        case "agent":
+          navigate(`/complaint/${clickedId}`);
+          break;
+        case "tenant":
+          navigate(`/update/complaint/${clickedId}`);
+          break;
+        case "owner":
+          navigate(`/approve/complaint/${clickedId}`);
+          break;
+        default:
+          break;
+      }
+    };
+
+    if (state.selectedItem === "Add Complaint") return <AddComplaint />;
+    else if (state.selectedItem === "Add Property") return <AddProperty />;
+    else if (state.selectedItem === "Properties") return <Properties />;
+    else if (state.updateComplaint) return <AddComplaint />;
+    else if (state.role === "tenant")
+      return (
+        <Root container>
+          <Grid item xs={12} md={12} lg={12} component={Paper} elevation={2}>
+            <Box
+              sx={{
+                minWidth: 100,
+                height: "100%",
+                width: "100%",
+                "& .super-app-theme--header": {
+                  backgroundColor: "#101F33",
+                  color: "white",
+                },
+              }}
+            >
+              <DataGrid
+                disableColumnMenu
+                getRowClassName={(params) =>
+                  `super-app-theme--${params.row.status}`
+                }
+                onRowClick={handleRowClick}
+                rows={rows}
+                columns={columns}
+                columnVisibilityModel={{
+                  // Hide columns property and quotes, the other columns will remain visible
+                  approvedQuote: false,
+                  property: false,
+                }}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 15,
+                    },
+                  },
+                }}
+                pageSizeOptions={[5]}
+                disableRowSelectionOnClick
+              />
+            </Box>
+          </Grid>
+        </Root>
+      );
+    else
+      return (
+        <Root container>
+          <Grid item xs={12} md={12} lg={12} component={Paper} elevation={2}>
+            <Box
+              sx={{
+                minWidth: 100,
+                height: "100%",
+                width: "100%",
+                "& .super-app-theme--header": {
+                  backgroundColor: "#101F33",
+                  color: "white",
+                },
+              }}
+            >
+              <DataGrid
+                sx={{ backgroundColor: "#eaeff1" }}
+                disableColumnMenu
+                getRowClassName={(params) =>
+                  `super-app-theme--${params.row.status}`
+                }
+                onRowClick={handleRowClick}
+                rows={rows}
+                columns={columns}
+                columnVisibilityModel={{
+                  // Hide column property, the other columns will remain visible
+
+                  property: false,
+                }}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 15,
+                    },
+                  },
+                }}
+                pageSizeOptions={[5]}
+                disableRowSelectionOnClick
+              />
+            </Box>
+          </Grid>
+        </Root>
+      );
   }
-  let clickedId = "";
-  //click event of grid( when a particular complaint is clicked )
-  const handleRowClick = (params) => {
-    dispatch({
-      type: SELECTED_COMPLAINT,
-      selectedComplaint: { ...params.row },
-    });
-    dispatch({
-      type: CLEAR_CURRENT_SELECTED_ITEM,
-      selectedItem: "",
-    });
-    dispatch({
-      type: UPDATE_COMPLAINT,
-      updateComplaint: true,
-    });
-    clickedId = params.row.id;
-    // if (state.role === "agent") navigate(`/complaint/${clickedId}`);
-    switch (state.role) {
-      case "agent":
-        navigate(`/complaint/${clickedId}`);
-        break;
-      case "tenant":
-        navigate(`/update/complaint/${clickedId}`);
-        break;
-      case "owner":
-        navigate(`/approve/complaint/${clickedId}`);
-        break;
-      default:
-        break;
-    }
-  };
-
-  if (state.selectedItem === "Add Complaint") return <AddComplaint />;
-  else if (state.selectedItem === "Add Property") return <AddProperty />;
-  else if (state.selectedItem === "Properties") return <Properties />;
-  else if (state.updateComplaint) return <AddComplaint />;
-  else if (state.role === "tenant")
-    return (
-      <Root container>
-        <Grid item xs={12} md={12} lg={12} component={Paper} elevation={2}>
-          <Box
-            sx={{
-              minWidth: 100,
-              height: "100%",
-              width: "100%",
-              "& .super-app-theme--header": {
-                backgroundColor: "#101F33",
-                color: "white",
-              },
-            }}
-          >
-            <DataGrid
-              disableColumnMenu
-              getRowClassName={(params) =>
-                `super-app-theme--${params.row.status}`
-              }
-              onRowClick={handleRowClick}
-              rows={rows}
-              columns={columns}
-              columnVisibilityModel={{
-                // Hide columns property and quotes, the other columns will remain visible
-                approvedQuote: false,
-                property: false,
-              }}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 15,
-                  },
-                },
-              }}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-            />
-          </Box>
-        </Grid>
-      </Root>
-    );
-  else
-    return (
-      <Root container>
-        <Grid item xs={12} md={12} lg={12} component={Paper} elevation={2}>
-          <Box
-            sx={{
-              minWidth: 100,
-              height: "100%",
-              width: "100%",
-              "& .super-app-theme--header": {
-                backgroundColor: "#101F33",
-                color: "white",
-              },
-            }}
-          >
-            <DataGrid
-              sx={{ backgroundColor: "#eaeff1" }}
-              disableColumnMenu
-              getRowClassName={(params) =>
-                `super-app-theme--${params.row.status}`
-              }
-              onRowClick={handleRowClick}
-              rows={rows}
-              columns={columns}
-              columnVisibilityModel={{
-                // Hide column property, the other columns will remain visible
-
-                property: false,
-              }}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 15,
-                  },
-                },
-              }}
-              pageSizeOptions={[5]}
-              disableRowSelectionOnClick
-            />
-          </Box>
-        </Grid>
-      </Root>
-    );
 }

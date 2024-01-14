@@ -39,15 +39,12 @@ export default function ComplaintDetails() {
   });
 
   const [status, setStatus] = useState(state.selectedComplaint.status);
-  const [quotes, setQuotes] = useState(state.selectedComplaint.quotes);
   const [errorMessage, setErrorMessage] = useState("");
   const complaintId = state.selectedComplaint.id;
   const handleChange = (event) => {
     setStatus(event.target.value);
   };
-  const handleQuotesChange = (event) => {
-    setQuotes(event.target.value);
-  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -56,8 +53,6 @@ export default function ComplaintDetails() {
         //get quotes from state and update complaint
         const quotes = state.quotes;
         const suggestedQuotes = [];
-        console.log("quotes state");
-        console.log(state.quotes);
         for (let i = 0; i < quotes.length; i++) {
           const quote = {};
           (quote.businessName = quotes[i].name),
