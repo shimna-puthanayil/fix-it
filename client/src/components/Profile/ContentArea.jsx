@@ -10,8 +10,7 @@ import Content from "./Content";
 
 export default function ContentArea() {
   const [state, dispatch] = useComplaintContext();
-  console.log(state.role);
-  console.log(state.updateComplaint);
+
   if (
     (state.updateComplaint && state.role === "tenant") ||
     state.selectedItem === "Add Complaint"

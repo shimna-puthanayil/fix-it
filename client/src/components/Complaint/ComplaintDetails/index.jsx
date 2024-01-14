@@ -210,8 +210,8 @@ export default function ComplaintDetails() {
               type="submit"
               variant="contained"
               sx={{
-                mt: 3,
-                mb: 4,
+                mt: 4,
+                mb: 5,
                 mx: "auto",
                 display: "flex",
                 flexDirection: "column",

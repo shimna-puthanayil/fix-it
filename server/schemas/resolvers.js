@@ -81,30 +81,6 @@ const resolvers = {
         console.log("Could not find complaints", error);
       }
     },
-    // complaintsOfPropertyByOwner: async (parent, { ownerId }) => {
-    //   try {
-    //     const propertyIds = [];
-    //     const properties = await Property.find({ owner: ownerId });
-    //     properties.map((x) => propertyIds.push(x._id));
-    //     return await Complaint.find({
-    //       property: { $in: propertyIds },
-    //     }).populate("property");
-    //   } catch (error) {
-    //     console.log("Could not find complaints", error);
-    //   }
-    // },
-    // complaintsRaisedByTenant: async (parent, { tenantId }) => {
-    //   try {
-    //     const propertyIds = [];
-    //     const properties = await Property.find({ tenant: tenantId });
-    //     properties.map((x) => propertyIds.push(x._id));
-    //     return await Complaint.find({
-    //       property: { $in: propertyIds },
-    //     }).populate("property");
-    //   } catch {
-    //     console.log("Could not find complaints", error);
-    //   }
-    // },
   },
   Mutation: {
     addProperty: async (parent, { propertyDetails }) => {

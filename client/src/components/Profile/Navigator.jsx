@@ -52,7 +52,7 @@ const categoriesForTenants = [
 ];
 const categoriesForAdmin = [
   {
-    id: "Complaints",
+    id: "Properties",
     children: [
       { id: "Add Property", icon: <AddHomeWorkIcon /> },
       { id: "Properties", icon: <HomeIcon /> },
@@ -95,9 +95,8 @@ export default function Navigator(props) {
     });
     if (childId === "Properties" || childId === "Houses")
       navigate("/properties");
-
-    if (state.selectedComplaint || childId === "Add Property")
-      navigate("/profile");
+    // if (state.selectedComplaint || childId === "Add Property")
+    else navigate("/profile");
   };
 
   if (state.role === "tenant") categories = categoriesForTenants;

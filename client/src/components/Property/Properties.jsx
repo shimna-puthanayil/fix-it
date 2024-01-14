@@ -69,8 +69,6 @@ export default function Properties() {
     variables: { role: state.role },
     fetchPolicy: "network-only",
   });
-  console.log(state.role);
-  console.log(data);
 
   useEffect(() => {
     if (data) {
@@ -81,7 +79,7 @@ export default function Properties() {
       });
     }
   }, [loading, data, dispatch]);
-  console.log(state.properties);
+
   const propertyByUser = state.properties.map((property) => ({
     id: property._id,
     address: property.address,
@@ -89,19 +87,20 @@ export default function Properties() {
     agent: property.agent.username,
     tenant: property.tenant.username,
   }));
-  console.log(propertyByUser);
+
   const rows = propertyByUser;
 
   let clickedId = "";
   //click event of grid( when a  property is clicked )
   const handleRowClick = (params) => {
-    console.log(params.row);
-    clickedId = params.row.id;
-    dispatch({
-      type: UPDATE_PROPERTY,
-      updateProperty: true,
-    });
-    if (state.role === "admin") navigate(`/update/property/${clickedId}`);
+    if (state.role === "admin") {
+      clickedId = params.row.id;
+      dispatch({
+        type: UPDATE_PROPERTY,
+        updateProperty: true,
+      });
+      navigate(`/update/property/${clickedId}`);
+    }
   };
   return (
     <Root container>
@@ -119,6 +118,7 @@ export default function Properties() {
           }}
         >
           <DataGrid
+            sx={{ backgroundColor: "#F6F6F6" }}
             disableColumnMenu
             getRowClassName={(params) =>
               `super-app-theme--${params.row.status}`

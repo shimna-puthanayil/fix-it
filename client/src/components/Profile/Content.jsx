@@ -107,7 +107,7 @@ export default function Content() {
       });
     }
   }, [loading, data, dispatch]);
-  console.log(state.complaints);
+
   function filterComplaints() {
     //returns complaints based on status( for owner and agent login)
     return state.complaints.filter((complaint) => complaint.status === status);
@@ -121,7 +121,7 @@ export default function Content() {
   }
   if (state.role === "tenant") complaints = filterComplaintsForTenants();
   else complaints = filterComplaints();
-  console.log(complaints);
+
   for (let i = 0; i < complaints.length; i++) {
     const comp = {};
     (comp.id = i + 1),
@@ -272,7 +272,7 @@ export default function Content() {
               }}
             >
               <DataGrid
-                sx={{ backgroundColor: "#eaeff1" }}
+                sx={{ backgroundColor: "#F6F6F6" }}
                 disableColumnMenu
                 getRowClassName={(params) =>
                   `super-app-theme--${params.row.status}`

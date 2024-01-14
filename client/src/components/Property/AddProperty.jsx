@@ -131,7 +131,7 @@ export default function AddProperty() {
               propertyDetails: property,
             },
           });
-          console.log(response);
+
           dispatch({
             type: CLEAR_CURRENT_SELECTED_ITEM,
           });

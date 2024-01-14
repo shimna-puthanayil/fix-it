@@ -114,13 +114,19 @@ export default function SignUp() {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 25,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "#457373" }}>
+          <Avatar
+            sx={{
+              m: 1,
+              backgroundImage: `linear-gradient(to right,#457373,#6E9B9B,#457373)`,
+              bgcolor: "#457373",
+            }}
+          >
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">

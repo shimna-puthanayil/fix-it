@@ -45,41 +45,7 @@ export const QUERY_PROPERTIES_BY_USER = gql`
     }
   }
 `;
-// export const QUERY_PROPERTIES_BY_OWNER = gql`
-//   query PropertiesByOwner($ownerId: ID!) {
-//     propertiesByOwner(ownerId: $ownerId) {
-//       address
-//       agent {
-//         username
-//       }
-//       tenant {
-//         username
-//       }
-//     }
-//   }
-// `;
-// export const QUERY_COMPLAINTS_BY_TENANT = gql`
-//   query ComplaintsRaisedByTenant($tenantId: ID!) {
-//     complaintsRaisedByTenant(tenantId: $tenantId) {
-//       complaint
-//       property {
-//         address
-//       }
-//       date
-//     }
-//   }
-// `;
-// export const QUERY_COMPLAINTS_OF_PROPERTY_BY_OWNER = gql`
-//   query ComplaintsOfPropertyByOwner($ownerId: ID!) {
-//     complaintsOfPropertyByOwner(ownerId: $ownerId) {
-//       complaint
-//       property {
-//         address
-//       }
-//       date
-//     }
-//   }
-// `;
+
 export const QUERY_COMPLAINTS_RAISED = gql`
   query ComplaintsRaised {
     complaintsRaised {

@@ -27,7 +27,7 @@ function Header(props) {
   const accountPopover = usePopover();
   const { onDrawerToggle } = props;
   const [state, dispatch] = useComplaintContext();
-  let title = "Open",
+  let title,
     role = "";
 
   if (Auth.loggedIn) {
@@ -38,11 +38,12 @@ function Header(props) {
         role: role,
       });
     }, [dispatch]);
-    if (state.selectedItem === "Add Complaint") title = "";
-    else if (role === "tenant" && state.selectedItem === "My Complaints") {
-      title = "My Complaints";
-    } else title = state.selectedItem;
-    console.log(title);
+    //sets the title in header according to  components that will be rendered on different conditions
+    if (state.updateComplaint || state.updateProperty) title = "";
+    else if (state.selectedItem) title = state.selectedItem;
+    else if (state.role === "admin") title = "Properties";
+    else if (role === "tenant") title = "My Complaints";
+    else title = "Open";
   }
   const ColorAvatar = styled(Avatar)(({ theme }) => ({
     background: "linear-gradient(to right ,#457373, #B2C9CB,#457373)",

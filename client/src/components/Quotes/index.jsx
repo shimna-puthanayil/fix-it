@@ -108,7 +108,7 @@ export default function Quotes() {
     setRows(rows.filter((row) => row.id !== id));
     const isAlreadyExisting = (quote) => quote.id === id;
     const index = currentQuotes.findIndex(isAlreadyExisting);
-    console.log(index);
+
     if (index >= 0) {
       currentQuotes.splice(index, 1);
     }

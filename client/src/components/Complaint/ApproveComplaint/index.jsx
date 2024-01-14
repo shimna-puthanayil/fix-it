@@ -218,8 +218,8 @@ export default function ApproveComplaint() {
               type="submit"
               variant="contained"
               sx={{
-                mt: 3,
-                mb: 2,
+                mt:4,
+                mb: 5,
                 mx: "auto",
                 display: "flex",
                 flexDirection: "column",
