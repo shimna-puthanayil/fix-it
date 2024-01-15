@@ -4,28 +4,23 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Paper from "@mui/material/Paper";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
-import { cyan } from "@mui/material/colors";
+import { FormControl, FormHelperText } from "@material-ui/core";
 import { useMutation } from "@apollo/client";
 //import methods from files
 import Auth from "../../utils/auth";
 import { ADD_USER } from "../../utils/mutations";
 import { validateEmail } from "../../utils/helpers";
-const ColorButton = styled(Button)(({ theme }) => ({
+const ColorButton = styled(Button)(({}) => ({
   color: "white",
   fontWeight: "bold",
   background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
@@ -40,7 +35,7 @@ function Copyright(props) {
     >
       {"Copyright © "}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        FixIt
       </Link>{" "}
       {new Date().getFullYear()}
       {"."}
@@ -52,43 +47,112 @@ export default function SignUp() {
   const [addUser] = useMutation(ADD_USER);
   const [role, setRole] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [errors, setErrors] = useState({});
+  const [formState, setFormState] = useState({
+    email: "",
+    password: "",
+    name: "",
+    role: "",
+  });
   const handleChange = (event) => {
     setRole(event.target.value);
+    const temp = { ...errors };
+    // check if the role is selected
+    temp.role = role ? "" : "Please select a role";
+    //set error messages in errors
+    setErrors({
+      ...temp,
+    });
   };
   const handleInputOnFocusOut = (e) => {
     const type = e.target.name;
     const value = e.target.value;
-    // check if any field left empty and email is invalid and set error message
-    if (type === "email" && !validateEmail(value)) {
-      setErrorMessage("Please enter valid email address");
-    } else if (type === "name" && (!value || value.length < 3)) {
-      setErrorMessage("Please enter valid username  ");
-    } else if (type === "password" && (!value || value.length < 8)) {
-      setErrorMessage("Password length should be more than 8 characters");
-    } else {
-      setErrorMessage("");
+    const temp = { ...errors };
+    // check if the user name is empty
+    temp.name =
+      type === "username" && !data.get("name")
+        ? "Please enter the name of the user"
+        : "";
+    // check if the email is invalid and set error message
+    if (value) {
+      temp.email =
+        type === "email" && !validateEmail(value)
+          ? "Please enter valid email address"
+          : "";
+      // check if the password length is less than 8 and set error message
+      temp.password =
+        type === "password" && value.length < 8
+          ? "Password should be minimum of 8 characters"
+          : "";
+    }
+    //set error messages in errors
+    setErrors({
+      ...temp,
+    });
+  };
+  //function to  validate fields
+  const validate = (data) => {
+    let temp = { ...errors };
+    // check if the user name is empty
+    temp.name = !data.get("name") ? "Please enter the name of the user" : "";
+    // check if the email is invalid and set error message
+    temp.email = !validateEmail(data.get("email"))
+      ? "Please enter valid email address"
+      : "";
+    // check if the password length is less than 8 and set error message
+    if (data.get("password"))
+      temp.password =
+        data.get("password").length < 8
+          ? "Password should be minimum of 8 characters"
+          : "";
+    // check if the password is empty
+    else
+      temp.password =
+        data.get("password") != "" ? "" : "Please enter password .";
+    // check if the role is selected
+    temp.role = role ? "" : "Please select a role";
+
+    setErrors({
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x == "");
+  };
+  const handleInput = (e) => {
+    const type = e.target.name;
+    const value = e.target.value;
+
+    // set value of selected field
+    if (type === "email" || type === "password" || type === "username") {
+      setFormState({ ...formState, [type]: value });
     }
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const data = new FormData(event.currentTarget);
-      const response = await addUser({
-        variables: {
-          email: data.get("email"),
-          password: data.get("password"),
-          username: data.get("name"),
-          role: role,
-        },
-      });
-      const token = response.data.addUser.token;
-      Auth.login(token);
-      data.set("email", "");
-      data.set("password", "");
-      data.set("name", "");
-      data.set("role", "");
+      if (validate(data)) {
+        const response = await addUser({
+          variables: {
+            email: data.get("email"),
+            password: data.get("password"),
+            username: data.get("name"),
+            role: role,
+          },
+        });
+
+        if (response.data?.addUser === null) {
+          setErrorMessage("There is already an account in this mail id");
+          return;
+        }
+        const token = response.data.addUser.token;
+        Auth.login(token);
+        data.set("email", "");
+        data.set("password", "");
+        data.set("name", "");
+        data.set("role", "");
+      }
     } catch (error) {
-      setErrorMessage("Please enter required fields");
+      setErrorMessage("Something went wrong");
     }
   };
 
@@ -99,7 +163,7 @@ export default function SignUp() {
         item
         xs={false}
         sm={4}
-        md={7}
+        md={8}
         sx={{
           backgroundImage: `url("./images/login.png")`,
           backgroundRepeat: "no-repeat",
@@ -111,10 +175,11 @@ export default function SignUp() {
           backgroundPosition: "center",
         }}
       />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
         <Box
           sx={{
             marginTop: 25,
+            mx: 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
@@ -136,73 +201,77 @@ export default function SignUp() {
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={{ mt: 1 }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <TextField
-                    autoComplete="given-name"
-                    name="name"
-                    required
-                    fullWidth
-                    id="name"
-                    label="name"
-                    autoFocus
-                    onBlur={handleInputOnFocusOut}
-                  />
-                </FormControl>
-              </Grid>
+            <TextField
+              margin="dense"
+              autoComplete="given-name"
+              name="name"
+              type="username"
+              required
+              fullWidth
+              id="name"
+              label="name"
+              autoFocus
+              onChange={handleInput}
+              onBlur={handleInputOnFocusOut}
+              error={errors.name ? true : false}
+              helperText={errors.name}
+            />
 
-              <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <TextField
-                    required
-                    fullWidth
-                    id="email"
-                    label="Email Address"
-                    name="email"
-                    autoComplete="email"
-                    onBlur={handleInputOnFocusOut}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <TextField
-                    required
-                    fullWidth
-                    name="password"
-                    label="Password"
-                    type="password"
-                    id="password"
-                    autoComplete="new-password"
-                    onBlur={handleInputOnFocusOut}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <InputLabel id="label-role">Role</InputLabel>
-                  <Select
-                    required
-                    labelId="label-role"
-                    id="role"
-                    value={role}
-                    label="Role"
-                    name="role"
-                    onChange={handleChange}
-                  >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-                    <MenuItem value={"agent"}>Agent</MenuItem>
-                    <MenuItem value={"owner"}>Owner</MenuItem>
-                    <MenuItem value={"tenant"}>Tenant</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-            </Grid>
+            <TextField
+              margin="dense"
+              required
+              fullWidth
+              value={formState.email}
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              onChange={handleInput}
+              onBlur={handleInputOnFocusOut}
+              error={errors.email ? true : false}
+              helperText={errors.email}
+            />
+
+            <TextField
+              margin="dense"
+              required
+              fullWidth
+              value={formState.password}
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="new-password"
+              onChange={handleInput}
+              onBlur={handleInputOnFocusOut}
+              error={errors.password ? true : false}
+              helperText={errors.password}
+            />
+            <FormControl variant="outlined" fullWidth>
+              <InputLabel id="label-role">Role</InputLabel>
+              <Select
+                margin="dense"
+                fullWidth
+                required
+                labelId="label-role"
+                id="role"
+                value={role}
+                label="Role"
+                name="role"
+                onChange={handleChange}
+                error={errors.role ? true : false}
+                helperText={errors.role}
+              >
+                <MenuItem value={"agent"}>Agent</MenuItem>
+                <MenuItem value={"owner"}>Owner</MenuItem>
+                <MenuItem value={"tenant"}>Tenant</MenuItem>
+              </Select>
+              <FormHelperText sx={{ color: "red" }}>
+                {errors.role}
+              </FormHelperText>
+            </FormControl>
             <ColorButton
               type="submit"
               fullWidth
@@ -213,7 +282,7 @@ export default function SignUp() {
             </ColorButton>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signin" variant="body2">
+                <Link href="/signin" variant="body2" sx={{ color: "#457373" }}>
                   Already have an account? Sign in
                 </Link>
               </Grid>

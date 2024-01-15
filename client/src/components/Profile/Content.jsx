@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { styled } from "@mui/material/styles";
 import { QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
-import { Container, SvgIcon, Link } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import {
   UPDATE_COMPLAINTS,
   SELECTED_COMPLAINT,
@@ -20,7 +20,7 @@ import AddComplaint from "../Complaint/AddComplaint";
 import { useNavigate } from "react-router-dom";
 import AddProperty from "../Property/AddProperty";
 import Properties from "../../pages/Properties";
-import { Typography } from "@mui/material";
+
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down("md")]: {

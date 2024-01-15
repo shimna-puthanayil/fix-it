@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { styled } from "@mui/material/styles";
+import { Container, Typography } from "@mui/material";
 import { QUERY_PROPERTIES_BY_USER } from "../../utils/queries";
 import { UPDATE_PROPERTIES, UPDATE_PROPERTY } from "../../utils/actions";
 import { useEffect } from "react";
@@ -79,69 +80,113 @@ export default function Properties() {
       });
     }
   }, [loading, data, dispatch]);
-
-  const propertyByUser = state.properties.map((property) => ({
-    id: property._id,
-    address: property.address,
-    owner: property.owner.username,
-    agent: property.agent.username,
-    tenant: property.tenant.username,
-  }));
-
-  const rows = propertyByUser;
-
-  let clickedId = "";
-  //click event of grid( when a  property is clicked )
-  const handleRowClick = (params) => {
-    if (state.role === "admin") {
-      clickedId = params.row.id;
-      dispatch({
-        type: UPDATE_PROPERTY,
-        updateProperty: true,
-      });
-      navigate(`/update/property/${clickedId}`);
-    }
-  };
-  return (
-    <Root container>
-      <Grid item xs={12} md={12} lg={11} component={Paper} elevation={2}>
+  if (state.properties.length === 0) {
+    return (
+      <>
         <Box
           sx={{
-            minWidth: 100,
-            height: "100%",
-
-            "& .super-app-theme--header": {
-              backgroundColor: "#101F33",
-              color: "white",
-              padding: 2,
-            },
+            alignItems: "center",
+            display: "flex",
+            flexGrow: 1,
           }}
         >
-          <DataGrid
-            sx={{ backgroundColor: "#F6F6F6" }}
-            disableColumnMenu
-            getRowClassName={(params) =>
-              `super-app-theme--${params.row.status}`
-            }
-            onRowClick={handleRowClick}
-            rows={rows}
-            columns={columns}
-            columnVisibilityModel={{
-              // Hide columns id, the other columns will remain visible
-              id: false,
-            }}
-            initialState={{
-              pagination: {
-                paginationModel: {
-                  pageSize: 15,
-                },
+          <Container>
+            <Box
+              sx={{
+                alignItems: "center",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <Box
+                sx={{
+                  mt: 20,
+                  mb: 3,
+                  textAlign: "center",
+                }}
+              >
+                <img
+                  alt="no data"
+                  src="/images/no-data.png"
+                  style={{
+                    display: "inline-block",
+                    maxWidth: "50%",
+                    width: 300,
+                  }}
+                />
+              </Box>
+              <Typography align="center" sx={{ mb: 3 }} variant="h6">
+                There are no properties
+              </Typography>
+            </Box>
+          </Container>
+        </Box>
+      </>
+    );
+  } else {
+    const propertyByUser = state.properties.map((property) => ({
+      id: property._id,
+      address: property.address,
+      owner: property.owner.username,
+      agent: property.agent.username,
+      tenant: property.tenant.username,
+    }));
+
+    const rows = propertyByUser;
+
+    let clickedId = "";
+    //click event of grid( when a  property is clicked )
+    const handleRowClick = (params) => {
+      if (state.role === "admin") {
+        clickedId = params.row.id;
+        dispatch({
+          type: UPDATE_PROPERTY,
+          updateProperty: true,
+        });
+        navigate(`/update/property/${clickedId}`);
+      }
+    };
+    return (
+      <Root container>
+        <Grid item xs={12} md={12} lg={11} component={Paper} elevation={2}>
+          <Box
+            sx={{
+              minWidth: 100,
+              height: "100%",
+
+              "& .super-app-theme--header": {
+                backgroundColor: "#101F33",
+                color: "white",
+                padding: 2,
               },
             }}
-            pageSizeOptions={[15]}
-            disableRowSelectionOnClick
-          />
-        </Box>
-      </Grid>
-    </Root>
-  );
+          >
+            <DataGrid
+              sx={{ backgroundColor: "#F6F6F6" }}
+              disableColumnMenu
+              getRowClassName={(params) =>
+                `super-app-theme--${params.row.status}`
+              }
+              onRowClick={handleRowClick}
+              rows={rows}
+              columns={columns}
+              columnVisibilityModel={{
+                // Hide columns id, the other columns will remain visible
+                id: false,
+              }}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: 15,
+                  },
+                },
+              }}
+              pageSizeOptions={[15]}
+              disableRowSelectionOnClick
+            />
+          </Box>
+        </Grid>
+      </Root>
+    );
+  }
 }
