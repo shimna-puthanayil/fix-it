@@ -16,6 +16,7 @@ import Select from "@mui/material/Select";
 import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
+import { FormHelperText } from "@material-ui/core";
 //import methods from files
 import Auth from "../../../utils/auth";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
@@ -32,6 +33,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 export default function ApproveComplaint() {
+  const [errors, setErrors] = useState({});
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
   //mutation to add/update approved quote for complaint
@@ -176,11 +178,8 @@ export default function ApproveComplaint() {
                     label="Quotes"
                     name="quotes"
                     onChange={handleQuotesChange}
+                    error={errors.quote ? true : false}
                   >
-                    <MenuItem value="">
-                      <em>None</em>
-                    </MenuItem>
-
                     {quotesOfComplaint.map((quote) => (
                       <MenuItem
                         key={quote.businessName}
@@ -210,6 +209,9 @@ export default function ApproveComplaint() {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText sx={{ color: "red" }}>
+                    {errors.quote}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
             </Grid>
@@ -218,7 +220,7 @@ export default function ApproveComplaint() {
               type="submit"
               variant="contained"
               sx={{
-                mt:4,
+                mt: 4,
                 mb: 5,
                 mx: "auto",
                 display: "flex",

@@ -262,7 +262,6 @@ export default function SignUp() {
                 name="role"
                 onChange={handleChange}
                 error={errors.role ? true : false}
-                helperText={errors.role}
               >
                 <MenuItem value={"agent"}>Agent</MenuItem>
                 <MenuItem value={"owner"}>Owner</MenuItem>

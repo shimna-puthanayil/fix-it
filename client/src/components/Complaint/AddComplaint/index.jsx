@@ -44,47 +44,61 @@ export default function AddComplaint() {
     [complaint, setComplaint] = useState(state.selectedComplaint.complaint);
   }
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [errors, setErrors] = useState({});
   const handleInputOnFocusOut = (e) => {
-    const type = e.target.name;
     const value = e.target.value;
-    // check if any field left empty and email is invalid and set error message
-    if (!value) {
-      setErrorMessage("Please enter complaint ");
-    } else {
-      setErrorMessage("");
-      setComplaint("");
+
+    const temp = { ...errors };
+    // check if the complaint is invalid and set error message
+    if (value) {
+      temp.complaint = !value ? "Please enter complaint" : "";
     }
+    //set error messages in errors
+    setErrors({
+      ...temp,
+    });
+  };
+  //function to  validate field
+  const validate = (data) => {
+    let temp = { ...errors };
+    // check if the complaint is entered and set error message if empty
+    temp.complaint = !complaint ? "Please enter complaint" : "";
+    setErrors({
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x == "");
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const data = new FormData(event.currentTarget);
       if (Auth.loggedIn()) {
-        if (state.updateComplaint) {
-          const response = await updateComplaint({
-            variables: {
-              complaint: complaint,
-              quotes: [],
-              status: "",
-              complaintId: state.selectedComplaint.id,
-            },
-          });
-          dispatch({
-            type: CLEAR_UPDATE_COMPLAINT,
-          });
-        } else {
-          const response = await addComplaint({
-            variables: {
-              complaint: complaint,
-            },
-          });
-          dispatch({
-            type: CLEAR_CURRENT_SELECTED_ITEM,
-          });
+        if (validate(data)) {
+          if (state.updateComplaint) {
+            const response = await updateComplaint({
+              variables: {
+                complaint: complaint,
+                quotes: [],
+                status: "",
+                complaintId: state.selectedComplaint.id,
+              },
+            });
+            dispatch({
+              type: CLEAR_UPDATE_COMPLAINT,
+            });
+          } else {
+            const response = await addComplaint({
+              variables: {
+                complaint: complaint,
+              },
+            });
+            dispatch({
+              type: CLEAR_CURRENT_SELECTED_ITEM,
+            });
+          }
+          setComplaint("");
+          navigate("/profile");
         }
-        setComplaint("");
-        navigate("/profile");
       }
     } catch (error) {
       setErrorMessage("Please enter required fields");
@@ -156,6 +170,9 @@ export default function AddComplaint() {
                     name="complaint"
                     multiline
                     variant="standard"
+                    onBlur={handleInputOnFocusOut}
+                    error={errors.complaint ? true : false}
+                    helperText={errors.complaint}
                   />
                 </FormControl>
               </Grid>

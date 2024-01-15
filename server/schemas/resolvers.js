@@ -25,16 +25,19 @@ const resolvers = {
       try {
         if (role === "agent")
           return await Property.find({ agent: context.user._id })
+            .sort({ _id: -1 })
             .populate("owner")
             .populate("agent")
             .populate("tenant");
         else if (role === "owner")
           return await Property.find({ owner: context.user._id })
+            .sort({ _id: -1 })
             .populate("owner")
             .populate("agent")
             .populate("tenant");
         else
           return await Property.find()
+            .sort({ _id: -1 })
             .populate("owner")
             .populate("agent")
             .populate("tenant");
@@ -42,15 +45,7 @@ const resolvers = {
         console.log("Could not find properties", error);
       }
     },
-    // propertiesByOwner: async (parent, { ownerId }) => {
-    //   try {
-    //     return await Property.find({ owner: ownerId })
-    //       .populate("agent")
-    //       .populate("tenant");
-    //   } catch (error) {
-    //     console.log("Could not find properties", error);
-    //   }
-    // },
+
     complaintsRaised: async (parent, args, context) => {
       try {
         const params = {};
@@ -75,7 +70,9 @@ const resolvers = {
 
         const complaints = await Complaint.find({
           property: { $in: propertyIds },
-        }).populate("property");
+        })
+          .sort({ _id: -1 })
+          .populate("property");
         return complaints;
       } catch (error) {
         console.log("Could not find complaints", error);

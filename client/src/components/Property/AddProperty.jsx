@@ -13,7 +13,7 @@ import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
 import { useQuery, useMutation, NetworkStatus } from "@apollo/client";
 import Select from "@mui/material/Select";
-
+import { FormHelperText } from "@material-ui/core";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 //import methods from files
@@ -44,7 +44,7 @@ export default function AddProperty() {
   let propertyId;
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
-
+  const [errors, setErrors] = useState({});
   const { loading, data } = useQuery(QUERY_USERS);
   const [addProperty] = useMutation(ADD_PROPERTY, {
     refetchQueries: [QUERY_PROPERTIES_BY_USER, "propertiesByUser"],
@@ -103,46 +103,76 @@ export default function AddProperty() {
   const handleTenantChange = (event) => {
     setTenant(event.target.value);
   };
+  const handleInputOnFocusOut = (e) => {
+    const value = e.target.value;
+    console.log("changed");
+    const temp = { ...errors };
+    // check if the fields are invalid and set error message
+    if (value) {
+      temp.address = !address ? "Please enter address" : "";
+      temp.owner = !owner ? "Please select owner" : "";
+      temp.agent = !agent ? "Please select agent" : "";
+      temp.tenant = !tenant ? "Please select tenant" : "";
+    }
+    //set error messages in errors
+    setErrors({
+      ...temp,
+    });
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const property = {};
-      (property.address = address),
-        (property.owner = owner),
-        (property.agent = agent),
-        (property.tenant = tenant);
+      if (validate()) {
+        const property = {};
+        (property.address = address),
+          (property.owner = owner),
+          (property.agent = agent),
+          (property.tenant = tenant);
 
-      if (Auth.loggedIn()) {
-        //update property details
-        if (state.updateProperty) {
-          const response = await updateProperty({
-            variables: {
-              propertyDetails: property,
-              propertyId: propertyId,
-            },
-          });
-          dispatch({
-            type: CLEAR_UPDATE_PROPERTY,
-          });
-        } else {
-          //add property details
-          const response = await addProperty({
-            variables: {
-              propertyDetails: property,
-            },
-          });
+        if (Auth.loggedIn()) {
+          //update property details
+          if (state.updateProperty) {
+            const response = await updateProperty({
+              variables: {
+                propertyDetails: property,
+                propertyId: propertyId,
+              },
+            });
+            dispatch({
+              type: CLEAR_UPDATE_PROPERTY,
+            });
+          } else {
+            //add property details
+            const response = await addProperty({
+              variables: {
+                propertyDetails: property,
+              },
+            });
 
-          dispatch({
-            type: CLEAR_CURRENT_SELECTED_ITEM,
-          });
+            dispatch({
+              type: CLEAR_CURRENT_SELECTED_ITEM,
+            });
+          }
+          navigate("/properties");
         }
-        navigate("/properties");
       }
     } catch (error) {
       setErrorMessage("Something went wrong!");
     }
   };
-
+  //function to  validate field
+  const validate = (data) => {
+    let temp = { ...errors };
+    // check if the fields are entered and set error messages if empty
+    temp.address = !address ? "Please enter address" : "";
+    temp.owner = !owner ? "Please select owner" : "";
+    temp.agent = !agent ? "Please select agent" : "";
+    temp.tenant = !tenant ? "Please select tenant" : "";
+    setErrors({
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x == "");
+  };
   return (
     <Grid
       container
@@ -210,12 +240,15 @@ export default function AddProperty() {
                   <TextField
                     value={address}
                     onChange={handleAddressChange}
+                    error={errors.address ? true : false}
+                    helperText={errors.address}
                     id="standard-multiline-static"
                     label="Address"
                     name="address"
                     multiline
                     variant="standard"
                     aria-readonly
+                    onBlur={handleInputOnFocusOut}
                   />
                 </FormControl>
               </Grid>
@@ -231,6 +264,7 @@ export default function AddProperty() {
                     label="Owner"
                     name="owner"
                     onChange={handleOwnerChange}
+                    error={errors.role ? true : false}
                   >
                     {owners.map((owner) => (
                       <MenuItem key={owner._id} value={owner._id}>
@@ -238,6 +272,9 @@ export default function AddProperty() {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText sx={{ color: "red" }}>
+                    {errors.owner}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
@@ -251,6 +288,7 @@ export default function AddProperty() {
                     label="Agent"
                     name="agent"
                     onChange={handleAgentChange}
+                    error={errors.role ? true : false}
                   >
                     {agents.map((agent) => (
                       <MenuItem key={agent._id} value={agent._id}>
@@ -258,6 +296,9 @@ export default function AddProperty() {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText sx={{ color: "red" }}>
+                    {errors.agent}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
@@ -271,6 +312,7 @@ export default function AddProperty() {
                     label="Tenant"
                     name="tenant"
                     onChange={handleTenantChange}
+                    error={errors.role ? true : false}
                   >
                     {tenants.map((tenant) => (
                       <MenuItem key={tenant._id} value={tenant._id}>
@@ -278,6 +320,9 @@ export default function AddProperty() {
                       </MenuItem>
                     ))}
                   </Select>
+                  <FormHelperText sx={{ color: "red" }}>
+                    {errors.tenant}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
             </Grid>

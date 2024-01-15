@@ -181,7 +181,7 @@ export default function Properties() {
                   },
                 },
               }}
-              pageSizeOptions={[15]}
+              pageSizeOptions={[5]}
               disableRowSelectionOnClick
             />
           </Box>

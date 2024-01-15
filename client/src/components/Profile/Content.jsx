@@ -245,7 +245,7 @@ export default function Content() {
                 initialState={{
                   pagination: {
                     paginationModel: {
-                      pageSize: 15,
+                      pageSize: 5,
                     },
                   },
                 }}

@@ -73,7 +73,6 @@ export default function SignIn() {
   const handleInput = (e) => {
     const type = e.target.name;
     const value = e.target.value;
-
     // set value of selected field
     if (type === "email" || type === "password") {
       setFormState({ ...formState, [type]: value });
