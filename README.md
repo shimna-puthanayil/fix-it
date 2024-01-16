@@ -47,6 +47,8 @@ npm run develop
 
 Create accounts for owner, agent and tenant by selecting corresponding roles while sign up and then tenant can login and raise a complaint .The tenants can view their complaints (status- open and in progress) in their dashboard when they login. On clicking on a particular complaint a form will be displayed where they can update it. Agents can view the open complaints in the dashboard when they sign in .They can also see the complaints according to status. When a new complaint is raised , they can change status and add quotes of different business for approval by owner. Owners can view and choose one of the quotes and approve it . These functionalities are done in a form which can be accessed by clicking on a particular complaint from dashboard.
 
+![login](./client/public/images/fixit.gif)
+
 ### Screenshots
 
 **SignIn**
