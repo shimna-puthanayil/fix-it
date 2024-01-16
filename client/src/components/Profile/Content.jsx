@@ -6,7 +6,7 @@ import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { styled } from "@mui/material/styles";
 import { QUERY_COMPLAINTS_RAISED } from "../../utils/queries";
-import { Container, Typography } from "@mui/material";
+import { Container, Tooltip, Typography, tooltipClasses } from "@mui/material";
 import {
   UPDATE_COMPLAINTS,
   SELECTED_COMPLAINT,
@@ -44,7 +44,20 @@ export default function Content() {
     statusColumnWidth = 330;
     addressColumnWidth = 400;
   }
-
+  const BootstrapTooltip = styled(({ className, ...props }) => (
+    <Tooltip {...props} arrow classes={{ popper: className }} />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      maxWidth: 900,
+      height: 50,
+    },
+    [`& .${tooltipClasses.arrow}`]: {
+      color: theme.palette.common.black,
+    },
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: theme.palette.common.black,
+    },
+  }));
   const columns = [
     {
       renderHeader: () => <strong>{"Address "}</strong>,
@@ -53,6 +66,16 @@ export default function Content() {
       headerName: "Address",
       width: addressColumnWidth,
       minWidth: 150,
+      renderCell: (params) => (
+        <BootstrapTooltip
+          title={
+            <Typography fontSize={13}>Click to view / edit details</Typography>
+          }
+          followCursor
+        >
+          <span>{params.value}</span>
+        </BootstrapTooltip>
+      ),
     },
     {
       renderHeader: () => <strong>{"Complaint "}</strong>,
@@ -60,6 +83,16 @@ export default function Content() {
       headerName: "Complaint",
       width: 502,
       headerClassName: "super-app-theme--header",
+      renderCell: (params) => (
+        <BootstrapTooltip
+          title={
+            <Typography fontSize={13}>Click to view / edit details</Typography>
+          }
+          followCursor
+        >
+          <span>{params.value}</span>
+        </BootstrapTooltip>
+      ),
     },
     {
       renderHeader: () => <strong>{"Date "}</strong>,
@@ -67,6 +100,16 @@ export default function Content() {
       headerName: "Date",
       width: dateColumnWidth,
       headerClassName: "super-app-theme--header",
+      renderCell: (params) => (
+        <BootstrapTooltip
+          title={
+            <Typography fontSize={13}>Click to view / edit details</Typography>
+          }
+          followCursor
+        >
+          <span>{params.value}</span>
+        </BootstrapTooltip>
+      ),
     },
     {
       renderHeader: () => <strong>{"Status "}</strong>,
@@ -74,6 +117,16 @@ export default function Content() {
       headerName: "Status",
       width: statusColumnWidth,
       headerClassName: "super-app-theme--header",
+      renderCell: (params) => (
+        <BootstrapTooltip
+          title={
+            <Typography fontSize={13}>Click to view / edit details</Typography>
+          }
+          followCursor
+        >
+          <span>{params.value}</span>
+        </BootstrapTooltip>
+      ),
     },
 
     {
@@ -83,6 +136,16 @@ export default function Content() {
       headerClassName: "super-app-theme--header",
       width: 465,
       editable: true,
+      renderCell: (params) => (
+        <BootstrapTooltip
+          title={
+            <Typography fontSize={13}>Click to view / edit details</Typography>
+          }
+          followCursor
+        >
+          <span>{params.value}</span>
+        </BootstrapTooltip>
+      ),
     },
   ];
 

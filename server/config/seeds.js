@@ -75,7 +75,7 @@ db.once("open", async () => {
     },
     {
       address: "Unit 3, 88 Abc Street, Sydney",
-      owner: users[7]._id,
+      owner: users[6]._id,
       agent: users[0]._id,
       tenant: users[4]._id,
     },
@@ -87,11 +87,11 @@ db.once("open", async () => {
       property: properties[0],
     },
     {
-      complaint: "Dishwasher not working ",
+      complaint: "Dishwasher is not working ",
       property: properties[1],
     },
     {
-      complaint: "Oven not working ",
+      complaint: "Oven is not working ",
       property: properties[2],
     },
   ]);

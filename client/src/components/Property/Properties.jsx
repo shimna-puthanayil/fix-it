@@ -5,7 +5,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { styled } from "@mui/material/styles";
-import { Container, Typography } from "@mui/material";
+import { Container, Typography, Tooltip, tooltipClasses } from "@mui/material";
 import { QUERY_PROPERTIES_BY_USER } from "../../utils/queries";
 import { UPDATE_PROPERTIES, UPDATE_PROPERTY } from "../../utils/actions";
 import { useEffect } from "react";
@@ -25,41 +25,135 @@ const Root = styled(Grid)(({ theme }) => ({
     maxWidth: "100%",
   },
 }));
-
+const BootstrapTooltip = styled(({ className, ...props }) => (
+  <Tooltip {...props} arrow classes={{ popper: className }} />
+))(({ theme }) => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: 900,
+    height: 50,
+  },
+  [`& .${tooltipClasses.arrow}`]: {
+    color: theme.palette.common.black,
+  },
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: theme.palette.common.black,
+  },
+}));
 export default function Properties() {
   const [state, dispatch] = useComplaintContext();
 
-  const columns = [
-    {
-      renderHeader: () => <strong>{"Address "}</strong>,
-      field: "address",
-      headerClassName: "super-app-theme--header",
-      headerName: "Address",
-      width: 370,
-    },
-    {
-      renderHeader: () => <strong>{"Owner "}</strong>,
-      field: "owner",
-      headerName: "Owner",
-      width: 355,
-      headerClassName: "super-app-theme--header",
-    },
-    {
-      renderHeader: () => <strong>{"Agent "}</strong>,
-      field: "agent",
-      headerName: "Agent",
-      width: 355,
-      headerClassName: "super-app-theme--header",
-    },
-    {
-      renderHeader: () => <strong>{"Tenant "}</strong>,
-      field: "tenant",
-      headerName: "Tenant",
-      width: 355,
-      headerClassName: "super-app-theme--header",
-    },
-  ];
-
+  let columns = [];
+  if (state.role === "admin") {
+    columns = [
+      {
+        renderHeader: () => <strong>{"Address "}</strong>,
+        field: "address",
+        headerClassName: "super-app-theme--header",
+        headerName: "Address",
+        width: 370,
+        renderCell: (params) => (
+          <BootstrapTooltip
+            title={
+              <Typography fontSize={13}>
+                Click to view / edit details
+              </Typography>
+            }
+            followCursor
+          >
+            <span>{params.value}</span>
+          </BootstrapTooltip>
+        ),
+      },
+      {
+        renderHeader: () => <strong>{"Owner "}</strong>,
+        field: "owner",
+        headerName: "Owner",
+        width: 355,
+        headerClassName: "super-app-theme--header",
+        renderCell: (params) => (
+          <BootstrapTooltip
+            title={
+              <Typography fontSize={13}>
+                Click to view / edit details
+              </Typography>
+            }
+            followCursor
+          >
+            <span>{params.value}</span>
+          </BootstrapTooltip>
+        ),
+      },
+      {
+        renderHeader: () => <strong>{"Agent "}</strong>,
+        field: "agent",
+        headerName: "Agent",
+        width: 355,
+        headerClassName: "super-app-theme--header",
+        renderCell: (params) => (
+          <BootstrapTooltip
+            title={
+              <Typography fontSize={13}>
+                Click to view / edit details
+              </Typography>
+            }
+            followCursor
+          >
+            <span>{params.value}</span>
+          </BootstrapTooltip>
+        ),
+      },
+      {
+        renderHeader: () => <strong>{"Tenant "}</strong>,
+        field: "tenant",
+        headerName: "Tenant",
+        width: 355,
+        headerClassName: "super-app-theme--header",
+        renderCell: (params) => (
+          <BootstrapTooltip
+            title={
+              <Typography fontSize={13}>
+                Click to view / edit details
+              </Typography>
+            }
+            followCursor
+          >
+            <span>{params.value}</span>
+          </BootstrapTooltip>
+        ),
+      },
+    ];
+  } else {
+    columns = [
+      {
+        renderHeader: () => <strong>{"Address "}</strong>,
+        field: "address",
+        headerClassName: "super-app-theme--header",
+        headerName: "Address",
+        width: 370,
+      },
+      {
+        renderHeader: () => <strong>{"Owner "}</strong>,
+        field: "owner",
+        headerName: "Owner",
+        width: 355,
+        headerClassName: "super-app-theme--header",
+      },
+      {
+        renderHeader: () => <strong>{"Agent "}</strong>,
+        field: "agent",
+        headerName: "Agent",
+        width: 355,
+        headerClassName: "super-app-theme--header",
+      },
+      {
+        renderHeader: () => <strong>{"Tenant "}</strong>,
+        field: "tenant",
+        headerName: "Tenant",
+        width: 355,
+        headerClassName: "super-app-theme--header",
+      },
+    ];
+  }
   const navigate = useNavigate();
   let status = "open";
   if (state.selectedItem) {
