@@ -50,7 +50,7 @@ export default function Properties() {
         field: "address",
         headerClassName: "super-app-theme--header",
         headerName: "Address",
-        width: 370,
+        width: 570,
         renderCell: (params) => (
           <BootstrapTooltip
             title={
@@ -68,7 +68,7 @@ export default function Properties() {
         renderHeader: () => <strong>{"Owner "}</strong>,
         field: "owner",
         headerName: "Owner",
-        width: 355,
+        width: 290,
         headerClassName: "super-app-theme--header",
         renderCell: (params) => (
           <BootstrapTooltip
@@ -87,7 +87,7 @@ export default function Properties() {
         renderHeader: () => <strong>{"Agent "}</strong>,
         field: "agent",
         headerName: "Agent",
-        width: 355,
+        width: 290,
         headerClassName: "super-app-theme--header",
         renderCell: (params) => (
           <BootstrapTooltip
@@ -106,7 +106,7 @@ export default function Properties() {
         renderHeader: () => <strong>{"Tenant "}</strong>,
         field: "tenant",
         headerName: "Tenant",
-        width: 355,
+        width: 286,
         headerClassName: "super-app-theme--header",
         renderCell: (params) => (
           <BootstrapTooltip
@@ -129,27 +129,27 @@ export default function Properties() {
         field: "address",
         headerClassName: "super-app-theme--header",
         headerName: "Address",
-        width: 370,
+        width: 570,
       },
       {
         renderHeader: () => <strong>{"Owner "}</strong>,
         field: "owner",
         headerName: "Owner",
-        width: 355,
+        width: 290,
         headerClassName: "super-app-theme--header",
       },
       {
         renderHeader: () => <strong>{"Agent "}</strong>,
         field: "agent",
         headerName: "Agent",
-        width: 355,
+        width: 290,
         headerClassName: "super-app-theme--header",
       },
       {
         renderHeader: () => <strong>{"Tenant "}</strong>,
         field: "tenant",
         headerName: "Tenant",
-        width: 355,
+        width: 286,
         headerClassName: "super-app-theme--header",
       },
     ];

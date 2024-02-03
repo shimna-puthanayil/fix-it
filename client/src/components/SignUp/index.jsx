@@ -14,7 +14,7 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import { styled } from "@mui/material/styles";
-import { FormControl, FormHelperText } from "@material-ui/core";
+import { FormControl, FormHelperText } from "@mui/material";
 import { useMutation } from "@apollo/client";
 //import methods from files
 import Auth from "../../utils/auth";

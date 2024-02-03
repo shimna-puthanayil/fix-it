@@ -1,21 +1,25 @@
 import * as React from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import FormControl from "@mui/material/FormControl";
-import { styled } from "@mui/material/styles";
-import { useQuery, useMutation, NetworkStatus } from "@apollo/client";
-import Select from "@mui/material/Select";
-import { FormHelperText } from "@material-ui/core";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  Paper,
+  Grid,
+  Box,
+  Typography,
+  FormControl,
+  styled,
+  Select,
+  FormHelperText,
+  Input,
+  MenuItem,
+  InputLabel,
+} from "@mui/material";
+
+import { useQuery, useMutation } from "@apollo/client";
+
 //import methods from files
 import Auth from "../../utils/auth";
 import { QUERY_PROPERTIES_BY_USER } from "../../utils/queries";
@@ -29,19 +33,42 @@ import {
   CLEAR_UPDATE_PROPERTY,
   CLEAR_CURRENT_SELECTED_ITEM,
 } from "../../utils/actions";
-
+//import react-google-maps/api for auto populated address field
+import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 const ColorButton = styled(Button)(({ theme }) => ({
   color: "white",
   fontWeight: "bold",
   width: "80%",
   background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
 }));
-
+const placesLibrary = ["places"];
 export default function AddProperty() {
   let owners,
     agents,
     tenants = [];
   let propertyId;
+  const [searchResult, setSearchResult] = useState("Result: none");
+
+  ///// code for auto populated address field ////////////
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: "AIzaSyAIq_4MebErt-IkM0lmmsX413ETRpQom2E",
+    libraries: placesLibrary,
+  });
+
+  function onLoad(autocomplete) {
+    setSearchResult(autocomplete);
+  }
+
+  function onPlaceChanged() {
+    if (searchResult != null) {
+      const place = searchResult.getPlace();
+      setAddress(place.formatted_address);
+    } else {
+      console.log("Please Enter Address");
+    }
+  }
+  ////////////////////////////////////////////////
+
   const [state, dispatch] = useComplaintContext();
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
@@ -105,7 +132,6 @@ export default function AddProperty() {
   };
   const handleInputOnFocusOut = (e) => {
     const value = e.target.value;
-    console.log("changed");
     const temp = { ...errors };
     // check if the fields are invalid and set error message
     if (value) {
@@ -161,7 +187,7 @@ export default function AddProperty() {
     }
   };
   //function to  validate field
-  const validate = (data) => {
+  const validate = () => {
     let temp = { ...errors };
     // check if the fields are entered and set error messages if empty
     temp.address = !address ? "Please enter address" : "";
@@ -173,6 +199,10 @@ export default function AddProperty() {
     });
     return Object.values(temp).every((x) => x == "");
   };
+  if (!isLoaded) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Grid
       container
@@ -236,20 +266,35 @@ export default function AddProperty() {
           >
             <Grid container spacing={10}>
               <Grid item xs={12}>
-                <FormControl sx={{ m: 1 }} fullWidth>
-                  <TextField
-                    value={address}
-                    onChange={handleAddressChange}
-                    error={errors.address ? true : false}
-                    helperText={errors.address}
-                    id="standard-multiline-static"
-                    label="Address"
-                    name="address"
-                    multiline
-                    variant="standard"
-                    aria-readonly
-                    onBlur={handleInputOnFocusOut}
-                  />
+                <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
+                  <InputLabel id="label-address" mb={10}>
+                    Address
+                  </InputLabel>
+                  {/* auto populated address field */}
+                  <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
+                    <Input
+                      required
+                      value={address}
+                      type="text"
+                      placeholder=""
+                      style={{
+                        boxSizing: `border-box`,
+                        border: `1px  transparent`,
+                        width: `100%`,
+                        height: `48px`,
+                        borderRadius: `3px`,
+                        fontSize: `14px`,
+                        outline: `none`,
+                        textOverflow: `ellipses`,
+                      }}
+                      onChange={handleAddressChange}
+                      onBlur={handleInputOnFocusOut}
+                      error={errors.role ? true : false}
+                    />
+                  </Autocomplete>
+                  <FormHelperText sx={{ color: "red" }}>
+                    {errors.address}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
 
@@ -264,6 +309,7 @@ export default function AddProperty() {
                     label="Owner"
                     name="owner"
                     onChange={handleOwnerChange}
+                    onBlur={handleInputOnFocusOut}
                     error={errors.role ? true : false}
                   >
                     {owners.map((owner) => (
@@ -288,6 +334,7 @@ export default function AddProperty() {
                     label="Agent"
                     name="agent"
                     onChange={handleAgentChange}
+                    onBlur={handleInputOnFocusOut}
                     error={errors.role ? true : false}
                   >
                     {agents.map((agent) => (
@@ -312,6 +359,7 @@ export default function AddProperty() {
                     label="Tenant"
                     name="tenant"
                     onChange={handleTenantChange}
+                    onBlur={handleInputOnFocusOut}
                     error={errors.role ? true : false}
                   >
                     {tenants.map((tenant) => (

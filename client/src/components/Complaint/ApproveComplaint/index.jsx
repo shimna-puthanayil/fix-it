@@ -16,7 +16,7 @@ import Select from "@mui/material/Select";
 import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
-import { FormHelperText } from "@material-ui/core";
+import { FormHelperText } from "@mui/material";
 //import methods from files
 import Auth from "../../../utils/auth";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
