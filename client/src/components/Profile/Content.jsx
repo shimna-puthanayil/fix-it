@@ -1,7 +1,16 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
+import {
+  Box,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Avatar,
+} from "@mui/material";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import LoopIcon from "@mui/icons-material/Loop";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import Grid from "@mui/material/Grid";
 import { useQuery } from "@apollo/client";
 import { styled } from "@mui/material/styles";
@@ -112,7 +121,7 @@ export default function Content() {
       ),
     },
     {
-      renderHeader: () => <strong>{"Status "}</strong>,
+      renderHeader: () => <strong>{"  Status "}</strong>,
       field: "status",
       headerName: "Status",
       width: statusColumnWidth,
@@ -124,7 +133,36 @@ export default function Content() {
           }
           followCursor
         >
-          <span>{params.value}</span>
+          <span>
+            {params.value === "open" ? (
+              <ListItem sx={{ padding: 0 }}>
+                <ListItemIcon>
+                  <Avatar sx={{ width: 24, height: 24, bgcolor: "#9F1D1D" }}>
+                    <NewReleasesIcon />
+                  </Avatar>
+                </ListItemIcon>
+                <ListItemText> Open</ListItemText>
+              </ListItem>
+            ) : params.value === "in progress" ? (
+              <ListItem sx={{ padding: 0 }}>
+                <ListItemIcon>
+                  <Avatar sx={{ width: 24, height: 24, bgcolor: "#CD8820" }}>
+                    <LoopIcon />
+                  </Avatar>
+                </ListItemIcon>
+                <ListItemText> In Progress</ListItemText>
+              </ListItem>
+            ) : (
+              <ListItem sx={{ padding: 0 }}>
+                <ListItemIcon>
+                  <Avatar sx={{ width: 24, height: 24, bgcolor: "#457373" }}>
+                    <CheckCircleIcon />
+                  </Avatar>
+                </ListItemIcon>
+                <ListItemText> Resolved</ListItemText>
+              </ListItem>
+            )}
+          </span>
         </BootstrapTooltip>
       ),
     },
