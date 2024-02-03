@@ -33,6 +33,7 @@ import {
   CLEAR_UPDATE_PROPERTY,
   CLEAR_CURRENT_SELECTED_ITEM,
 } from "../../utils/actions";
+
 //import react-google-maps/api for auto populated address field
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 const ColorButton = styled(Button)(({ theme }) => ({
@@ -51,7 +52,7 @@ export default function AddProperty() {
 
   ///// code for auto populated address field ////////////
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyAIq_4MebErt-IkM0lmmsX413ETRpQom2E",
+    googleMapsApiKey: import.meta.env.VITE_API_KEY,
     libraries: placesLibrary,
   });
 
