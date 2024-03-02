@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -11,19 +11,31 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+import ImageListItemBar from "@mui/material/ImageListItemBar";
+import IconButton from "@mui/material/IconButton";
+import HighlightOffRoundedIcon from "@mui/icons-material/HighlightOffRounded";
 import DriveFileRenameOutlineIcon from "@mui/icons-material/DriveFileRenameOutline";
 import { useMutation } from "@apollo/client";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { useDropzone } from "react-dropzone";
+import axios from "axios";
 //import methods from files
 import Auth from "../../../utils/auth";
 import {
   CLEAR_UPDATE_COMPLAINT,
   CLEAR_CURRENT_SELECTED_ITEM,
 } from "../../../utils/actions";
-import { ADD_COMPLAINT, UPDATE_COMPLAINT } from "../../../utils/mutations";
+import {
+  ADD_COMPLAINT,
+  UPDATE_COMPLAINT,
+  S3Sign,
+} from "../../../utils/mutations";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
 import { useComplaintContext } from "../../../utils/GlobalState";
-const ColorButton = styled(Button)(({ theme }) => ({
+const ColorButton = styled(Button)(({}) => ({
   color: "white",
   fontWeight: "bold",
   width: "80%",
@@ -32,6 +44,32 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 export default function AddComplaint() {
   const [state, dispatch] = useComplaintContext();
+  let savedPictureUrls = [];
+  if (state.updateComplaint) {
+    savedPictureUrls = state.selectedComplaint.picUrl;
+  }
+  let [complaintPictureUrls, setComplaintPictureUrls] =
+    useState(savedPictureUrls);
+  useEffect(() => {
+    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, []);
+  const [files, setFiles] = useState([]);
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: {
+      "image/*": [],
+    },
+    onDrop: (acceptedFiles) => {
+      setFiles(
+        acceptedFiles.map((file) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    },
+  });
+
   const navigate = useNavigate();
   const [addComplaint] = useMutation(ADD_COMPLAINT, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
@@ -39,6 +77,7 @@ export default function AddComplaint() {
   const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
   });
+  const [s3Sign] = useMutation(S3Sign);
   let [complaint, setComplaint] = useState("");
   if (state.updateComplaint) {
     [complaint, setComplaint] = useState(state.selectedComplaint.complaint);
@@ -47,7 +86,6 @@ export default function AddComplaint() {
   const [errors, setErrors] = useState({});
   const handleInputOnFocusOut = (e) => {
     const value = e.target.value;
-
     const temp = { ...errors };
     // check if the complaint is invalid and set error message
     if (value) {
@@ -59,7 +97,7 @@ export default function AddComplaint() {
     });
   };
   //function to  validate field
-  const validate = (data) => {
+  const validate = () => {
     let temp = { ...errors };
     // check if the complaint is entered and set error message if empty
     temp.complaint = !complaint ? "Please enter complaint" : "";
@@ -68,43 +106,131 @@ export default function AddComplaint() {
     });
     return Object.values(temp).every((x) => x == "");
   };
+  //click event of submit button
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const data = new FormData(event.currentTarget);
       if (Auth.loggedIn()) {
-        if (validate(data)) {
+        if (validate()) {
+          //update complaint
+
           if (state.updateComplaint) {
+            for (let i = 0; i < files.length; i++) {
+              const responseS3 = await s3Sign({
+                variables: {
+                  filename: formatFilename(files[i].name),
+                  filetype: files[i].type,
+                },
+              });
+              setComplaintPictureUrls(
+                (complaintPictureUrls = [
+                  ...complaintPictureUrls,
+                  responseS3.data.s3Sign.url,
+                ])
+              );
+              const options = {
+                headers: {
+                  "Content-Type": files[i].type,
+                },
+              };
+              //save image to s3
+              await axios.put(
+                responseS3.data.s3Sign.signedRequest,
+                files[i],
+                options
+              );
+            }
             const response = await updateComplaint({
               variables: {
                 complaint: complaint,
                 quotes: [],
                 status: "",
                 complaintId: state.selectedComplaint.id,
+                picUrl: complaintPictureUrls,
               },
             });
             dispatch({
               type: CLEAR_UPDATE_COMPLAINT,
             });
           } else {
+            //add new complaint
+            for (let i = 0; i < files.length; i++) {
+              const responseS3 = await s3Sign({
+                variables: {
+                  filename: formatFilename(files[i].name),
+                  filetype: files[i].type,
+                },
+              });
+              setComplaintPictureUrls(
+                (complaintPictureUrls = [
+                  ...complaintPictureUrls,
+                  responseS3.data.s3Sign.url,
+                ])
+              );
+              const options = {
+                headers: {
+                  "Content-Type": files[i].type,
+                },
+              };
+              //save image to s3
+              await axios.put(
+                responseS3.data.s3Sign.signedRequest,
+                files[i],
+                options
+              );
+            }
             const response = await addComplaint({
               variables: {
                 complaint: complaint,
+                picUrl: complaintPictureUrls,
               },
             });
+
             dispatch({
               type: CLEAR_CURRENT_SELECTED_ITEM,
             });
+
+            setComplaint("");
+            navigate("/profile");
           }
-          setComplaint("");
-          navigate("/profile");
         }
       }
     } catch (error) {
       setErrorMessage("Please enter required fields");
     }
   };
-
+  //formats the file name to make it unique before storing into s3
+  const formatFilename = (filename) => {
+    const randomString = Math.random().toString(36).substring(2, 7);
+    const cleanFileName = filename.toLowerCase().replace(/[^a-z0-9]/g, "-");
+    const newFilename = `images/${randomString}-${cleanFileName}`;
+    return newFilename.substring(0, 60);
+  };
+  //removes attached/saved image from image list
+  const removePicture = (fileToDelete) => {
+    //on click of delete button over attached image( to be saved)
+    if (fileToDelete.preview) {
+      const attachedFilesAfterDelete = files.filter(
+        (file) => file != fileToDelete
+      );
+      setFiles(attachedFilesAfterDelete);
+    } else {
+      //on click of delete button over saved image
+      const savedUrlsAfterDelete = complaintPictureUrls.filter(
+        (file) => file != fileToDelete
+      );
+      setComplaintPictureUrls(savedUrlsAfterDelete);
+    }
+  };
+  //breakpoints for image list
+  const PictureList = styled(ImageList)(({ theme }) => ({
+    padding: theme.spacing(1),
+    [theme.breakpoints.down("md")]: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+  }));
   return (
     <Grid
       container
@@ -177,6 +303,66 @@ export default function AddComplaint() {
                 </FormControl>
               </Grid>
             </Grid>
+            <Grid
+              {...getRootProps()}
+              border="thin dashed"
+              borderColor={"#c7c7c7"}
+              ml={1}
+              mt={2}
+              mb={5}
+            >
+              <input {...getInputProps()} />
+              <Grid item xs={12} p={4} textAlign={"center"}>
+                <CloudUploadIcon sx={{ color: "#457373" }} />
+                <Typography>
+                  {"Drag 'n' drop some files here, or click to select files"}
+                </Typography>
+              </Grid>
+            </Grid>
+            {/*    Pictures to upload   */}
+            {files.length ? (
+              <PictureList
+                sx={{
+                  width: "auto",
+                  height: 250,
+                  ml: 1,
+                }}
+                cols={6}
+                rowHeight={200}
+              >
+                {files.map((file) => (
+                  <ImageListItem key={file.preview}>
+                    <img
+                      width={200}
+                      height={200}
+                      background="no-repeat center"
+                      src={file.preview}
+                      // Revoke data url after image is loaded
+                    />
+                    <ImageListItemBar
+                      sx={{
+                        background:
+                          "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, " +
+                          "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+                      }}
+                      position="top"
+                      actionIcon={
+                        <IconButton
+                          onClick={() => removePicture(file)}
+                          sx={{ color: "#C44848" }}
+                          aria-label={`delete ${file}`}
+                        >
+                          <HighlightOffRoundedIcon />
+                        </IconButton>
+                      }
+                      actionPosition="left"
+                    />
+                  </ImageListItem>
+                ))}
+              </PictureList>
+            ) : (
+              <></>
+            )}
             <ColorButton
               type="submit"
               variant="contained"
@@ -191,6 +377,52 @@ export default function AddComplaint() {
             >
               Submit
             </ColorButton>
+            {state.updateComplaint && complaintPictureUrls.length ? (
+              <Typography component="h5" variant="h6" ml={1}>
+                Images
+              </Typography>
+            ) : (
+              <></>
+            )}
+            {/*    Saved Pictures   */}
+            <PictureList
+              sx={{
+                width: "auto",
+                height: 250,
+                ml: 1,
+              }}
+              cols={6}
+              rowHeight={200}
+            >
+              {complaintPictureUrls.map((file) => (
+                <ImageListItem key={file}>
+                  <img
+                    srcSet={`${file}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                    src={`${file}?w=164&h=164&fit=crop&auto=format`}
+                    alt={file}
+                    loading="lazy"
+                  />
+                  <ImageListItemBar
+                    sx={{
+                      background:
+                        "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, " +
+                        "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
+                    }}
+                    position="top"
+                    actionIcon={
+                      <IconButton
+                        onClick={() => removePicture(file)}
+                        sx={{ color: "#C44848" }}
+                        aria-label={`delete ${file}`}
+                      >
+                        <HighlightOffRoundedIcon />
+                      </IconButton>
+                    }
+                    actionPosition="left"
+                  />
+                </ImageListItem>
+              ))}
+            </PictureList>
           </Box>
         </Box>
         {/* if state of error message changes */}

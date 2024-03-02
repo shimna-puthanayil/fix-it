@@ -29,6 +29,7 @@ import AddComplaint from "../Complaint/AddComplaint";
 import { useNavigate } from "react-router-dom";
 import AddProperty from "../Property/AddProperty";
 import Properties from "../../pages/Properties";
+import auth from "../../utils/auth";
 
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
@@ -44,6 +45,10 @@ const Root = styled(Grid)(({ theme }) => ({
 }));
 
 export default function Content() {
+  const navigate = useNavigate();
+  if (!auth.loggedIn()) {
+    navigate(`/`);
+  }
   const [state, dispatch] = useComplaintContext();
   let dateColumnWidth = 150,
     statusColumnWidth = 150,
@@ -187,7 +192,6 @@ export default function Content() {
     },
   ];
 
-  const navigate = useNavigate();
   let status = "open";
   if (state.selectedItem) {
     status = state.selectedItem.toLowerCase();
@@ -230,9 +234,10 @@ export default function Content() {
       (comp.complaint = complaints[i].complaint),
       (comp.address = complaints[i].property.address),
       (comp.date = new Date(parseInt(complaints[i].date)).toLocaleDateString()),
-      ((comp.status = complaints[i].status),
+      (comp.status = complaints[i].status),
       (comp.approvedQuote = complaints[i].approvedQuote),
-      comps.push(comp));
+      (comp.picUrl = complaints[i].picUrl),
+      comps.push(comp);
   }
   const rows = comps;
   if (rows.length === 0) {

@@ -63,6 +63,7 @@ export const QUERY_COMPLAINTS_RAISED = gql`
         quote
       }
       approvedQuote
+      picUrl
     }
   }
 `;

@@ -20,6 +20,7 @@ type Complaint{
     status:String
     quotes:[Quote]
     approvedQuote:String
+    picUrl:[String]
 }
 type User{
     _id:ID
@@ -43,6 +44,10 @@ input quoteInput{
     address:String!
     quote:String!
     }
+type S3Payload{
+    signedRequest:String!
+    url:String!
+}
 
 type Query{
 users:[User]
@@ -55,11 +60,12 @@ complaintsRaisedByTenant(tenantId:ID!):[Complaint]
 }
 type Mutation{
 addProperty(propertyDetails:propertyInput):Property
-addComplaint(complaint:String!):Complaint
+addComplaint(complaint:String!,picUrl:[String]):Complaint
 addUser(username:String!,password:String!,email:String!,role:String!):Auth
-updateComplaint(quotes:[quoteInput],status:String,complaintId:String!,complaint:String):Complaint
+updateComplaint(quotes:[quoteInput],status:String,complaintId:String!,complaint:String,picUrl:[String]):Complaint
 updateProperty(propertyDetails:propertyInput,propertyId:ID!):Property
 addApprovedQuote(approvedQuote:String!,complaintId:String!):Complaint
-login(email: String!, password: String!): Auth
+login(email: String!, password: String!): Auth,
+s3Sign(filename:String!,filetype:String!):S3Payload
 }`;
 module.exports = typeDefs;

@@ -1,6 +1,4 @@
 const { Schema, model } = require("mongoose");
-
-// import schema from Book.js
 const quoteSchema = require("./Quote");
 const complaintSchema = new Schema({
   complaint: {
@@ -16,9 +14,13 @@ const complaintSchema = new Schema({
     trim: true,
     default: "open",
   },
-
   quotes: [quoteSchema],
   approvedQuote: { type: String, default: "" },
+  picUrl: [
+    {
+      type: String,
+    },
+  ],
 });
 const Complaint = new model("Complaint", complaintSchema);
 module.exports = Complaint;

@@ -1,7 +1,11 @@
 const { User, Complaint, Property } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
+const { S3, PutObjectCommand } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const s3Bucket = process.env.S3_BUCKET;
 const resolvers = {
   Query: {
+    //returns all the users
     users: async () => {
       try {
         return User.find();
@@ -9,18 +13,7 @@ const resolvers = {
         console.log("Could not find users", error);
       }
     },
-    // properties: async () => {
-    //   try {
-    //     const properties = Property.find()
-    //       .populate("agent")
-    //       .populate("owner")
-    //       .populate("tenant");
-
-    //     return properties;
-    //   } catch (error) {
-    //     console.log("Could not find properties", error);
-    //   }
-    // },
+    //returns the property details based on role and user id
     propertiesByUser: async (parent, { role }, context) => {
       try {
         if (role === "agent")
@@ -45,7 +38,10 @@ const resolvers = {
         console.log("Could not find properties", error);
       }
     },
-
+    //returns the complaints related to logged in user.
+    //If the logged in user is tenant then returns all the complaints raised by that tenant.
+    //If the logged in user is agent then returns all the complaints related to properties that they manage.
+    //If the logged in user is owner then returns all the complaints related to properties that they own.
     complaintsRaised: async (parent, args, context) => {
       try {
         const params = {};
@@ -80,6 +76,7 @@ const resolvers = {
     },
   },
   Mutation: {
+    //adds property details
     addProperty: async (parent, { propertyDetails }) => {
       try {
         return Property.create(propertyDetails);
@@ -87,6 +84,7 @@ const resolvers = {
         console.log("Could not add property!", error);
       }
     },
+    //update property details
     updateProperty: async (parent, { propertyDetails, propertyId }) => {
       try {
         return await Property.findByIdAndUpdate(propertyId, propertyDetails, {
@@ -96,24 +94,26 @@ const resolvers = {
         console.log("Could not update property", error);
       }
     },
-    addComplaint: async (parent, { complaint }, context) => {
+    //add complaint and image url if any
+    addComplaint: async (parent, { complaint, picUrl }, context) => {
       try {
         const properties = await Property.find({ tenant: context.user._id });
         const propertyId = properties[0]._id;
-        return Complaint.create({ complaint, property: propertyId });
+        return Complaint.create({ complaint, picUrl, property: propertyId });
       } catch (error) {
         console.log("Could not raise complaint", error);
       }
     },
+    //updates complaint
     updateComplaint: async (
       parent,
-      { complaint, quotes, status, complaintId }
+      { complaint, quotes, status, complaintId, picUrl }
     ) => {
       try {
         if (complaint)
           return await Complaint.findByIdAndUpdate(
             complaintId,
-            { complaint },
+            { complaint, picUrl },
             { new: true }
           );
         else
@@ -126,6 +126,7 @@ const resolvers = {
         console.log("Could not update complaint", error);
       }
     },
+    //update the complaint collection with approved quote
     addApprovedQuote: async (parent, { approvedQuote, complaintId }) => {
       try {
         return await Complaint.findByIdAndUpdate(
@@ -137,6 +138,7 @@ const resolvers = {
         console.log("Could not update approved quote", error);
       }
     },
+    //add  new user
     addUser: async (parent, args) => {
       try {
         const user = await User.create(args);
@@ -146,6 +148,7 @@ const resolvers = {
         console.log("SignUp failed", error);
       }
     },
+    //login
     login: async (parent, { email, password, complaintId }) => {
       try {
         const user = await User.findOne({ email });
@@ -161,6 +164,30 @@ const resolvers = {
       } catch (error) {
         console.log("Login failed", error);
       }
+    },
+    //gets signed url from s3 and returns the same with object url
+    s3Sign: async (parent, { filename, filetype }) => {
+      const s3 = new S3({
+        region: "ap-southeast-2",
+      });
+      //parameters for s3 upload
+      const s3Params = {
+        Bucket: s3Bucket,
+        Key: filename,
+        ContentType: filetype,
+        ACL: "public-read",
+      };
+      const expiresIn = 3600;
+      const signedRequest = await getSignedUrl(
+        s3,
+        new PutObjectCommand(s3Params),
+        { expiresIn }
+      );
+      const url = `https://${s3Bucket}.s3.amazonaws.com/${filename}`;
+      return {
+        signedRequest,
+        url,
+      };
     },
   },
 };

@@ -22,8 +22,8 @@ export const UPDATE_PROPERTY = gql`
 `;
 // Mutation to add a new complaint
 export const ADD_COMPLAINT = gql`
-  mutation AddComplaint($complaint: String!) {
-    addComplaint(complaint: $complaint) {
+  mutation AddComplaint($complaint: String!, $picUrl: [String]) {
+    addComplaint(complaint: $complaint, picUrl: $picUrl) {
       _id
     }
   }
@@ -63,20 +63,22 @@ export const LOGIN = gql`
     }
   }
 `;
-// Mutation to add a new complaint
 
+// Mutation to update a complaint
 export const UPDATE_COMPLAINT = gql`
   mutation UpdateComplaint(
     $quotes: [quoteInput]
     $status: String
     $complaintId: String!
     $complaint: String!
+    $picUrl: [String]
   ) {
     updateComplaint(
       quotes: $quotes
       status: $status
       complaintId: $complaintId
       complaint: $complaint
+      picUrl: $picUrl
     ) {
       complaint
       quotes {
@@ -87,10 +89,21 @@ export const UPDATE_COMPLAINT = gql`
     }
   }
 `;
+
+//mutation to add approved quote
 export const ADD_APPROVED_QUOTE = gql`
   mutation AddApprovedQuote($approvedQuote: String!, $complaintId: String!) {
     addApprovedQuote(approvedQuote: $approvedQuote, complaintId: $complaintId) {
       _id
+    }
+  }
+`;
+// Mutation to get signed url and object url
+export const S3Sign = gql`
+  mutation S3Sign($filename: String!, $filetype: String!) {
+    s3Sign(filename: $filename, filetype: $filetype) {
+      url
+      signedRequest
     }
   }
 `;
