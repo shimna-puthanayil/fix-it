@@ -384,7 +384,7 @@ export default function AddComplaint() {
             ) : (
               <></>
             )}
-            {/*    Saved Pictures   */}
+            {/*   Saved Pictures  */}
             <PictureList
               sx={{
                 width: "auto",

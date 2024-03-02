@@ -1,8 +1,8 @@
 const { User, Complaint, Property } = require("../models");
 const { signToken, AuthenticationError } = require("../utils/auth");
 const { S3, PutObjectCommand } = require("@aws-sdk/client-s3");
-const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const s3Bucket = process.env.S3_BUCKET;
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const resolvers = {
   Query: {
     //returns all the users
@@ -76,7 +76,7 @@ const resolvers = {
     },
   },
   Mutation: {
-    //adds property details
+    //adds propert details
     addProperty: async (parent, { propertyDetails }) => {
       try {
         return Property.create(propertyDetails);
@@ -84,6 +84,7 @@ const resolvers = {
         console.log("Could not add property!", error);
       }
     },
+
     //update property details
     updateProperty: async (parent, { propertyDetails, propertyId }) => {
       try {
@@ -94,6 +95,7 @@ const resolvers = {
         console.log("Could not update property", error);
       }
     },
+
     //add complaint and image url if any
     addComplaint: async (parent, { complaint, picUrl }, context) => {
       try {
@@ -104,6 +106,7 @@ const resolvers = {
         console.log("Could not raise complaint", error);
       }
     },
+
     //updates complaint
     updateComplaint: async (
       parent,
@@ -126,6 +129,7 @@ const resolvers = {
         console.log("Could not update complaint", error);
       }
     },
+
     //update the complaint collection with approved quote
     addApprovedQuote: async (parent, { approvedQuote, complaintId }) => {
       try {
@@ -148,6 +152,7 @@ const resolvers = {
         console.log("SignUp failed", error);
       }
     },
+
     //login
     login: async (parent, { email, password, complaintId }) => {
       try {
@@ -165,10 +170,15 @@ const resolvers = {
         console.log("Login failed", error);
       }
     },
+
     //gets signed url from s3 and returns the same with object url
     s3Sign: async (parent, { filename, filetype }) => {
       const s3 = new S3({
         region: "ap-southeast-2",
+        credentials: {
+          accessKeyId: process.env.ACCESS_KEY,
+          secretAccessKey: process.env.SECRET_KEY,
+        },
       });
       //parameters for s3 upload
       const s3Params = {
@@ -178,12 +188,14 @@ const resolvers = {
         ACL: "public-read",
       };
       const expiresIn = 3600;
+
       const signedRequest = await getSignedUrl(
         s3,
         new PutObjectCommand(s3Params),
         { expiresIn }
       );
       const url = `https://${s3Bucket}.s3.amazonaws.com/${filename}`;
+
       return {
         signedRequest,
         url,
