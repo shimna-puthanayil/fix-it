@@ -76,10 +76,10 @@ Create accounts for owner, agent and tenant by selecting corresponding roles whi
 **In Progress**
 ![IN](https://github.com/shimna-puthanayil/fix-it/assets/132061805/186e8027-466a-4990-86ca-15644b16d0c4)
 
-
 **Complaint Details**
-![a3](https://github.com/shimna-puthanayil/fix-it/assets/132061805/b07a2e84-645b-4ac5-9d72-8f101a6f6b52)
-![a4](https://github.com/shimna-puthanayil/fix-it/assets/132061805/af84ce71-8c14-4f8e-8d9b-43ba6e21c7f4)
+![Screen Shot 2024-03-03 at 7 15 44 pm](https://github.com/shimna-puthanayil/fix-it/assets/132061805/1cf1031b-824d-41fe-af88-7559409fe361)
+![Screen Shot 2024-03-03 at 7 44 50 pm](https://github.com/shimna-puthanayil/fix-it/assets/132061805/fa2e1797-2190-4495-8aa6-4c26ac7d92c5)
+![Screen Shot 2024-03-03 at 7 45 00 pm](https://github.com/shimna-puthanayil/fix-it/assets/132061805/4279c770-63e5-4087-b82b-f1e7aae5024d)
 
 ### Owner
 
@@ -90,7 +90,8 @@ Create accounts for owner, agent and tenant by selecting corresponding roles whi
 ![RES](https://github.com/shimna-puthanayil/fix-it/assets/132061805/1b2d4783-8145-4642-a3ff-2a9360afad5f)
 
 **Approve Complaint**
-![o3](https://github.com/shimna-puthanayil/fix-it/assets/132061805/d0a7217b-f1d6-47d3-97af-d3e85eb4e108)
+![ow1](https://github.com/shimna-puthanayil/fix-it/assets/132061805/945239e7-49ff-426c-bf96-dee5b1a841cc)
+![ow2](https://github.com/shimna-puthanayil/fix-it/assets/132061805/87ba4acd-8155-442e-b9c3-4c52156097eb)
 
 ### Admin
 
