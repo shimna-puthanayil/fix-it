@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -17,6 +17,8 @@ import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import { FormHelperText } from "@mui/material";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
 //import methods from files
 import Auth from "../../../utils/auth";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
@@ -35,6 +37,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
 export default function ApproveComplaint() {
   const [errors, setErrors] = useState({});
   const [state, dispatch] = useComplaintContext();
+  const complaintPictureUrls = state.selectedComplaint.picUrl;
   const navigate = useNavigate();
   //mutation to add/update approved quote for complaint
   const [addApprovedQuote] = useMutation(ADD_APPROVED_QUOTE, {
@@ -71,7 +74,15 @@ export default function ApproveComplaint() {
       setErrorMessage("Something went wrong!");
     }
   };
-
+  //breakpoints for image list
+  const PictureList = styled(ImageList)(({ theme }) => ({
+    padding: theme.spacing(1),
+    [theme.breakpoints.down("md")]: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+  }));
   return (
     <Grid
       container
@@ -155,6 +166,37 @@ export default function ApproveComplaint() {
                   />
                 </FormControl>
               </Grid>
+              {complaintPictureUrls.length ? (
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <Typography ml={1} color={"gray"}>
+                      Images
+                    </Typography>
+
+                    <PictureList
+                      sx={{
+                        width: "auto",
+                        height: 218,
+                      }}
+                      cols={6}
+                      rowHeight={200}
+                    >
+                      {complaintPictureUrls.map((file) => (
+                        <ImageListItem key={file}>
+                          <img
+                            srcSet={`${file}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                            src={`${file}?w=164&h=164&fit=crop&auto=format`}
+                            alt={file}
+                            loading="lazy"
+                          />
+                        </ImageListItem>
+                      ))}
+                    </PictureList>
+                  </FormControl>
+                </Grid>
+              ) : (
+                <></>
+              )}
               <Grid item xs={12}>
                 <FormControl sx={{ m: 1 }} fullWidth>
                   <TextField
@@ -167,6 +209,7 @@ export default function ApproveComplaint() {
                   />
                 </FormControl>
               </Grid>
+
               <Grid item xs={12}>
                 <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
                   <InputLabel id="label-role">Quotes</InputLabel>

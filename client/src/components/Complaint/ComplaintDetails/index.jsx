@@ -16,6 +16,9 @@ import Select from "@mui/material/Select";
 import SpeakerNotesIcon from "@mui/icons-material/SpeakerNotes";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
+import ImageList from "@mui/material/ImageList";
+import ImageListItem from "@mui/material/ImageListItem";
+
 //import methods from files
 import Auth from "../../../utils/auth";
 import { UPDATE_COMPLAINT } from "../../../utils/mutations";
@@ -24,6 +27,7 @@ import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 import { useComplaintContext } from "../../../utils/GlobalState";
 import Quotes from "../../Quotes";
 import { CLEAR_QUOTES, CLEAR_UPDATE_COMPLAINT } from "../../../utils/actions";
+
 const ColorButton = styled(Button)(({}) => ({
   color: "white",
   fontWeight: "bold",
@@ -33,6 +37,10 @@ const ColorButton = styled(Button)(({}) => ({
 
 export default function ComplaintDetails() {
   const [state, dispatch] = useComplaintContext();
+  const complaintPictureUrls = state.selectedComplaint.picUrl;
+  // let [complaintPictureUrls, setComplaintPictureUrls] =
+  //   useState(savedPictureUrls);
+
   const navigate = useNavigate();
   const [updateComplaint] = useMutation(UPDATE_COMPLAINT, {
     refetchQueries: [QUERY_COMPLAINTS_RAISED, "complaintsRaised"],
@@ -81,7 +89,15 @@ export default function ComplaintDetails() {
       setErrorMessage("Please enter required fields");
     }
   };
-
+  //breakpoints for image list
+  const PictureList = styled(ImageList)(({ theme }) => ({
+    padding: theme.spacing(1),
+    [theme.breakpoints.down("md")]: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+  }));
   return (
     <Grid
       container
@@ -166,6 +182,37 @@ export default function ComplaintDetails() {
                   />
                 </FormControl>
               </Grid>
+              {complaintPictureUrls.length ? (
+                <Grid item xs={12}>
+                  <FormControl fullWidth>
+                    <Typography ml={1} color={"gray"}>
+                      Images
+                    </Typography>
+
+                    <PictureList
+                      sx={{
+                        width: "auto",
+                        height: 218,
+                      }}
+                      cols={6}
+                      rowHeight={200}
+                    >
+                      {complaintPictureUrls.map((file) => (
+                        <ImageListItem key={file}>
+                          <img
+                            srcSet={`${file}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                            src={`${file}?w=164&h=164&fit=crop&auto=format`}
+                            alt={file}
+                            loading="lazy"
+                          />
+                        </ImageListItem>
+                      ))}
+                    </PictureList>
+                  </FormControl>
+                </Grid>
+              ) : (
+                <></>
+              )}
               <Grid item xs={12}>
                 <FormControl variant="standard" sx={{ m: 1 }} fullWidth>
                   <InputLabel id="label-role">Status</InputLabel>
