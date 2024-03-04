@@ -2,7 +2,7 @@
 
 ## Description
 
-This is a single page MERN application built for rental agents, owners and tenants to effectively manage the property maintenance tasks. This simple solution helps tenants to manage their complaints and get updated on the progress. The application also helps both property agents and owners to track the issues. The following are core functionalities of the application.
+This is a single page MERN application built for rental agents, owners and tenants to effectively manage the property maintenance tasks. This simple solution helps tenants to manage their complaints and get updated on the progress. The application also helps both property agents and owners to track the issues.
 
 ## Features
 
@@ -27,10 +27,19 @@ This is a single page MERN application built for rental agents, owners and tenan
   npm run seed
   ```
 
-  Create a .env file in the root directory and add the environment variable to hold your secret key for authentication
+  Create a .env file in the folder 'server' and add the environment variable to hold your secret keys
 
   ```
-  SECRET="YOUR SECRET KEY"
+  SECRET="YOUR SECRET KEY FOR AUTHENTICATION"
+  S3_BUCKET="AWS S3 BUCKET NAME"
+  ACCESS_KEY="AWS ACCESS_KEY"
+  SECRET_KEY="AWS SECRET_KEY"
+  ```
+
+  Create a .env file in the folder 'client' and add the environment variable to hold your secret keys
+
+  ```
+  VITE_API_KEY = "REACT GOOGLE MAPS API KEY"
   ```
 
 ### Deployment Link :
@@ -45,9 +54,9 @@ The application can be invoked in the terminal by using the following command:
 npm run develop
 ```
 
-Create accounts for owner, agent and tenant by selecting corresponding roles while sign up and then tenant can login and raise a complaint .The tenants can view their complaints (status- open and in progress) in their dashboard when they login. On clicking on a particular complaint a form will be displayed where they can update it. Agents can view the open complaints in the dashboard when they sign in .They can also see the complaints according to status. When a new complaint is raised , they can change status and add quotes of different business for approval by owner. Owners can view and choose one of the quotes and approve it . These functionalities are done in a form which can be accessed by clicking on a particular complaint from dashboard.
+Create accounts for owner, agent and tenant by selecting corresponding roles while sign up and then tenant can login and raise a complaint .The tenants can view the complaints they raised (status- open and in progress) in their dashboard when they login. If they want to add a new complaint then 'Add Complaint' can be clicked where they can enter complaint and upload images if any. On clicking on a particular complaint a form will be displayed where complaint details can be updated. Agents can view the open complaints in the dashboard when they sign in .They can also see the complaints according to status. When a new complaint is raised, they can change status and add quotes of different businesses for approval by owner. Owners can view and choose one of the quotes and approve it . These functionalities are done in a form which can be accessed by clicking on a particular complaint from dashboard.
 
-![login](./client/public/images/fixit.gif)
+![fix-it-gif](./client/public/images/fixit.gif)
 
 ### Screenshots
 
