@@ -44,7 +44,7 @@ This is a single page MERN application built for rental agents, owners and tenan
 
 ### Deployment Link :
 
-https://rentals-fix-it-015339fa2e18.herokuapp.com/
+http://ec2-3-27-148-98.ap-southeast-2.compute.amazonaws.com/
 
 # Usage
 
