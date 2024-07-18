@@ -1,4 +1,4 @@
-FROM node:20-alpine:3.19 as build
+FROM node:20-alpine3.19 as build
 
 # Build App
 WORKDIR /fix-it
