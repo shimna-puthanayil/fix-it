@@ -1,0 +1,35 @@
+name: Deploy Node Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build Docker Image
+        run: docker build -t fixit24/client ./client
+         run: docker build -t fixit24/server ./server
+      - name: Publish Image to docker hub
+        run: docker push fixit24/client:latest
+        run: docker push fixit24/server:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull fixit24/client:latest
+        run: docker pull fixit24/server:latest
+      - name: Delete old container
+        run: docker rm -f fixit24/client-container
+        run: docker rm -f fixit24/server-container
+      - name: Run Docker Container
+        run: docker run -d -p 3000:80 --name client-container fixit24/client
+         run: docker run -d -p 5000:5000 --name server-container -e MONGODB_URI='${{ secrets.MONGODB_URI }}' fixit24/server

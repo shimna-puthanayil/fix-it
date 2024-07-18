@@ -142,7 +142,7 @@ export default function Content() {
             {params.value === "open" ? (
               <ListItem sx={{ padding: 0 }}>
                 <ListItemIcon>
-                  <Avatar sx={{ width: 24, height: 24, bgcolor: "#9F1D1D" }}>
+                  <Avatar sx={{ width: 24, height: 24, bgcolor: "red" }}>
                     <NewReleasesIcon />
                   </Avatar>
                 </ListItemIcon>
