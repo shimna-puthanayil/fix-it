@@ -30,4 +30,4 @@ jobs:
         run: docker rm -f client-container
 
       - name: Run Docker Container
-        run: docker run -d -p 80:80 --name client-container fixit24/client
+        run: docker run -d -p 3000:80 --name client-container fixit24/client
