@@ -28,7 +28,7 @@ jobs:
         run: docker pull fixit24/server:latest
       - name: Delete old container
        
-        run: docker rm -f fixit24/server-container
+        run: docker rm -f server-container
       - name: Run Docker Container
       
          run: docker run -d -p 5000:5000 --name server-container -e MONGODB_URI='${{ secrets.MONGODB_URI }}' fixit24/server
