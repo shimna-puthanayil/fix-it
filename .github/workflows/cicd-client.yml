@@ -27,7 +27,7 @@ jobs:
         run: docker pull fixit24/client:latest
 
       - name: Delete old container
-        run: docker rm -f fixit24/client-container
+        run: docker rm -f client-container
 
       - name: Run Docker Container
         run: docker run -d -p 3000:80 --name client-container fixit24/client
