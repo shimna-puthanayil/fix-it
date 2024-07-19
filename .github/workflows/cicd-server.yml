@@ -15,7 +15,7 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
       - name: Build Docker Image
         run: docker build -t fixit24/server ./server
-    
+
       - name: Publish Image to docker hub
         run: docker push fixit24/server:latest
 
@@ -24,11 +24,10 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
-     
+
         run: docker pull fixit24/server:latest
       - name: Delete old container
-       
+
         run: docker rm -f server-container
       - name: Run Docker Container
-      
-         run: docker run -d -p 5000:5000 --name server-container -e MONGODB_URI='${{ secrets.MONGODB_URI }}' fixit24/server
+        run: docker run -d -p 5000:5000 --name server-container -e MONGODB_URI='${{ secrets.MONGODB_URI }}' fixit24/server
