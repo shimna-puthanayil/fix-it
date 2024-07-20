@@ -1,5 +1,11 @@
 FROM node:20-alpine3.19 as build
 
+# Declare build time environment variables
+ARG VITE_API_KEY
+
+# Set default values for environment variables
+ENV VITE_API_KEY=$VITE_API_KEY
+
 # Build App
 WORKDIR /fix-it
 COPY package.json .
