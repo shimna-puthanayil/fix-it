@@ -13,6 +13,6 @@ WORKDIR /usr/share/nginx/html
 RUN rm -rf *
 COPY --from=build /fix-it/dist .
 # add nginx config
-COPY nginx.conf etc/nginx/sites-available/default
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 ENTRYPOINT [ "nginx", "-g", "daemon off;" ]
