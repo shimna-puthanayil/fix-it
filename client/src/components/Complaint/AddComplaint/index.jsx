@@ -236,7 +236,6 @@ export default function AddComplaint() {
       container
       component="main"
       sx={{
-        height: "100vh",
         width: "100%",
         display: "flex",
         flexDirection: "column",
@@ -251,7 +250,6 @@ export default function AddComplaint() {
         sm={12}
         md={12}
         component={Paper}
-        square
         sx={{
           width: "100%",
         }}

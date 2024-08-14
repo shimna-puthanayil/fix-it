@@ -2,6 +2,7 @@ import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
+  List,
   ListItem,
   ListItemIcon,
   ListItemText,
@@ -34,10 +35,13 @@ import auth from "../../utils/auth";
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
   [theme.breakpoints.down("md")]: {
-    maxWidth: 300,
+    maxWidth: "100%",
+  },
+  [theme.breakpoints.up("sm")]: {
+    maxWidth: "100%",
   },
   [theme.breakpoints.up("md")]: {
-    maxWidth: 500,
+    maxWidth: "100%",
   },
   [theme.breakpoints.up("lg")]: {
     maxWidth: "100%",
@@ -83,7 +87,7 @@ export default function Content() {
       renderCell: (params) => (
         <BootstrapTooltip
           title={
-            <Typography fontSize={13}>Click to view / edit details</Typography>
+            <Typography fontSize={15}>Click to view / edit details</Typography>
           }
           followCursor
         >
@@ -100,7 +104,7 @@ export default function Content() {
       renderCell: (params) => (
         <BootstrapTooltip
           title={
-            <Typography fontSize={13}>Click to view / edit details</Typography>
+            <Typography fontSize={15}>Click to view / edit details</Typography>
           }
           followCursor
         >
@@ -117,7 +121,7 @@ export default function Content() {
       renderCell: (params) => (
         <BootstrapTooltip
           title={
-            <Typography fontSize={13}>Click to view / edit details</Typography>
+            <Typography fontSize={15}>Click to view / edit details</Typography>
           }
           followCursor
         >
@@ -131,23 +135,35 @@ export default function Content() {
       headerName: "Status",
       width: statusColumnWidth,
       headerClassName: "super-app-theme--header",
+
       renderCell: (params) => (
         <BootstrapTooltip
           title={
-            <Typography fontSize={13}>Click to view / edit details</Typography>
+            <Typography fontSize={15}>Click to view / edit details</Typography>
           }
           followCursor
         >
           <span>
             {params.value === "open" ? (
-              <ListItem sx={{ padding: 0 }}>
-                <ListItemIcon>
-                  <Avatar sx={{ width: 24, height: 24, bgcolor: "#9F1D1D" }}>
-                    <NewReleasesIcon />
-                  </Avatar>
-                </ListItemIcon>
-                <ListItemText> Open</ListItemText>
-              </ListItem>
+              <List>
+                <ListItem sx={{ padding: 0 }}>
+                  <ListItemIcon>
+                    <Avatar sx={{ width: 24, height: 24, bgcolor: "#9F1D1D" }}>
+                      <NewReleasesIcon />
+                    </Avatar>
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Typography
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: "15px",
+                      }}
+                    >
+                      Open
+                    </Typography>
+                  </ListItemText>
+                </ListItem>
+              </List>
             ) : params.value === "in progress" ? (
               <ListItem sx={{ padding: 0 }}>
                 <ListItemIcon>
@@ -155,7 +171,17 @@ export default function Content() {
                     <LoopIcon />
                   </Avatar>
                 </ListItemIcon>
-                <ListItemText> In Progress</ListItemText>
+                <ListItemText>
+                  {" "}
+                  <Typography
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "15px",
+                    }}
+                  >
+                    In Progress{" "}
+                  </Typography>
+                </ListItemText>
               </ListItem>
             ) : (
               <ListItem sx={{ padding: 0 }}>
@@ -164,7 +190,17 @@ export default function Content() {
                     <CheckCircleIcon />
                   </Avatar>
                 </ListItemIcon>
-                <ListItemText> Resolved</ListItemText>
+                <ListItemText>
+                  {" "}
+                  <Typography
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: "15px",
+                    }}
+                  >
+                    Resolved{" "}
+                  </Typography>
+                </ListItemText>
               </ListItem>
             )}
           </span>
@@ -182,7 +218,7 @@ export default function Content() {
       renderCell: (params) => (
         <BootstrapTooltip
           title={
-            <Typography fontSize={13}>Click to view / edit details</Typography>
+            <Typography fontSize={15}>Click to view / edit details</Typography>
           }
           followCursor
         >
@@ -240,48 +276,40 @@ export default function Content() {
       comps.push(comp);
   }
   const rows = comps;
+  //if no complaints
   if (rows.length === 0) {
     return (
-      <>
+      <Container>
         <Box
           sx={{
-            alignItems: "center",
+            JustifyContent: "center",
+
             display: "flex",
-            flexGrow: 1,
+            flexDirection: "column",
           }}
         >
-          <Container>
-            <Box
-              sx={{
-                alignItems: "center",
-                display: "flex",
-                flexDirection: "column",
+          <Box
+            sx={{
+              mt: 20,
+              mb: 3,
+              textAlign: "center",
+            }}
+          >
+            <img
+              alt="no data"
+              src="/images/no-data.png"
+              style={{
+                display: "inline-block",
+                maxWidth: "50%",
+                width: 200,
               }}
-            >
-              <Box
-                sx={{
-                  mt: 20,
-                  mb: 3,
-                  textAlign: "center",
-                }}
-              >
-                <img
-                  alt="no data"
-                  src="/images/no-data.png"
-                  style={{
-                    display: "inline-block",
-                    maxWidth: "50%",
-                    width: 300,
-                  }}
-                />
-              </Box>
-              <Typography align="center" sx={{ mb: 3 }} variant="h6">
-                There are no complaints
-              </Typography>
-            </Box>
-          </Container>
+            />
+          </Box>
+          <Typography align="center" sx={{ mb: 3 }} variant="h6">
+            There are no complaints
+          </Typography>
         </Box>
-      </>
+      </Container>
     );
   } else {
     let clickedId = "";
@@ -323,19 +351,33 @@ export default function Content() {
     else if (state.role === "tenant")
       return (
         <Root container>
-          <Grid item xs={12} md={12} lg={12} component={Paper} elevation={2}>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            component={Paper}
+            elevation={2}
+            sx={{ height: 0 }}
+          >
             <Box
               sx={{
                 minWidth: 100,
-                height: "100%",
                 width: "100%",
                 "& .super-app-theme--header": {
                   backgroundColor: "#101F33",
                   color: "white",
+                  fontWeight: "bold",
+                  fontSize: "15px",
                 },
               }}
             >
               <DataGrid
+                sx={{
+                  backgroundColor: "white",
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                }}
                 disableColumnMenu
                 getRowClassName={(params) =>
                   `super-app-theme--${params.row.status}`
@@ -365,20 +407,34 @@ export default function Content() {
     else
       return (
         <Root container>
-          <Grid item xs={12} md={12} lg={12} component={Paper} elevation={2}>
+          <Grid
+            item
+            xs={12}
+            md={12}
+            lg={12}
+            component={Paper}
+            elevation={2}
+            sx={{ height: 0 }}
+          >
             <Box
               sx={{
                 minWidth: 100,
-                height: "100%",
                 width: "100%",
+
                 "& .super-app-theme--header": {
                   backgroundColor: "#101F33",
                   color: "white",
+                  fontWeight: "bold",
+                  fontSize: "15px",
                 },
               }}
             >
               <DataGrid
-                sx={{ backgroundColor: "#F6F6F6" }}
+                sx={{
+                  backgroundColor: "white",
+                  fontWeight: "bold",
+                  fontSize: "15px",
+                }}
                 disableColumnMenu
                 getRowClassName={(params) =>
                   `super-app-theme--${params.row.status}`

@@ -103,7 +103,6 @@ export default function ComplaintDetails() {
       container
       component="main"
       sx={{
-        height: "100vh",
         width: "100%",
         display: "flex",
         flexDirection: "column",
@@ -119,7 +118,6 @@ export default function ComplaintDetails() {
         md={10}
         component={Paper}
         elevation={6}
-        square
         sx={{
           width: "100%",
         }}

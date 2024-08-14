@@ -54,7 +54,7 @@ export default function Properties() {
         renderCell: (params) => (
           <BootstrapTooltip
             title={
-              <Typography fontSize={13}>
+              <Typography fontSize={15}>
                 Click to view / edit details
               </Typography>
             }
@@ -73,7 +73,7 @@ export default function Properties() {
         renderCell: (params) => (
           <BootstrapTooltip
             title={
-              <Typography fontSize={13}>
+              <Typography fontSize={15}>
                 Click to view / edit details
               </Typography>
             }
@@ -92,7 +92,7 @@ export default function Properties() {
         renderCell: (params) => (
           <BootstrapTooltip
             title={
-              <Typography fontSize={13}>
+              <Typography fontSize={15}>
                 Click to view / edit details
               </Typography>
             }
@@ -111,7 +111,7 @@ export default function Properties() {
         renderCell: (params) => (
           <BootstrapTooltip
             title={
-              <Typography fontSize={13}>
+              <Typography fontSize={15}>
                 Click to view / edit details
               </Typography>
             }
@@ -129,7 +129,7 @@ export default function Properties() {
         field: "address",
         headerClassName: "super-app-theme--header",
         headerName: "Address",
-        width: 570,
+        width: 580,
       },
       {
         renderHeader: () => <strong>{"Owner "}</strong>,
@@ -149,7 +149,7 @@ export default function Properties() {
         renderHeader: () => <strong>{"Tenant "}</strong>,
         field: "tenant",
         headerName: "Tenant",
-        width: 286,
+        width: 290,
         headerClassName: "super-app-theme--header",
       },
     ];
@@ -176,46 +176,33 @@ export default function Properties() {
   }, [loading, data, dispatch]);
   if (state.properties.length === 0) {
     return (
-      <>
+      <Box
+        sx={{
+          justifyContent: "center",
+          display: "flex",
+        }}
+      >
         <Box
           sx={{
-            alignItems: "center",
-            display: "flex",
-            flexGrow: 1,
+            mt: 20,
+            mb: 3,
+            textAlign: "center",
           }}
         >
-          <Container>
-            <Box
-              sx={{
-                alignItems: "center",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Box
-                sx={{
-                  mt: 20,
-                  mb: 3,
-                  textAlign: "center",
-                }}
-              >
-                <img
-                  alt="no data"
-                  src="/images/no-data.png"
-                  style={{
-                    display: "inline-block",
-                    maxWidth: "50%",
-                    width: 300,
-                  }}
-                />
-              </Box>
-              <Typography align="center" sx={{ mb: 3 }} variant="h6">
-                There are no properties
-              </Typography>
-            </Box>
-          </Container>
+          <img
+            alt="no data"
+            src="/images/no-data.png"
+            style={{
+              display: "inline-block",
+              maxWidth: "50%",
+              width: 300,
+            }}
+          />
         </Box>
-      </>
+        <Typography align="center" sx={{ mb: 3 }} variant="h6">
+          There are no properties
+        </Typography>
+      </Box>
     );
   } else {
     const propertyByUser = state.properties.map((property) => ({
@@ -242,21 +229,32 @@ export default function Properties() {
     };
     return (
       <Root container>
-        <Grid item xs={12} md={12} lg={11} component={Paper} elevation={2}>
+        <Grid
+          item
+          xs={12}
+          md={12}
+          lg={12}
+          component={Paper}
+          elevation={2}
+          sx={{ height: 0 }}
+        >
           <Box
             sx={{
-              minWidth: 100,
-              height: "100%",
-
               "& .super-app-theme--header": {
                 backgroundColor: "#101F33",
                 color: "white",
                 padding: 2,
+                fontWeight: "bold",
+                fontSize: "15px",
               },
             }}
           >
             <DataGrid
-              sx={{ backgroundColor: "#F6F6F6" }}
+              sx={{
+                backgroundColor: "white",
+                fontWeight: "bold",
+                fontSize: "15px",
+              }}
               disableColumnMenu
               getRowClassName={(params) =>
                 `super-app-theme--${params.row.status}`

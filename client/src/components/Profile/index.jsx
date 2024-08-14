@@ -184,9 +184,6 @@ export default function ProfileComponent() {
       <Box
         sx={{
           display: "flex",
-
-          flex: "1 1 auto",
-          height: "200vh",
         }}
       >
         <CssBaseline />
@@ -210,15 +207,25 @@ export default function ProfileComponent() {
             sx={{ display: { sm: "block", xs: "none" } }}
           />
         </Box>
-        <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        <Box
+          sx={{
+            flex: 1,
+            display: "flex",
+            flexDirection: "column",
+            width: 100,
+            height: "200%",
+          }}
+        >
           <Header onDrawerToggle={handleDrawerToggle} />
           <Box
             component="main"
             sx={{
-              flex: 1,
+              display: "flex",
+              minHeight: "100vh",
               py: 6,
               px: 4,
               bgcolor: "#eaeff1",
+              alignContent: "center",
             }}
           >
             {/*id && !state.selectedItem ? <ComplaintDetails /> : <Content />*/}
