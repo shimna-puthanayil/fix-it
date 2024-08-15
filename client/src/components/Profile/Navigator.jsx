@@ -107,7 +107,13 @@ export default function Navigator(props) {
       <List disablePadding onClick={onClose}>
         {/* Logo  */}
         <ListItem
-          sx={{ ...item, ...itemCategory, fontSize: 12, color: "#fff" }}
+          sx={{
+            ...item,
+            ...itemCategory,
+            fontSize: 12,
+            color: "#fff",
+            height: "139px",
+          }}
         >
           <Avatar
             alt="logo"

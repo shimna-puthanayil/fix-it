@@ -263,7 +263,7 @@ export default function AddProperty() {
             component="form"
             noValidate
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
+            sx={{ mt: 3, pb: 5 }}
           >
             <Grid container spacing={10}>
               <Grid item xs={12}>
@@ -380,7 +380,7 @@ export default function AddProperty() {
               type="submit"
               variant="contained"
               sx={{
-                mt: 3,
+                mt: 5,
                 mb: 2,
                 mx: "auto",
                 display: "flex",

@@ -50,7 +50,8 @@ function Header(props) {
   }));
   return (
     <React.Fragment>
-      <ColorBar position="sticky" elevation={0} sx={{ height: 80 }}>
+      {/*header section */}
+      <ColorBar position="sticky" elevation={0} sx={{ height: 139 }}>
         <Toolbar>
           <Grid container spacing={1} alignItems="center">
             <Grid sx={{ display: { sm: "none", xs: "block" } }} item>
@@ -91,24 +92,24 @@ function Header(props) {
             </Grid>
           </Grid>
         </Toolbar>
-      </ColorBar>
-      <ColorBar
-        component="div"
-        color="primary"
-        position="static"
-        elevation={0}
-        sx={{ zIndex: 0 }}
-      >
         <Toolbar>
           <Grid container alignItems="center" spacing={1}>
             <Grid item xs>
-              <Typography color="white" variant="h5" component="h1" mb={3}>
+              <Typography
+                color="white"
+                variant="h5"
+                component="h1"
+                mb={3}
+                mt={5}
+                ml={2}
+              >
                 <strong>{title}</strong>
               </Typography>
             </Grid>
           </Grid>
         </Toolbar>
       </ColorBar>
+      {/*title section */}
     </React.Fragment>
   );
 }

@@ -34,18 +34,18 @@ import auth from "../../utils/auth";
 
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
-  [theme.breakpoints.down("md")]: {
-    maxWidth: "100%",
-  },
-  [theme.breakpoints.up("sm")]: {
-    maxWidth: "100%",
-  },
-  [theme.breakpoints.up("md")]: {
-    maxWidth: "100%",
-  },
-  [theme.breakpoints.up("lg")]: {
-    maxWidth: "100%",
-  },
+  // [theme.breakpoints.down("md")]: {
+  //   maxWidth: "100%",
+  // },
+  // [theme.breakpoints.up("sm")]: {
+  //   maxWidth: "100%",
+  // },
+  // [theme.breakpoints.up("md")]: {
+  //   maxWidth: "100%",
+  // },
+  // [theme.breakpoints.up("lg")]: {
+  //   maxWidth: "100%",
+  // },
 }));
 
 export default function Content() {
@@ -54,13 +54,13 @@ export default function Content() {
     navigate(`/`);
   }
   const [state, dispatch] = useComplaintContext();
-  let dateColumnWidth = 150,
-    statusColumnWidth = 150,
-    addressColumnWidth = 300;
+  let dateColumnWidth = 100,
+    statusColumnWidth = 135,
+    addressColumnWidth = 217;
   if (state.role === "tenant") {
-    dateColumnWidth = 350;
-    statusColumnWidth = 330;
-    addressColumnWidth = 400;
+    dateColumnWidth = 100;
+    statusColumnWidth = 135;
+    addressColumnWidth = 217;
   }
   const BootstrapTooltip = styled(({ className, ...props }) => (
     <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -82,8 +82,8 @@ export default function Content() {
       field: "address",
       headerClassName: "super-app-theme--header",
       headerName: "Address",
-      width: addressColumnWidth,
-      minWidth: 150,
+      flex: 0.1,
+      minWidth: addressColumnWidth,
       renderCell: (params) => (
         <BootstrapTooltip
           title={
@@ -99,7 +99,8 @@ export default function Content() {
       renderHeader: () => <strong>{"Complaint "}</strong>,
       field: "complaint",
       headerName: "Complaint",
-      width: 502,
+      minWidth: 200,
+      flex: 0.3,
       headerClassName: "super-app-theme--header",
       renderCell: (params) => (
         <BootstrapTooltip
@@ -116,7 +117,8 @@ export default function Content() {
       renderHeader: () => <strong>{"Date "}</strong>,
       field: "date",
       headerName: "Date",
-      width: dateColumnWidth,
+      minWidth: dateColumnWidth,
+      flex: 0.1,
       headerClassName: "super-app-theme--header",
       renderCell: (params) => (
         <BootstrapTooltip
@@ -133,7 +135,8 @@ export default function Content() {
       renderHeader: () => <strong>{"  Status "}</strong>,
       field: "status",
       headerName: "Status",
-      width: statusColumnWidth,
+      minWidth: statusColumnWidth,
+      flex: 0.1,
       headerClassName: "super-app-theme--header",
 
       renderCell: (params) => (
@@ -172,14 +175,13 @@ export default function Content() {
                   </Avatar>
                 </ListItemIcon>
                 <ListItemText>
-                  {" "}
                   <Typography
                     sx={{
                       fontWeight: "bold",
                       fontSize: "15px",
                     }}
                   >
-                    In Progress{" "}
+                    In Progress
                   </Typography>
                 </ListItemText>
               </ListItem>
@@ -191,14 +193,13 @@ export default function Content() {
                   </Avatar>
                 </ListItemIcon>
                 <ListItemText>
-                  {" "}
                   <Typography
                     sx={{
                       fontWeight: "bold",
                       fontSize: "15px",
                     }}
                   >
-                    Resolved{" "}
+                    Resolved
                   </Typography>
                 </ListItemText>
               </ListItem>
@@ -213,7 +214,8 @@ export default function Content() {
       field: "approvedQuote",
       headerName: "Quote",
       headerClassName: "super-app-theme--header",
-      width: 465,
+      minWidth: 350,
+      flex: 0.3,
       editable: true,
       renderCell: (params) => (
         <BootstrapTooltip
@@ -362,8 +364,6 @@ export default function Content() {
           >
             <Box
               sx={{
-                minWidth: 100,
-                width: "100%",
                 "& .super-app-theme--header": {
                   backgroundColor: "#101F33",
                   color: "white",
@@ -418,9 +418,6 @@ export default function Content() {
           >
             <Box
               sx={{
-                minWidth: 100,
-                width: "100%",
-
                 "& .super-app-theme--header": {
                   backgroundColor: "#101F33",
                   color: "white",

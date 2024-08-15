@@ -15,15 +15,15 @@ import { useNavigate } from "react-router-dom";
 
 const Root = styled(Grid)(({ theme }) => ({
   padding: theme.spacing(1),
-  [theme.breakpoints.down("md")]: {
-    maxWidth: 300,
-  },
-  [theme.breakpoints.up("md")]: {
-    maxWidth: 500,
-  },
-  [theme.breakpoints.up("lg")]: {
-    maxWidth: "100%",
-  },
+  // [theme.breakpoints.down("md")]: {
+  //   maxWidth: 300,
+  // },
+  // [theme.breakpoints.up("md")]: {
+  //   maxWidth: 500,
+  // },
+  // [theme.breakpoints.up("lg")]: {
+  //   maxWidth: "100%",
+  // },
 }));
 const BootstrapTooltip = styled(({ className, ...props }) => (
   <Tooltip {...props} arrow classes={{ popper: className }} />
@@ -50,7 +50,8 @@ export default function Properties() {
         field: "address",
         headerClassName: "super-app-theme--header",
         headerName: "Address",
-        width: 570,
+        minWidth: 300,
+        flex: 1,
         renderCell: (params) => (
           <BootstrapTooltip
             title={
@@ -68,7 +69,8 @@ export default function Properties() {
         renderHeader: () => <strong>{"Owner "}</strong>,
         field: "owner",
         headerName: "Owner",
-        width: 290,
+        minWidth: 250,
+        flex: 1,
         headerClassName: "super-app-theme--header",
         renderCell: (params) => (
           <BootstrapTooltip
@@ -87,7 +89,8 @@ export default function Properties() {
         renderHeader: () => <strong>{"Agent "}</strong>,
         field: "agent",
         headerName: "Agent",
-        width: 290,
+        minWidth: 250,
+        flex: 0.3,
         headerClassName: "super-app-theme--header",
         renderCell: (params) => (
           <BootstrapTooltip
@@ -106,7 +109,8 @@ export default function Properties() {
         renderHeader: () => <strong>{"Tenant "}</strong>,
         field: "tenant",
         headerName: "Tenant",
-        width: 286,
+        minWidth: 250,
+        flex: 0.3,
         headerClassName: "super-app-theme--header",
         renderCell: (params) => (
           <BootstrapTooltip
@@ -129,27 +133,31 @@ export default function Properties() {
         field: "address",
         headerClassName: "super-app-theme--header",
         headerName: "Address",
-        width: 580,
+        minWidth: 300,
+        flex: 1,
       },
       {
         renderHeader: () => <strong>{"Owner "}</strong>,
         field: "owner",
         headerName: "Owner",
-        width: 290,
+        minWidth: 250,
+        flex: 0.3,
         headerClassName: "super-app-theme--header",
       },
       {
         renderHeader: () => <strong>{"Agent "}</strong>,
         field: "agent",
         headerName: "Agent",
-        width: 290,
+        minWidth: 250,
+        flex: 0.3,
         headerClassName: "super-app-theme--header",
       },
       {
         renderHeader: () => <strong>{"Tenant "}</strong>,
         field: "tenant",
         headerName: "Tenant",
-        width: 290,
+        minWidth: 250,
+        flex: 0.3,
         headerClassName: "super-app-theme--header",
       },
     ];
@@ -240,6 +248,7 @@ export default function Properties() {
         >
           <Box
             sx={{
+              width: "100%",
               "& .super-app-theme--header": {
                 backgroundColor: "#101F33",
                 color: "white",
