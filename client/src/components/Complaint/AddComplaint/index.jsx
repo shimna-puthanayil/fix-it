@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Avatar from "@mui/material/Avatar";
@@ -33,17 +34,25 @@ import {
   S3Sign,
 } from "../../../utils/mutations";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
-// import global state
-import { useComplaintContext } from "../../../utils/GlobalState";
+
 const ColorButton = styled(Button)(({}) => ({
   color: "white",
   fontWeight: "bold",
   width: "80%",
   background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
 }));
-
+/*******  code using Context API *************/
+// import global state
+// import { useComplaintContext } from "../../../utils/GlobalState";
 export default function AddComplaint() {
-  const [state, dispatch] = useComplaintContext();
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
+
   let savedPictureUrls = [];
   if (state.updateComplaint) {
     savedPictureUrls = state.selectedComplaint.picUrl;

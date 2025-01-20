@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -19,7 +20,7 @@ import {
 import { randomId } from "@mui/x-data-grid-generator";
 import { UPDATE_QUOTES } from "../../utils/actions";
 // import global state
-import { useComplaintContext } from "../../utils/GlobalState";
+// import { useComplaintContext } from "../../utils/GlobalState";
 
 function EditToolbar(props) {
   const { setRows, setRowModesModel } = props;
@@ -65,8 +66,12 @@ const ColorButton = styled(Button)(({}) => ({
   fontWeight: "bold",
 }));
 export default function Quotes() {
-  const [state, dispatch] = useComplaintContext();
-
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   const quotesOfComplaint = state.complaints.find(
     (x) => x._id === state.selectedComplaint.id
   ).quotes;

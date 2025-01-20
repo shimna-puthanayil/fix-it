@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useParams } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,8 +7,6 @@ import Typography from "@mui/material/Typography";
 import Link from "@mui/material/Link";
 import Navigator from "../../components/Profile/Navigator";
 import Header from "../../components/Profile/Header";
-// import global state
-import { useComplaintContext } from "../../utils/GlobalState";
 
 import ContentArea from "./ContentArea";
 function Copyright() {
@@ -169,9 +166,6 @@ theme = {
 
 const drawerWidth = 256;
 export default function ProfileComponent() {
-  //get complaint id from route
-  const { id } = useParams();
-  const [state, dispatch] = useComplaintContext();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const isSmUp = useMediaQuery(theme.breakpoints.up("sm"));
 

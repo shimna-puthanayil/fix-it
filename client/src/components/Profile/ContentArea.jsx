@@ -1,5 +1,6 @@
+import { useDispatch, useSelector } from "react-redux";
 // import global state
-import { useComplaintContext } from "../../utils/GlobalState";
+// import { useComplaintContext } from "../../utils/GlobalState";
 
 import AddComplaint from "../Complaint/AddComplaint";
 import ApproveComplaint from "../Complaint/ApproveComplaint";
@@ -9,7 +10,13 @@ import Properties from "../Property/Properties";
 import Content from "./Content";
 
 export default function ContentArea() {
-  const [state, dispatch] = useComplaintContext();
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
 
   if (
     (state.updateComplaint && state.role === "tenant") ||

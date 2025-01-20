@@ -33,7 +33,9 @@
     "react-icons": "^4.11.0",
     "react-router-dom": "^6.11.2",
     "simplebar-react": "^3.2.4",
-    "vitest": "^0.32.0"
+    "vitest": "^0.32.0",
+    "react-redux": "^8.0.7",
+    "redux": "^4.2.1"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",

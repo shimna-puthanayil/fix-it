@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
@@ -14,7 +15,7 @@ import { useEffect } from "react";
 import Auth from "../../utils/auth";
 import { styled } from "@mui/material/styles";
 // import global state
-import { useComplaintContext } from "../../utils/GlobalState";
+// import { useComplaintContext } from "../../utils/GlobalState";
 import { UPDATE_ROLE } from "../../utils/actions";
 import AccountPopover from "../Profile/AccountPopOver";
 import { usePopover } from "../Profile/UsePopOver";
@@ -26,7 +27,13 @@ const ColorBar = styled(AppBar)(({ theme }) => ({
 function Header(props) {
   const accountPopover = usePopover();
   const { onDrawerToggle } = props;
-  const [state, dispatch] = useComplaintContext();
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   let title,
     role = "";
 

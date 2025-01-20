@@ -8,7 +8,7 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-import { ComplaintProvider } from "./utils/GlobalState";
+import ComplaintProvider  from "./utils/GlobalState";
 import { ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "./styles";
 const httpLink = createHttpLink({ uri: "/graphql" });

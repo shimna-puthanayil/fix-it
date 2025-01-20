@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
@@ -23,7 +24,7 @@ import ImageListItem from "@mui/material/ImageListItem";
 import Auth from "../../../utils/auth";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
-import { useComplaintContext } from "../../../utils/GlobalState";
+// import { useComplaintContext } from "../../../utils/GlobalState";
 import { Divider } from "@mui/material";
 import { ADD_APPROVED_QUOTE } from "../../../utils/mutations";
 import { CLEAR_UPDATE_COMPLAINT } from "../../../utils/actions";
@@ -33,10 +34,19 @@ const ColorButton = styled(Button)(({ theme }) => ({
   width: "80%",
   background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
 }));
-
+/*******  code using Context API *************/
+// import global state
+// import { useComplaintContext } from "../../../utils/GlobalState";
 export default function ApproveComplaint() {
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   const [errors, setErrors] = useState({});
-  const [state, dispatch] = useComplaintContext();
+
   const complaintPictureUrls = state.selectedComplaint.picUrl;
   const navigate = useNavigate();
   //mutation to add/update approved quote for complaint

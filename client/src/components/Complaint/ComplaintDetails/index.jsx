@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
@@ -24,7 +25,7 @@ import Auth from "../../../utils/auth";
 import { UPDATE_COMPLAINT } from "../../../utils/mutations";
 import { QUERY_COMPLAINTS_RAISED } from "../../../utils/queries";
 // import global state
-import { useComplaintContext } from "../../../utils/GlobalState";
+// import { useComplaintContext } from "../../../utils/GlobalState";
 import Quotes from "../../Quotes";
 import { CLEAR_QUOTES, CLEAR_UPDATE_COMPLAINT } from "../../../utils/actions";
 
@@ -34,9 +35,17 @@ const ColorButton = styled(Button)(({}) => ({
   width: "80%",
   background: "linear-gradient(to right ,#86AEAF,#457373, #457373,#86AEAF)",
 }));
-
+/*******  code using Context API *************/
+// import global state
+// import { useComplaintContext } from "../../../utils/GlobalState";
 export default function ComplaintDetails() {
-  const [state, dispatch] = useComplaintContext();
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   const complaintPictureUrls = state.selectedComplaint.picUrl;
   // let [complaintPictureUrls, setComplaintPictureUrls] =
   //   useState(savedPictureUrls);

@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
@@ -24,7 +25,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import Auth from "../../utils/auth";
 import { QUERY_PROPERTIES_BY_USER } from "../../utils/queries";
 // import global state
-import { useComplaintContext } from "../../utils/GlobalState";
+// import { useComplaintContext } from "../../utils/GlobalState";
 import AddHomeWorkIcon from "@mui/icons-material/AddHomeWork";
 import { ADD_PROPERTY, UPDATE_PROPERTY } from "../../utils/mutations";
 import { QUERY_USERS } from "../../utils/queries";
@@ -70,7 +71,13 @@ export default function AddProperty() {
   }
   ////////////////////////////////////////////////
 
-  const [state, dispatch] = useComplaintContext();
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
   const { loading, data } = useQuery(QUERY_USERS);

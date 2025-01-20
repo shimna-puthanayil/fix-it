@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -10,7 +11,7 @@ import { QUERY_PROPERTIES_BY_USER } from "../../utils/queries";
 import { UPDATE_PROPERTIES, UPDATE_PROPERTY } from "../../utils/actions";
 import { useEffect } from "react";
 // import global state
-import { useComplaintContext } from "../../utils/GlobalState";
+// import { useComplaintContext } from "../../utils/GlobalState";
 import { useNavigate } from "react-router-dom";
 
 const Root = styled(Grid)(({ theme }) => ({
@@ -40,8 +41,12 @@ const BootstrapTooltip = styled(({ className, ...props }) => (
   },
 }));
 export default function Properties() {
-  const [state, dispatch] = useComplaintContext();
-
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   let columns = [];
   if (state.role === "admin") {
     columns = [

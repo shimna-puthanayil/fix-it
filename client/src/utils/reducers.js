@@ -13,8 +13,24 @@ import {
   UPDATE_PROPERTY,
   CLEAR_UPDATE_PROPERTY,
 } from "./actions";
+//set initial state  while using redux
+const intialState = {
+  selectedItem: "",
+  complaints: [],
+  role: "",
+  properties: [],
+  selectedComplaint: "",
+  quotes: [],
+  updateComplaint: false,
+  users: [],
+  updateProperty: false,
+};
 // The reducer is a function that accepts the current state and an action. It returns a new state based on that action.
-export const reducer = (state, action) => {
+/******  code while using createContext *************/
+// export const reducer = (state, action) => {
+
+/************code while using react redux ***************/
+export default function reducer(state = intialState, action) {
   switch (action.type) {
     // Returns a copy of state with an updated complaints array. We use the action.complaints property and spread it's contents into the new array.
     case UPDATE_COMPLAINTS:
@@ -94,4 +110,4 @@ export const reducer = (state, action) => {
     default:
       return state;
   }
-};
+}

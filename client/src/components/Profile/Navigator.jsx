@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useMediaQuery } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -23,7 +23,7 @@ import {
   CLEAR_UPDATE_PROPERTY,
 } from "../../utils/actions";
 // import global state
-import { useComplaintContext } from "../../utils/GlobalState";
+// import { useComplaintContext } from "../../utils/GlobalState";
 import { useNavigate } from "react-router-dom";
 import auth from "../../utils/auth";
 let categories = [
@@ -77,7 +77,13 @@ const itemCategory = {
 export default function Navigator(props) {
   const navigate = useNavigate();
   const { onClose, ...other } = props;
-  const [state, dispatch] = useComplaintContext();
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   // click event for items on navigation bar
   const handleClick = async (childId) => {
     dispatch({

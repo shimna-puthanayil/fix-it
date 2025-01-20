@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Box,
@@ -25,7 +26,7 @@ import {
 } from "../../utils/actions";
 import { useEffect } from "react";
 // import global state
-import { useComplaintContext } from "../../utils/GlobalState";
+// import { useComplaintContext } from "../../utils/GlobalState";
 import AddComplaint from "../Complaint/AddComplaint";
 import { useNavigate } from "react-router-dom";
 import AddProperty from "../Property/AddProperty";
@@ -53,7 +54,13 @@ export default function Content() {
   if (!auth.loggedIn()) {
     navigate(`/`);
   }
-  const [state, dispatch] = useComplaintContext();
+  /*******  code using Context API *************/
+  //const [state, dispatch] = useComplaintContext();
+
+  /************code using react redux ***************/
+  const dispatch = useDispatch();
+  const state = useSelector((state) => state);
+  /***********************************************/
   let dateColumnWidth = 100,
     statusColumnWidth = 135,
     addressColumnWidth = 217;
